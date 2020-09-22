@@ -6,14 +6,7 @@ import random
 
 app = Flask(__name__)
 
-# Opening JSON file 
-with open('posts2.json', 'r') as openfile: 
-  
-    # Reading from json file 
-    posts = json.load(openfile) 
 
-print(posts)
-print(type(posts))
 # function to add to JSON 
 def write_json(data, filename='posts2.json'): 
     with open(filename,'w') as f: 
@@ -23,6 +16,11 @@ def write_json(data, filename='posts2.json'):
 @app.route('/')
 @app.route('/home')
 def home():
+    # Opening JSON file 
+    with open('posts2.json', 'r') as openfile: 
+        # Reading from json file 
+        posts = json.load(openfile) 
+    print(posts)
     return render_template('home.html', posts=posts)
 
 @app.route('/add_post', methods=['GET','POST'])
