@@ -1,5 +1,7 @@
 from flask import Flask, url_for, request, render_template
 from markupsafe import escape
+import json
+import datetime
 
 app = Flask(__name__)
 
@@ -27,8 +29,16 @@ posts = [
 def home():
     return render_template('home.html', posts=posts)
 
-@app.route('/add_post')
+@app.route('/add_post', methods=['GET','POST'])
 def add_post():
+    if request.method == 'POST':
+        req = request.form
+
+        toDict = dict(req)
+        posts.append(toDict)
+        
+        
+
     return render_template('post.html')
 
 

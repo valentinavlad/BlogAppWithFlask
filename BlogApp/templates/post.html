@@ -1,18 +1,18 @@
 ﻿{% extends "layout.html" %}
 {% block content %}
-<form>
+<form method="POST" action="/add_post">
     <div class="form-group">
         <label for="title">Title</label>
-        <input type="text" class="form-control" id="title">
+        <input type="text" class="form-control" id="title" name="title">
 
     </div>
     <div class="form-group">
         <label for="owner">Owner</label>
-        <input type="text" class="form-control" id="owner">
+        <input type="text" class="form-control" id="owner" name="owner">
     </div>
     <div class="form-group">
         <label for="contents">Content</label>
-        <textarea class="form-control" id="contents" rows="3"></textarea>
+        <textarea class="form-control" id="contents" rows="3" name="contents"></textarea>
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
