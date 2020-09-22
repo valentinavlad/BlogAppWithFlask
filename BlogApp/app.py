@@ -2,27 +2,23 @@ from flask import Flask, url_for, request, render_template
 from markupsafe import escape
 import json
 import datetime
+import random
 
 app = Flask(__name__)
 
-posts = [
-    {
-        'id': 1,
-        'title': 'Python',
-        'contents': 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.',
-        'owner': 'D.B.Higgins',
-        'created_at': 'September 20, 2020',
-        'modified_at': 'September 21, 2020'
-    },
-    {
-        'id': 2,
-        'title': 'Php',
-        'contents': 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.',
-        'owner': 'D.B.Higgins',
-        'created_at': 'September 19, 2020',
-        'modified_at': 'September 21, 2020'
-    }
-]
+# Opening JSON file 
+with open('posts2.json', 'r') as openfile: 
+  
+    # Reading from json file 
+    posts = json.load(openfile) 
+
+print(posts)
+print(type(posts))
+# function to add to JSON 
+def write_json(data, filename='posts2.json'): 
+    with open(filename,'w') as f: 
+        json.dump(data, f, indent=4) 
+      
 
 @app.route('/')
 @app.route('/home')
@@ -33,14 +29,29 @@ def home():
 def add_post():
     if request.method == 'POST':
         req = request.form
-
-        toDict = dict(req)
-        posts.append(toDict)
-        
-        
-
+        date_now = datetime.datetime.now()
+        with open('posts2.json') as json_file: 
+            data = json.load(json_file) 
+            temp = data 
+  
+            # python object to be appended 
+            y = {
+                "id": random.randint(1, 9),
+                "title": request.form.get("title"),
+                "contents": request.form.get("contents"),
+                "owner": request.form.get("owner"),
+                "created_at": date_now.strftime("%Y, %B, %A"),
+                "modified_at":  date_now.strftime("%Y, %B, %A")
+            }
+  
+            # appending data to emp_details  
+            temp.append(y) 
+      
+        write_json(data)  
     return render_template('post.html')
 
+#with open('posts2.json', 'w') as outfile:
+ #   json.dump(data, outfile)
 
 if __name__ == '__main__':
     # Run the app server on localhost:4449
