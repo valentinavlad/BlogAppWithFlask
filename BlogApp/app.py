@@ -13,7 +13,7 @@ app = Flask(__name__)
 def posts():
     return render_template('posts.html', content=dummy_posts)
 
-
+print(dummy_posts)
 @app.route('/posts/new', methods=['GET','POST'])
 def new():
     if request.method == 'POST':
@@ -27,7 +27,14 @@ def new():
         return redirect(url_for('posts'))
     return render_template('post.html')
   
-    
+
+@app.route('/posts/<int:id>/edit')
+def edit(id):
+    for post in dummy_posts:
+        if post.id == id:
+            found_post = post
+    return render_template('edit.html', post=found_post)
+
 if __name__ == '__main__':
     # Run the app server on localhost:4449
     app.run(debug=True)
