@@ -28,11 +28,20 @@ def new():
     return render_template('post.html')
   
 
-@app.route('/posts/<int:id>/edit')
+@app.route('/posts/<int:id>/edit', methods=['GET','POST'])
 def edit(id):
     for post in dummy_posts:
         if post.id == id:
             found_post = post
+    if request.method == 'POST':
+        date_now = datetime.datetime.now()
+        post = Post(title=request.form.get("title"), owner= request.form.get("owner"),
+                    contents=request.form.get("contents"),
+                    created_at=date_now.strftime("%Y, %B, %A"),
+                    modified_at=date_now.strftime("%Y, %B, %A"))
+        dummy_posts.remove(found_post)
+        dummy_posts.append(post)
+        return redirect(url_for('posts'))
     return render_template('edit.html', post=found_post)
 
 if __name__ == '__main__':

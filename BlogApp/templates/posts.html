@@ -2,11 +2,11 @@
 
 {% block content %}
     {% for post in content %}
-        <a href="edit">
+
             <h1>{{ post.title }}</h1>
-            <p>By {{ post.owner }} on {{ post.created_at }}</p>
+            <p>By {{ post.owner }} on {{ post.created_at }} <small>Id is {{post.id}}</small></p>
             <p>{{ post.contents }}</p>
-        </a>
+
 
     {% endfor %}
 {% endblock content %}
