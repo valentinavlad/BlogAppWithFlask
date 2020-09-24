@@ -30,13 +30,21 @@
     <Compile Include="app.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="post.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="posts_data.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="templates\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="templates\home.html" />
+    <Content Include="templates\edit.html" />
+    <Content Include="templates\posts.html" />
     <Content Include="templates\layout.html" />
+    <Content Include="templates\navigation.html" />
     <Content Include="templates\post.html" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Web.targets" />

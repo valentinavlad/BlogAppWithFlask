@@ -1,4 +1,4 @@
-posts = [
+dummy_posts = [
     {
         'id': 1,
         'title': 'Python',

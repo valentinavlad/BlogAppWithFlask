@@ -1,0 +1,12 @@
+﻿{% extends "layout.html" %}
+
+{% block content %}
+    {% for post in content %}
+        <a href="edit">
+            <h1>{{ post.title }}</h1>
+            <p>By {{ post.owner }} on {{ post.created_at }}</p>
+            <p>{{ post.contents }}</p>
+        </a>
+
+    {% endfor %}
+{% endblock content %}
