@@ -6,11 +6,13 @@ from posts_data import dummy_posts
 import random
 from post import Post
 
+
 app = Flask(__name__)
 
 @app.route('/')
 @app.route('/posts', methods=['GET','POST'])
 def posts():
+    
     return render_template('posts.html', content=dummy_posts)
 
 print(dummy_posts)
@@ -20,10 +22,10 @@ def new():
         date_now = datetime.datetime.now()
         post = Post(title=request.form.get("title"), owner= request.form.get("owner"),
                     contents=request.form.get("contents"),
-                    created_at=date_now.strftime("%Y, %B, %A"),
-                    modified_at=date_now.strftime("%Y, %B, %A"))
+                    created_at=date_now.strftime("%Y, %B, %d"),
+                    modified_at=date_now.strftime("%Y, %B, %d"))
 
-        dummy_posts.append(post)
+        dummy_posts.insert(0, post)
         return redirect(url_for('posts'))
     return render_template('post.html')
   

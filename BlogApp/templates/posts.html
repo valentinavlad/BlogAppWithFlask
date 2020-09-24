@@ -1,12 +1,22 @@
 ﻿{% extends "layout.html" %}
 
 {% block content %}
+<div class="jumbotron text-center">
+    <h2>Check our latest posts in web technologies!</h2>
+</div>
     {% for post in content %}
-
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <a href="{{url_for('edit', id=post.id)}}">
             <h1>{{ post.title }}</h1>
-            <p>By {{ post.owner }} on {{ post.created_at }} <small>Id is {{post.id}}</small></p>
-            <p>{{ post.contents }}</p>
+        </a>
 
+        <p>By {{ post.owner }} on {{ post.created_at }} <small>Id is {{post.id}}</small></p>
+        <p>{{ post.contents }}</p>
+
+    </div>
+</div>
 
     {% endfor %}
+
 {% endblock content %}
