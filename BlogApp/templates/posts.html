@@ -5,7 +5,7 @@
     <h2>Check our latest posts in web technologies!</h2>
 </div>
     {% for post in content %}
-<div class="row">
+<div class="row posts">
     <div class="col-md-6 offset-md-3">
         <a href="{{url_for('edit', id=post.id)}}">
             <h1>{{ post.title }}</h1>
@@ -16,7 +16,6 @@
 
     </div>
 </div>
-
     {% endfor %}
 
 {% endblock content %}

@@ -1,0 +1,7 @@
+.posts h1 {
+    color: black;
+}
+
+.posts a:hover{
+    text-decoration: none;
+}
