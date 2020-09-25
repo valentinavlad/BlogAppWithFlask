@@ -5,14 +5,14 @@ import datetime
 from posts_data import dummy_posts
 import random
 from post import Post
-
+from flask import Response
 
 app = Flask(__name__)
 
 @app.route('/')
 @app.route('/posts', methods=['GET','POST'])
 def posts():
-    
+  
     return render_template('posts.html', content=dummy_posts)
 
 print(dummy_posts)
@@ -22,8 +22,8 @@ def new():
         date_now = datetime.datetime.now()
         post = Post(title=request.form.get("title"), owner= request.form.get("owner"),
                     contents=request.form.get("contents"),
-                    created_at=date_now.strftime("%Y, %B, %d"),
-                    modified_at=date_now.strftime("%Y, %B, %d"))
+                    created_at=date_now.strftime("%B %d, %Y"),
+                    modified_at=date_now.strftime("%B %d, %Y"))
 
         dummy_posts.insert(0, post)
         return redirect(url_for('posts'))
@@ -46,6 +46,19 @@ def edit(id):
         return redirect(url_for('posts'))
     return render_template('edit.html', post=found_post)
 
+@app.route('/posts/<int:id>/delete', methods=['GET','DELETE'])
+def delete(id):
+    deleted = False
+    for post in dummy_posts:
+        if post.id == id:
+            found_post = post
+            deleted = True
+            dummy_posts.remove(found_post)
+    if deleted:
+        return Response("", status=204)
+    else:
+        return Response("", status=400)
+   
 if __name__ == '__main__':
     # Run the app server on localhost:4449
     app.run(debug=True)

@@ -38,9 +38,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="static\" />
     <Folder Include="templates\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="static\style.css">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="templates\edit.html" />
     <Content Include="templates\posts.html" />
     <Content Include="templates\layout.html" />
