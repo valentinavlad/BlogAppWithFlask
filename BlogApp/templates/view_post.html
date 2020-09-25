@@ -8,7 +8,10 @@
 <p>By {{ post.owner }} on {{ post.created_at }} <small>Id is {{post.id}}</small></p>
 <p>{{ post.contents }}</p>
 
-<button type="submit" class="btn btn-primary">Update</button>
-<button type="submit" class="btn btn-danger">Delete post</button>
+<a href="{{url_for('edit', id=post.id)}}" class="btn btn-primary">Edit your post</a>
+<form method="POST" id="delete_form">
+    <button type="submit" class="btn btn-danger">Delete post</button>
+</form>
+
 
 {% endblock content %}

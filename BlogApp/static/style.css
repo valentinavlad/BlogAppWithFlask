@@ -5,3 +5,7 @@
 .posts a:hover{
     text-decoration: none;
 }
+
+#delete_form {
+    display: inline-block;
+}

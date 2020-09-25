@@ -10,11 +10,10 @@ from flask import Response
 app = Flask(__name__)
 
 @app.route('/')
-@app.route('/posts', methods=['GET','POST'])
+@app.route('/posts/', methods=['GET','POST'])
 def posts():
     return render_template('posts.html', content=dummy_posts)
 
-print(dummy_posts)
 @app.route('/posts/new', methods=['GET','POST'])
 def new():
     if request.method == 'POST':
@@ -52,8 +51,7 @@ def edit(id):
         return redirect(url_for('posts'))
     return render_template('edit.html', post=found_post)
 
-# doesn't work
-@app.route('/posts/<int:id>/delete', methods=['POST'])
+@app.route('/posts/<int:id>', methods=['POST'])
 def delete(id):
     deleted = False
     for post in dummy_posts:
@@ -62,9 +60,10 @@ def delete(id):
             deleted = True
             dummy_posts.remove(found_post)
     if deleted:
-        return Response("", status=204)
+        return redirect(url_for('posts'))
     else:
         return Response("", status=400)
+
    
 if __name__ == '__main__':
     # Run the app server on localhost:4449
