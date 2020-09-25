@@ -4,14 +4,16 @@
 <div class="text-center">
     <h2>Hi! View your post</h2>
 </div>
-<h1>{{post.title}}</h1>
-<p>By {{ post.owner }} on {{ post.created_at }} <small>Id is {{post.id}}</small></p>
-<p>{{ post.contents }}</p>
+<div class="row posts">
+    <div class="col-md-12">
+        <h3>{{post.title}}</h3>
+        <p>By {{ post.owner }} on {{ post.created_at }} <small>Id is {{post.id}}</small></p>
+        <p id="view_content">{{ post.contents }}</p>
 
-<a href="{{url_for('edit', id=post.id)}}" class="btn btn-primary">Edit your post</a>
-<form method="POST" id="delete_form">
-    <button type="submit" class="btn btn-danger">Delete post</button>
-</form>
-
-
+        <a href="{{url_for('edit', id=post.id)}}" class="btn btn-primary">Edit your post</a>
+        <form method="POST" id="delete_form">
+            <button type="submit" class="btn btn-danger">Delete post</button>
+        </form>
+    </div>
+</div>   
 {% endblock content %}

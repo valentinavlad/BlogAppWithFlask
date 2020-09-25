@@ -6,14 +6,16 @@
 </div>
     {% for post in content %}
 <div class="row posts">
-    <div class="col-md-6 offset-md-3">
-        <a href="{{url_for('view_post', id=post.id)}}">
-            <h1>{{ post.title }}</h1>
-        </a>
+    <div class="col-lg-8 col-md-10 mx-auto">
+        <div class="post-preview">
+            <a href="{{url_for('view_post', id=post.id)}}">
+                <h1>{{ post.title }}</h1>
+            </a>
 
-        <p>By {{ post.owner }} on {{ post.created_at }} <small>Id is {{post.id}}</small></p>
-        <p>{{ post.contents }}</p>
+            <p>By {{ post.owner }} on {{ post.created_at }} <small>Id is {{post.id}}</small></p>
 
+            <p>{{ post.contents[:150] }} ...</p>
+        </div>
     </div>
 </div>
     {% endfor %}

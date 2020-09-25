@@ -9,3 +9,7 @@
 #delete_form {
     display: inline-block;
 }
+
+#contents, #view_content {
+    white-space: pre-wrap;
+}
