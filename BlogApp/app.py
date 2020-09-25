@@ -1,6 +1,4 @@
 from flask import Flask, url_for, request, render_template, redirect
-from markupsafe import escape
-import json
 import datetime
 from posts_data import dummy_posts
 import random
@@ -8,6 +6,7 @@ from post import Post
 from flask import Response
 
 app = Flask(__name__)
+dummy_posts.sort(key=lambda x: x.created_at, reverse=True)
 
 @app.route('/')
 @app.route('/posts/', methods=['GET','POST'])
@@ -47,7 +46,7 @@ def edit(id):
                     created_at=date_now.strftime("%B %d, %Y"),
                     modified_at=date_now.strftime("%B %d, %Y"))
         dummy_posts.remove(found_post)
-        dummy_posts.append(post)
+        dummy_posts.insert(0, post)
         return redirect(url_for('posts'))
     return render_template('edit.html', post=found_post)
 
@@ -64,7 +63,6 @@ def delete(id):
     else:
         return Response("", status=400)
 
-   
 if __name__ == '__main__':
     # Run the app server on localhost:4449
     app.run(debug=True)

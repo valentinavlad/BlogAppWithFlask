@@ -24,4 +24,3 @@ post_five = Post(title='Angular', owner= 'V.W. Craig',
 
 dummy_posts = [ post_one, post_two, post_three, post_four,post_five ]
 
-dummy_posts.sort(key=lambda x: x.created_at, reverse=True)
