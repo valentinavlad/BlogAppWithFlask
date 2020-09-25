@@ -10,7 +10,7 @@ from flask import Response
 app = Flask(__name__)
 
 @app.route('/')
-@app.route('/posts/', methods=['GET','POST'])
+@app.route('/posts', methods=['GET','POST'])
 def posts():
     return render_template('posts.html', content=dummy_posts)
 
@@ -27,7 +27,15 @@ def new():
         dummy_posts.insert(0, post)
         return redirect(url_for('posts'))
     return render_template('post.html')
-  
+
+@app.route('/posts/<int:id>', methods=['GET'])
+def view_post(id):
+    for post in dummy_posts:
+        if post.id == id:
+            found_post = post
+
+    return render_template('view_post.html', post=found_post)
+
 @app.route('/posts/<int:id>/edit', methods=['GET','POST'])
 def edit(id):
     for post in dummy_posts:

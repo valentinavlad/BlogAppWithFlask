@@ -1,0 +1,14 @@
+﻿{% extends "layout.html" %}
+{% block content %}
+
+<div class="text-center">
+    <h2>Hi! View your post</h2>
+</div>
+<h1>{{post.title}}</h1>
+<p>By {{ post.owner }} on {{ post.created_at }} <small>Id is {{post.id}}</small></p>
+<p>{{ post.contents }}</p>
+
+<button type="submit" class="btn btn-primary">Update</button>
+<button type="submit" class="btn btn-danger">Delete post</button>
+
+{% endblock content %}
