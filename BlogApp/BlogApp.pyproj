@@ -50,6 +50,7 @@
     <Content Include="templates\layout.html" />
     <Content Include="templates\navigation.html" />
     <Content Include="templates\post.html" />
+    <Content Include="templates\view_post.html" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Web.targets" />
   <!-- Specify pre- and post-build commands in the BeforeBuild and 

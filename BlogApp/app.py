@@ -1,9 +1,7 @@
-from flask import Flask, url_for, request, render_template, redirect
 import datetime
+from flask import Flask, url_for, request, render_template, redirect, Response
 from posts_data import dummy_posts
-import random
 from post import Post
-from flask import Response
 
 app = Flask(__name__)
 dummy_posts.sort(key=lambda x: x.created_at, reverse=True)
@@ -17,11 +15,11 @@ def posts():
 def new():
     if request.method == 'POST':
         date_now = datetime.datetime.now()
-        post = Post(title=request.form.get("title"), owner= request.form.get("owner"),
-                    contents=request.form.get("contents"),
-                    created_at=date_now.strftime("%B %d, %Y"),
-                    modified_at=date_now.strftime("%B %d, %Y"))
-
+        post = Post(title=request.form.get("title"), 
+                    owner= request.form.get("owner"),
+                    contents=request.form.get("contents"))
+        post.created_at = date_now.strftime("%B %d, %Y")
+        post.modified_at = date_now.strftime("%B %d, %Y")
         dummy_posts.insert(0, post)
         return redirect(url_for('posts'))
     return render_template('post.html')
@@ -29,7 +27,7 @@ def new():
 @app.route('/posts/<int:id>', methods=['GET'])
 def view_post(id):
     for post in dummy_posts:
-        if post.id == id:
+        if post.post_id== id:
             found_post = post
 
     return render_template('view_post.html', post=found_post)
@@ -37,14 +35,15 @@ def view_post(id):
 @app.route('/posts/<int:id>/edit', methods=['GET','POST'])
 def edit(id):
     for post in dummy_posts:
-        if post.id == id:
+        if post.post_id == id:
             found_post = post
     if request.method == 'POST':
         date_now = datetime.datetime.now()
-        post = Post(title=request.form.get("title"), owner= request.form.get("owner"),
-                    contents=request.form.get("contents"),
-                    created_at=date_now.strftime("%B %d, %Y"),
-                    modified_at=date_now.strftime("%B %d, %Y"))
+        post = Post(title=request.form.get("title"), 
+                    owner= request.form.get("owner"),
+                    contents=request.form.get("contents"))
+        post.created_at = date_now.strftime("%B %d, %Y")
+        post.modified_at = date_now.strftime("%B %d, %Y")
         dummy_posts.remove(found_post)
         dummy_posts.insert(0, post)
         return redirect(url_for('posts'))
@@ -54,14 +53,13 @@ def edit(id):
 def delete(id):
     deleted = False
     for post in dummy_posts:
-        if post.id == id:
+        if post.post_id == id:
             found_post = post
             deleted = True
             dummy_posts.remove(found_post)
     if deleted:
         return redirect(url_for('posts'))
-    else:
-        return Response("", status=400)
+    return Response("", status=400)
 
 if __name__ == '__main__':
     # Run the app server on localhost:4449
