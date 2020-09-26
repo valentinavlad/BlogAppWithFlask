@@ -36,12 +36,23 @@
     <Compile Include="models\__init__.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="posts_data.py">
+    <Compile Include="repository\posts_data.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="repository\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="views\index.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="views\__init__.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="models\" />
+    <Folder Include="views\" />
+    <Folder Include="repository\" />
     <Folder Include="static\" />
     <Folder Include="templates\" />
   </ItemGroup>
