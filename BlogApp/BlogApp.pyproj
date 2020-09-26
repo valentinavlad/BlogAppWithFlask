@@ -30,7 +30,10 @@
     <Compile Include="app.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="post.py">
+    <Compile Include="models\post.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="models\__init__.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="posts_data.py">
@@ -38,6 +41,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="models\" />
     <Folder Include="static\" />
     <Folder Include="templates\" />
   </ItemGroup>

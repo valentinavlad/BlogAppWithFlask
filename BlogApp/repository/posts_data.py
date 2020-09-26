@@ -1,4 +1,4 @@
-from post import Post
+from models.post import Post
 
 post_one = Post(title='Python', owner= 'D.B.Higgins',
                     contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
@@ -27,13 +27,14 @@ post_three.modified_at = 'May 2, 2018'
 post_four = Post(title='Javascript', owner= 'D.B.Poppask',
                     contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
                     Aenean commodo ligula eget dolor. Aenean commodo ligula eget dolor""")
-post_four.created_at = 'June 13, 2020'
-post_four.modified_at = 'June 15, 2020'
+post_four.created_at = 'June 13, 2019'
+post_four.modified_at = 'June 15, 2019'
 
 post_five = Post(title='Angular', owner= 'V.W. Craig',
                     contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
                     Aenean commodo ligula eget dolor.""")
-post_five.created_at = 'March 13, 2019'
+post_five.created_at = 'March 13, 2020'
 post_five.modified_at = 'June 13, 2020'
 
 dummy_posts = [ post_one, post_two, post_three, post_four,post_five ]
+dummy_posts.sort(key=lambda x: x.created_at, reverse=True)

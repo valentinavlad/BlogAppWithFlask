@@ -1,10 +1,10 @@
 import datetime
 from flask import Flask, url_for, request, render_template, redirect, Response
-from posts_data import dummy_posts
-from post import Post
+from repository.posts_data import dummy_posts
+from models.post import Post
 
 app = Flask(__name__)
-dummy_posts.sort(key=lambda x: x.created_at, reverse=True)
+
 
 @app.route('/')
 @app.route('/posts/', methods=['GET','POST'])
