@@ -1,8 +1,5 @@
-import datetime
 from flask import Blueprint, render_template
 from flask import url_for, request, redirect
-from repository.posts_data import dummy_posts
-from models.post import Post
 from repository.in_memory_db import InMemoryDb
 
 index_blueprint = Blueprint('index', __name__, template_folder='templates',
@@ -12,13 +9,13 @@ db = InMemoryDb()
 @index_blueprint.route('/')
 @index_blueprint.route('/posts/', methods=['GET','POST'])
 def posts():
-    return render_template('posts.html', content=dummy_posts)
+    return render_template('posts.html', content=db.view_posts())
 
 @index_blueprint.route('/posts/new', methods=['GET','POST'])
 def new():
     if request.method == 'POST':
-       db.add()
-       return redirect(url_for('index.posts'))
+        db.add()
+        return redirect(url_for('index.posts'))
     return render_template('post.html')
 
 @index_blueprint.route('/posts/<int:pid>', methods=['GET'])
@@ -39,7 +36,7 @@ def edit(pid):
 def delete(pid):
     deleted = False
     post_delete = db.find_post_id(pid)
-    if post_delete != None:
+    if post_delete is not None:
         deleted = True
         db.delete(post_delete, pid)
     if deleted:
