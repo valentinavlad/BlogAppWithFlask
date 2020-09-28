@@ -12,5 +12,4 @@ class Post():
         self.title = title
         self.owner = owner
         self.contents = contents
-       
         Post.count += 1

@@ -1,11 +1,13 @@
 import datetime
 from flask import Blueprint, render_template
-from flask import url_for, request, redirect, Response
+from flask import url_for, request, redirect
 from repository.posts_data import dummy_posts
 from models.post import Post
+from repository.in_memory_db import InMemoryDb
 
 index_blueprint = Blueprint('index', __name__, template_folder='templates',
                             static_folder='static')
+db = InMemoryDb()
 
 @index_blueprint.route('/')
 @index_blueprint.route('/posts/', methods=['GET','POST'])
@@ -15,50 +17,31 @@ def posts():
 @index_blueprint.route('/posts/new', methods=['GET','POST'])
 def new():
     if request.method == 'POST':
-        date_now = datetime.datetime.now()
-        post = Post(title=request.form.get("title"), 
-                    owner= request.form.get("owner"),
-                    contents=request.form.get("contents"))
-        post.created_at = date_now.strftime("%B %d, %Y")
-        post.modified_at = date_now.strftime("%B %d, %Y")
-        dummy_posts.insert(0, post)
-        return redirect(url_for('index.posts'))
+       db.add()
+       return redirect(url_for('index.posts'))
     return render_template('post.html')
 
-@index_blueprint.route('/posts/<int:id>', methods=['GET'])
-def view_post(id):
-    for post in dummy_posts:
-        if post.post_id== id:
-            found_post = post
-
-    return render_template('view_post.html', post=found_post)
-
-@index_blueprint.route('/posts/<int:id>/edit', methods=['GET','POST'])
-def edit(id):
-    for post in dummy_posts:
-        if post.post_id == id:
-            found_post = post
+@index_blueprint.route('/posts/<int:pid>', methods=['GET'])
+def view_post(pid):
+    post = db.find_post_id(pid)
+    print(post.title + " vieww")
+    return render_template('view_post.html', post=post)
+    
+@index_blueprint.route('/posts/<int:pid>/edit', methods=['GET','POST'])
+def edit(pid):
+    post = db.find_post_id(pid)
     if request.method == 'POST':
-        date_now = datetime.datetime.now()
-        post = Post(title=request.form.get("title"), 
-                    owner= request.form.get("owner"),
-                    contents=request.form.get("contents"))
-        post.created_at = date_now.strftime("%B %d, %Y")
-        post.modified_at = date_now.strftime("%B %d, %Y")
-        dummy_posts.remove(found_post)
-        dummy_posts.insert(0, post)
+        db.edit(pid)
         return redirect(url_for('index.posts'))
-    return render_template('edit.html', post=found_post)
+    return render_template('edit.html', post=post)
 
-@index_blueprint.route('/posts/<int:id>', methods=['POST'])
-def delete(id):
+@index_blueprint.route('/posts/<int:pid>', methods=['POST'])
+def delete(pid):
     deleted = False
-    for post in dummy_posts:
-        if post.post_id == id:
-            found_post = post
-            deleted = True
-            dummy_posts.remove(found_post)
+    post_delete = db.find_post_id(pid)
+    if post_delete != None:
+        deleted = True
+        db.delete(post_delete, pid)
     if deleted:
         return redirect(url_for('index.posts'))
     return render_template('view_post.html')
-
