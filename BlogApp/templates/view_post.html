@@ -13,7 +13,7 @@
 
         <a href="{{url_for('index.edit', id=post.post_id)}}" class="btn btn-primary">Edit your post</a>
         <form method="POST" id="delete_form">
-            <button type="submit" class="btn btn-danger">Delete post</button>
+            <button type="submit" class="btn btn-danger" id="confirm-delete" onclick="confirm()">Delete post</button>
         </form>
     </div>
 </div>   
