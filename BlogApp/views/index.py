@@ -60,5 +60,5 @@ def delete(id):
             dummy_posts.remove(found_post)
     if deleted:
         return redirect(url_for('index.posts'))
-    return Response("", status=400)
+    return render_template('view_post.html')
 
