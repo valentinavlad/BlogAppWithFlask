@@ -6,7 +6,7 @@
     <ProjectGuid>7c29c69f-defb-46c9-b7d8-2ceb2004ff8f</ProjectGuid>
     <ProjectHome>.</ProjectHome>
     <ProjectTypeGuids>{1b580a1a-fdb3-4b32-83e1-6407eb2722e6};{349c5851-65df-11da-9384-00065b846f21};{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
-    <StartupFile>connect.py</StartupFile>
+    <StartupFile>app.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -37,6 +37,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="connect.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="create_table.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="models\post.py">
