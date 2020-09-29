@@ -2,10 +2,11 @@ from flask import Blueprint, render_template
 from flask import url_for, request, redirect
 from repository.in_memory_db import InMemoryDb
 from repository.repo_db import RepoDb
+from repository.repo_factory import RepoFactory
 
 index_blueprint = Blueprint('index', __name__, template_folder='templates',
                             static_folder='static')
-db = InMemoryDb()
+db = RepoFactory.get_repo("InMemoryDb")
 
 @index_blueprint.route('/')
 @index_blueprint.route('/posts/', methods=['GET','POST'])

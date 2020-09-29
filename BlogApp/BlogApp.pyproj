@@ -60,6 +60,9 @@
     <Compile Include="repository\repo_db.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="repository\repo_factory.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="repository\__init__.py">
       <SubType>Code</SubType>
     </Compile>
