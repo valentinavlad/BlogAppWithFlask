@@ -6,7 +6,7 @@
     <ProjectGuid>7c29c69f-defb-46c9-b7d8-2ceb2004ff8f</ProjectGuid>
     <ProjectHome>.</ProjectHome>
     <ProjectTypeGuids>{1b580a1a-fdb3-4b32-83e1-6407eb2722e6};{349c5851-65df-11da-9384-00065b846f21};{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
-    <StartupFile>app.py</StartupFile>
+    <StartupFile>connect.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -17,6 +17,9 @@
     <Name>BlogApp</Name>
     <RootNamespace>BlogApp</RootNamespace>
     <WebBrowserPort>4449</WebBrowserPort>
+    <TestFramework>Pytest</TestFramework>
+    <InterpreterPath>
+    </InterpreterPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -28,6 +31,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="config.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="connect.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="models\post.py">
@@ -43,6 +52,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="repository\posts_data.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="repository\repo_db.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="repository\__init__.py">
@@ -68,6 +80,9 @@
     <Folder Include="templates\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="database.ini">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="static\img\1.jpg" />
     <Content Include="static\script.js" />
     <Content Include="static\style.css">

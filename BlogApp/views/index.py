@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template
 from flask import url_for, request, redirect
 from repository.in_memory_db import InMemoryDb
+from repository.repo_db import RepoDb
 
 index_blueprint = Blueprint('index', __name__, template_folder='templates',
                             static_folder='static')
