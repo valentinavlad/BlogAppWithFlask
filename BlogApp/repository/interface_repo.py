@@ -2,18 +2,18 @@ import abc
 class InterfaceRepo(abc.ABC):
     """description of class"""
     @abc.abstractclassmethod
-    def find_post_id(self,pid):
+    def find_post_id(cls,pid):
         pass
     @abc.abstractclassmethod
-    def view_posts(self):
+    def view_posts(cls):
         pass
     @abc.abstractclassmethod
-    def edit(self, pid):
+    def edit(cls, pid):
         pass
     @abc.abstractclassmethod
-    def delete(self, found_post, pid):
+    def delete(cls, found_post, pid):
         pass
     @abc.abstractclassmethod
-    def add(self):
+    def add(cls):
         pass
 

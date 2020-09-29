@@ -48,6 +48,9 @@
     <Compile Include="repository\__init__.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tests\test_flaskr.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="views\index.py">
       <SubType>Code</SubType>
     </Compile>
@@ -57,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="models\" />
+    <Folder Include="tests\" />
     <Folder Include="static\img\" />
     <Folder Include="views\" />
     <Folder Include="repository\" />
