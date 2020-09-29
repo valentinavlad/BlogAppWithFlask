@@ -42,9 +42,6 @@
     <Compile Include="create_table.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="insert_into_table.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="models\post.py">
       <SubType>Code</SubType>
     </Compile>
