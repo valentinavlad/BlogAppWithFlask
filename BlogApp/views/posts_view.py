@@ -11,7 +11,7 @@ print(db.view_posts())
 @index_blueprint.route('/')
 @index_blueprint.route('/posts/', methods=['GET','POST'])
 def posts():
-    return render_template('posts.html', content=db.view_posts())
+    return render_template('list_posts.html', content=db.view_posts())
 
 @index_blueprint.route('/posts/new', methods=['GET','POST'])
 def new():
@@ -22,7 +22,7 @@ def new():
         post.modified_at = date_now.strftime("%B %d, %Y")
         db.add_post(post)
         return redirect(url_for('index.posts'))
-    return render_template('post.html')
+    return render_template('add_post.html')
 
 @index_blueprint.route('/posts/<int:pid>', methods=['GET'])
 def view_post(pid):
@@ -43,7 +43,7 @@ def edit(pid):
             post.modified_at = date_now.strftime("%B %d, %Y")
             db.edit_post(post)
         return redirect(url_for('index.view_post', pid=post.post_id))
-    return render_template('edit.html', post=found_post)
+    return render_template('edit_post.html', post=found_post)
 
 @index_blueprint.route('/posts/<int:pid>', methods=['POST'])
 def delete(pid):
