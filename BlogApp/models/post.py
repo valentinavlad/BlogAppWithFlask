@@ -13,3 +13,7 @@ class Post():
         self.owner = owner
         self.contents = contents
         Post.count += 1
+    def __str__(self):
+        return self.title + " " + self.owner
+
+    __repr__ = __str__

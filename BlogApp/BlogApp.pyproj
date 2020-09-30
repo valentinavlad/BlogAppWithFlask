@@ -6,7 +6,7 @@
     <ProjectGuid>7c29c69f-defb-46c9-b7d8-2ceb2004ff8f</ProjectGuid>
     <ProjectHome>.</ProjectHome>
     <ProjectTypeGuids>{1b580a1a-fdb3-4b32-83e1-6407eb2722e6};{349c5851-65df-11da-9384-00065b846f21};{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
-    <StartupFile>repository\repo_db.py</StartupFile>
+    <StartupFile>app.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -33,13 +33,13 @@
     <Compile Include="app.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="config.py">
+    <Compile Include="setup\config.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="connect.py">
+    <Compile Include="setup\connect.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="create_table.py">
+    <Compile Include="setup\create_table.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="models\post.py">
@@ -48,19 +48,19 @@
     <Compile Include="models\__init__.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="repository\interface_repo.py">
+    <Compile Include="repository\interface_posts_repo.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="repository\in_memory_db.py">
+    <Compile Include="repository\in_memory_posts.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="repository\posts_data.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="repository\repo_db.py">
+    <Compile Include="repository\database_posts_repo.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="repository\repo_factory.py">
+    <Compile Include="repository\posts_repo_factory.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="repository\__init__.py">
@@ -72,7 +72,7 @@
     <Compile Include="tests\test_flaskr.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="views\index.py">
+    <Compile Include="views\posts_view.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="views\__init__.py">
@@ -81,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="models\" />
+    <Folder Include="setup\" />
     <Folder Include="tests\" />
     <Folder Include="static\img\" />
     <Folder Include="views\" />
@@ -89,7 +90,7 @@
     <Folder Include="templates\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="database.ini">
+    <Content Include="setup\database.ini">
       <SubType>Code</SubType>
     </Content>
     <Content Include="static\img\1.jpg" />

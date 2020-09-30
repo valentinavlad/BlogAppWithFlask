@@ -1,7 +1,7 @@
-from repository.interface_repo import InterfaceRepo
+from repository.interface_posts_repo import InterfacePostRepo
 import psycopg2
 
-class RepoDb(InterfaceRepo):
+class DatabasePostRepo(InterfacePostRepo):
     """description of class"""
     def __init__(self):
         pass

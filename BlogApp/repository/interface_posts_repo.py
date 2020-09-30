@@ -1,5 +1,7 @@
 import abc
-class InterfaceRepo(abc.ABC):
+from models.post import Post
+
+class InterfacePostRepo(abc.ABC):
     """description of class"""
     @abc.abstractclassmethod
     def find_post_id(cls,pid):
@@ -8,12 +10,12 @@ class InterfaceRepo(abc.ABC):
     def view_posts(cls):
         pass
     @abc.abstractclassmethod
-    def edit(cls, pid):
+    def edit_post(cls, post):
         pass
     @abc.abstractclassmethod
-    def delete(cls, found_post, pid):
+    def delete_post(cls, pid):
         pass
     @abc.abstractclassmethod
-    def add(cls):
+    def add_post(cls, post):
         pass
 
