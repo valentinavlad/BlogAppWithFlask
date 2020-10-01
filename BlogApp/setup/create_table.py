@@ -1,5 +1,5 @@
 import psycopg2
-from config import config
+from setup.config import config
 
 
 def create_table():
@@ -27,7 +27,7 @@ def create_table():
         cur.close()
         # commit the changes
         conn.commit()
-    except (Exception, psycopg2.DatabaseError) as error:
+    except (ConnectionError, psycopg2.DatabaseError) as error:
         print(error)
     finally:
         if conn is not None:

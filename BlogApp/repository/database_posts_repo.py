@@ -1,13 +1,19 @@
-from repository.interface_posts_repo import InterfacePostRepo
 import psycopg2
+from repository.interface_posts_repo import InterfacePostRepo
+from setup.config import config
 
 class DatabasePostRepo(InterfacePostRepo):
-    """description of class"""
     def __init__(self):
         pass
-    def add(self):
-        sql = "INSERT INTO posts(title, owner,contents,created_at,modified_at) VALUES(%s,%s,%s,%s,%s)"
-        # ??? 
+    def find_post_id(self, pid):
+        pass
+    def edit_post(self, post):
+        pass
+    def delete_post(self, pid):
+        pass
+
+    def add_post(self, post):
+        pass
     def view_posts(self):
         conn = None
         try:
@@ -23,7 +29,7 @@ class DatabasePostRepo(InterfacePostRepo):
                 row = cur.fetchone()
 
             cur.close()
-        except (Exception, psycopg2.DatabaseError) as error:
+        except (ConnectionError, psycopg2.DatabaseError) as error:
             print(error)
         finally:
             if conn is not None:
