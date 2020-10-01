@@ -93,7 +93,7 @@
     <Folder Include="templates\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="setup\database.ini">
+    <Content Include="database.ini">
       <SubType>Code</SubType>
     </Content>
     <Content Include="static\img\1.jpg" />

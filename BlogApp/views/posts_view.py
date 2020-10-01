@@ -6,7 +6,9 @@ from models.post import Post
 index_blueprint = Blueprint('index', __name__, template_folder='templates',
                             static_folder='static')
 db = PostsRepoFactory.get_repo("InMemoryPosts")
-
+#db = PostsRepoFactory.get_repo("DatabasePostRepo")
+print(type(db.view_posts()))
+print(db.view_posts()[0])
 @index_blueprint.route('/')
 @index_blueprint.route('/posts/', methods=['GET','POST'])
 def posts():
@@ -15,11 +17,10 @@ def posts():
 @index_blueprint.route('/posts/new', methods=['GET','POST'])
 def new():
     if request.method == 'POST':
-        date_now = datetime.datetime.now()
+        date_now = datetime.datetime.now().strftime("%B %d, %Y")
         post = Post(title=request.form.get("title"),owner= request.form.get("owner"),
-                    contents=request.form.get("contents"))
-        post.created_at = date_now.strftime("%B %d, %Y")
-        post.modified_at = date_now.strftime("%B %d, %Y")
+                    contents=request.form.get("contents"), created_at =date_now, 
+                    modified_at = date_now)
         db.add_post(post)
         return redirect(url_for('index.posts'))
     return render_template('add_post.html')

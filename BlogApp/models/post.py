@@ -3,15 +3,13 @@ import datetime
 class Post():
     count = 1
 
-    date_now = datetime.datetime.now()
-    created_at= date_now.strftime("%B %d, %Y")
-    modified_at = date_now.strftime("%B %d, %Y")
-
-    def __init__(self,title,owner,contents):
+    def __init__(self,title,owner,contents, created_at,modified_at):
         self.post_id = Post.count
         self.title = title
         self.owner = owner
         self.contents = contents
+        self.created_at =  created_at
+        self.modified_at = modified_at
         Post.count += 1
     def __str__(self):
         return self.title + " " + self.owner
