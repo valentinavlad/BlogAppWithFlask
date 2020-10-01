@@ -5,8 +5,8 @@ from models.post import Post
 
 index_blueprint = Blueprint('index', __name__, template_folder='templates',
                             static_folder='static')
-db = PostsRepoFactory.get_repo("InMemoryPosts")
-#db = PostsRepoFactory.get_repo("DatabasePostRepo")
+#db = PostsRepoFactory.get_repo("InMemoryPosts")
+db = PostsRepoFactory.get_repo("DatabasePostRepo")
 print(type(db.view_posts()))
 print(db.view_posts()[0])
 @index_blueprint.route('/')
