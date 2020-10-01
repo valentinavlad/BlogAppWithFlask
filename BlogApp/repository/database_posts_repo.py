@@ -36,7 +36,35 @@ class DatabasePostRepo(InterfacePostRepo):
                 conn.close()
         return post
     def edit_post(self, post):
-        pass
+        sql = """UPDATE posts 
+                    SET title=%s, owner=%s, contents=%s,  created_at=%s,
+                    modified_at=%s
+                    WHERE post_id=%s"""
+        record_to_update = (post.title, post.owner, post.contents, post.created_at, post.modified_at,post.post_id)
+        conn = None
+        update_rows = 0
+        try:
+            # read database configuration
+            params = config()
+            # connect to the PostgreSQL database
+            conn = psycopg2.connect(**params)
+            # create a new cursor
+            cur = conn.cursor()
+            # execute the UPDATE  statement
+            cur.execute(sql, record_to_update)
+            # get the number of updated rows
+            updated_rows = cur.rowcount
+            print("ÜPDATE POST")
+            print(updated_rows)
+            # Commit the changes to the database
+            conn.commit()
+            # Close communication with the PostgreSQL database
+            cur.close()
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+        finally:
+            if conn is not None:
+                conn.close()
     def delete_post(self, pid):
         conn = None
         try:
@@ -85,7 +113,7 @@ class DatabasePostRepo(InterfacePostRepo):
             params = config()
             conn = psycopg2.connect(**params)
             cur = conn.cursor()
-            cur.execute("SELECT * FROM posts ORDER BY created_at")
+            cur.execute("SELECT * FROM posts ORDER BY created_at desc")
             row = cur.fetchone()   
             while row is not None:
                 post = self.transfrom_row_in_post(row)
