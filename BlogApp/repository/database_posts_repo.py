@@ -13,14 +13,47 @@ class DatabasePostRepo(InterfacePostRepo):
         created_at = row[4]
         modified_at = row[5]
         post = Post(title,owner,contents, created_at, modified_at)
+        post.post_id = post_id
         return post
 
     def find_post_id(self, pid):
-        pass
+        conn = None
+        try:
+            params = config()
+            conn = psycopg2.connect(**params)
+            cur = conn.cursor()
+            sql = "SELECT * FROM posts WHERE post_id=%s"
+            cur.execute(sql, (pid,))
+            row = cur.fetchone()
+            post = self.transfrom_row_in_post(row)
+            count = cur.rowcount
+            print(count, "Post was found ")
+            cur.close()          
+        except (ConnectionError, psycopg2.DatabaseError) as error:
+            print(error)
+        finally:
+            if conn is not None:
+                conn.close()
+        return post
     def edit_post(self, post):
         pass
     def delete_post(self, pid):
-        pass
+        conn = None
+        try:
+            params = config()
+            conn = psycopg2.connect(**params)
+            cur = conn.cursor()
+            sql = "DELETE FROM posts WHERE post_id=%s"
+            cur.execute(sql, (pid, ))
+            conn.commit()
+            count = cur.rowcount
+            print(count, "Record deleted successfully ")
+            cur.close()          
+        except (ConnectionError, psycopg2.DatabaseError) as error:
+            print(error)
+        finally:
+            if conn is not None:
+                conn.close()
 
     def add_post(self, post):
         sql = """INSERT INTO posts(title, owner,contents,created_at,modified_at)
@@ -36,7 +69,7 @@ class DatabasePostRepo(InterfacePostRepo):
             post_id = cur.fetchone()[0]
             conn.commit()
             count = cur.rowcount
-            print (count, "Record inserted successfully into mobile table")
+            print (count, "Record inserted successfully into posts table")
             cur.close()
         except (ConnectionError, psycopg2.DatabaseError) as error:
             print(error)

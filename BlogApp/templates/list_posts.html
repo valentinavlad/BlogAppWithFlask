@@ -13,11 +13,9 @@
             </a>
 
             <p>By {{ post.owner }} on {{ post.created_at }} <small>Id is {{post.post_id}}</small></p>
-
             <p>{{ post.contents[:150] }} ...</p>
         </div>
     </div>
 </div>
     {% endfor %}
-
 {% endblock content %}

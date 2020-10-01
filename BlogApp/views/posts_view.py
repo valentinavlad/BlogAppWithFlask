@@ -8,7 +8,7 @@ index_blueprint = Blueprint('index', __name__, template_folder='templates',
 #db = PostsRepoFactory.get_repo("InMemoryPosts")
 db = PostsRepoFactory.get_repo("DatabasePostRepo")
 print(type(db.view_posts()))
-print(db.view_posts()[0])
+print(db.view_posts()[0].post_id, db.view_posts()[0].title)
 @index_blueprint.route('/')
 @index_blueprint.route('/posts/', methods=['GET','POST'])
 def posts():
