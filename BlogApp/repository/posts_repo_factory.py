@@ -1,12 +1,12 @@
-from repository.in_memory_posts import InMemoryPosts
+from repository.in_memory_posts_repo import InMemoryPostsRepo
 from repository.database_posts_repo import DatabasePostRepo
 
 class PostsRepoFactory():
-
+    testing = False
     @staticmethod
-    def get_repo(repo_type):
-        if repo_type == "InMemoryPosts":
-            return InMemoryPosts()
-        if repo_type == "DatabasePostRepo":
+    def get():
+        if PostsRepoFactory.testing:
+            return InMemoryPostsRepo()
+        if not PostsRepoFactory.testing:
             return DatabasePostRepo()
         raise AssertionError("Repo not found")

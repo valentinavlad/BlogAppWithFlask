@@ -1,9 +1,9 @@
 import abc
 
-class InterfacePostRepo(abc.ABC):
+class PostsRepo(abc.ABC):
     @classmethod
     def __subclasshook__(cls, C):
-        if cls is InterfacePostRepo:
+        if cls is PostsRepo:
             if any("__add_post__" in Q.__dict__
                     for Q in C.__mro__):
                 return True

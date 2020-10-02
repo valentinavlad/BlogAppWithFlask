@@ -1,7 +1,7 @@
 from repository.posts_data import dummy_posts
-from repository.interface_posts_repo import InterfacePostRepo
+from repository.posts_repo import PostsRepo
 
-class InMemoryPosts(InterfacePostRepo):
+class InMemoryPostsRepo(PostsRepo):
     def __init__(self):
         pass
     def find_post_id(self, pid):
@@ -17,7 +17,6 @@ class InMemoryPosts(InterfacePostRepo):
     def edit_post(self, post):
         index = dummy_posts.index(post)
         dummy_posts[index] = post
-
 
     def delete_post(self, pid):
         post = self.find_post_id(pid)
