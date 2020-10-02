@@ -16,11 +16,13 @@ post_three = Post(title='Java', owner= 'D.B.Goliloaw',
                     Aenean commodo ligula eget dolor.Lorem ipsum dolor sit amet, 
                     consectetuer adipiscing elit.Lorem ipsum dolor sit amet, consectetuer 
                     adipiscing elit.Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit.""",created_at = 'December 2, 2017',
+                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit.""",
+                    created_at = 'December 2, 2017',
                     modified_at = 'May 2, 2018')
 post_four = Post(title='Javascript', owner= 'D.B.Poppask',
                     contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                    Aenean commodo ligula eget dolor. Aenean commodo ligula eget dolor""",created_at = 'June 13, 2019',
+                    Aenean commodo ligula eget dolor. Aenean commodo ligula eget dolor""",
+                    created_at = 'June 13, 2019',
                     modified_at = 'June 15, 2019')
 post_five = Post(title='Angular', owner= 'V.W. Craig',
                     contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
@@ -30,6 +32,7 @@ post_five = Post(title='Angular', owner= 'V.W. Craig',
                     lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. 
                     Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. 
                     Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,
-                    Aenean commodo ligula eget dolor.""",created_at = 'March 13, 2020',modified_at = 'June 13, 2020')
+                    Aenean commodo ligula eget dolor.""",
+                    created_at = 'March 13, 2020',modified_at = 'June 13, 2020')
 dummy_posts = [ post_one, post_two, post_three, post_four,post_five ]
 dummy_posts.sort(key=lambda x: x.created_at, reverse=True)

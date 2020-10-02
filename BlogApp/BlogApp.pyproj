@@ -33,6 +33,9 @@
     <Compile Include="app.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="config_env.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="setup\config.py">
       <SubType>Code</SubType>
     </Compile>

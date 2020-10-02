@@ -1,4 +1,5 @@
 import datetime
+import os
 from flask import Blueprint, render_template, url_for, request, redirect
 from repository.posts_repo_factory import PostsRepoFactory
 from models.post import Post
@@ -18,7 +19,7 @@ def new():
     if request.method == 'POST':
         date_now = datetime.datetime.now().strftime("%B %d, %Y")
         post = Post(title=request.form.get("title"),owner= request.form.get("owner"),
-                    contents=request.form.get("contents"), created_at =date_now, 
+                    contents=request.form.get("contents"), created_at =date_now,
                     modified_at = date_now)
         db.add_post(post)
         return redirect(url_for('index.posts'))

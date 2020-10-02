@@ -1,5 +1,3 @@
-import datetime
-
 class Post():
     count = 1
 
