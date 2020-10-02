@@ -1,5 +1,4 @@
 import datetime
-import os
 from flask import Blueprint, render_template, url_for, request, redirect
 from repository.posts_repo_factory import PostsRepoFactory
 from models.post import Post

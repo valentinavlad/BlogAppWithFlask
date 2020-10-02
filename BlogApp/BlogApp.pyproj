@@ -33,7 +33,10 @@
     <Compile Include="app.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="config_env.py">
+    <Compile Include="instance\config.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="instance\__init__.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="setup\config.py">
@@ -86,6 +89,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="instance\" />
     <Folder Include="models\" />
     <Folder Include="setup\" />
     <Folder Include="tests\" />
