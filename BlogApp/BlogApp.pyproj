@@ -93,9 +93,7 @@
     <Folder Include="templates\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="database.ini">
-      <SubType>Code</SubType>
-    </Content>
+    <Content Include="database.ini" />
     <Content Include="static\img\1.jpg" />
     <Content Include="static\script.js" />
     <Content Include="static\style.css">
