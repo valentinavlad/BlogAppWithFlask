@@ -6,4 +6,5 @@ repo.testing = True
 
 @pytest.fixture
 def client():
+    flask_app.testing = True
     return flask_app.test_client()
