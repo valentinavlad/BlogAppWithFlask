@@ -1,7 +1,7 @@
 import psycopg2
 from setup.config import config
 
-class DbOperations(object):
+class DbOperations():
     conn = None
 
     @classmethod
@@ -14,7 +14,7 @@ class DbOperations(object):
         cls.conn = cls.connect()
         #return conn.cursor() if cls.conn is not None  else None
         return cls.conn.cursor()
-    
+    @staticmethod
     def create_table():
         """ create tables in the PostgreSQL database"""
         command = """
@@ -45,5 +45,3 @@ class DbOperations(object):
         finally:
             if conn is not None:
                 conn.close()
-
-
