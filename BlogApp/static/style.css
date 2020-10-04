@@ -1,3 +1,58 @@
+/************HEADER*********/
+header.masthead {
+    background-image: url('https://images7.alphacoders.com/110/1102604.jpg');
+    margin-bottom: 50px;
+    background-color: #868e96;
+    background-attachment: scroll;
+    position: relative;
+    background-size: cover;
+    color: black;
+}
+
+header.masthead .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #212529;
+    opacity: .5;
+    text-decoration: none;
+}
+
+header.masthead .page-heading, header.masthead .site-heading {
+    text-align: center;
+}
+
+header.masthead .page-heading, header.masthead .post-heading, header.masthead .site-heading {
+    color: #fff;
+}
+
+@media only screen and (min-width: 768px) {
+    header.masthead .page-heading, header.masthead .post-heading, header.masthead .site-heading {
+        padding: 200px 0;
+    }
+}
+
+/*************END HEADER*****************************/
+
+
+/*************NAVIGATION*****************************/
+#mainNav {
+    position: absolute;
+    border-bottom: 1px solid #e9ecef;
+    background-color: #fff;
+    font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
+}
+
+@media only screen and (min-width: 992px) {
+    #mainNav {
+        transition: background-color .2s;
+        transform: translate3d(0,0,0);
+    }
+}
+/*************END NAVIGATION*************************/
+
 .posts h1 {
     color: black;
 }
@@ -12,11 +67,4 @@
 
 #view_content {
     white-space: pre-wrap;
-}
-
-#jumbotron-style {
-    color: white;
-    background-color: #1c1f21 !important;
-    background-image: linear-gradient(315deg, #2f4353 0%, #b3afaa 74%) !important;
-
 }
