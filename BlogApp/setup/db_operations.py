@@ -22,7 +22,7 @@ class DbOperations():
                 post_id SERIAL PRIMARY KEY,
                 title VARCHAR(255) NOT NULL,
                 owner VARCHAR(255) NOT NULL,
-                contents VARCHAR(255) NOT NULL,
+                contents Text NOT NULL,
                 created_at DATE NOT NULL DEFAULT CURRENT_DATE,
                 modified_at DATE NULL
                 )

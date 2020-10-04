@@ -7,6 +7,7 @@ class DatabasePostRepo(PostsRepo):
     db_operations = DbOperations()
     def __init__(self):
         pass
+
     def find_post_id(self, pid):
         try:
             cur = self.db_operations.get_cursor()
@@ -21,6 +22,7 @@ class DatabasePostRepo(PostsRepo):
             if self.db_operations.conn is not None:
                 self.db_operations.conn.close()
         return post
+
     def edit_post(self, post):
         sql = """UPDATE posts
                     SET title=%s, owner=%s,
@@ -41,6 +43,7 @@ class DatabasePostRepo(PostsRepo):
         finally:
             if self.db_operations.conn is not None:
                 self.db_operations.conn.close()
+
     def delete_post(self, pid):
         try:
             cur = self.db_operations.get_cursor()
@@ -54,6 +57,7 @@ class DatabasePostRepo(PostsRepo):
         finally:
             if self.db_operations.conn is not None:
                 self.db_operations.conn.close()
+
     def add_post(self, post):
         sql = """INSERT INTO posts(title, owner,contents,
                         created_at,modified_at)
@@ -74,6 +78,7 @@ class DatabasePostRepo(PostsRepo):
             if self.db_operations.conn is not None:
                 self.db_operations.conn.close()
         return post_id
+
     def view_posts(self):
         posts = []
         try:
