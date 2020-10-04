@@ -11,9 +11,16 @@
         <p><pre id="view_content">{{ post.contents }}</pre></p>
 
         <a href="{{url_for('index.edit', pid=post.post_id)}}" class="btn btn-primary">Edit your post</a>
+        <a href="{{url_for('index.delete', pid=post.post_id)}}"
+           class="btn btn-warning"
+           onclick="if (!confirm('Delete selected post?') ) return false">
+            Delete your post
+        </a>
+        <!--
         <form method="POST" id="delete_form">
-            <button type="submit" class="btn btn-danger" id="confirm-delete" onclick="if (!confirm('Delete selected post?') ) return false">Delete post</button>
+        <button type="submit" class="btn btn-danger" id="confirm-delete" onclick="if (!confirm('Delete selected post?') ) return false">Delete post</button>
         </form>
+        -->
     </div>
 </div>   
 {% endblock content %}

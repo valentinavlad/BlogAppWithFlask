@@ -6,7 +6,6 @@ from models.post import Post
 index_blueprint = Blueprint('index', __name__, template_folder='templates',
                             static_folder='static')
 repo.testing = False
-
 @index_blueprint.route('/')
 @index_blueprint.route('/posts/', methods=['GET','POST'])
 def posts():
@@ -44,7 +43,7 @@ def edit(pid):
         return redirect(url_for('index.view_post', pid=post.post_id))
     return render_template('edit_post.html', post=found_post)
 
-@index_blueprint.route('/posts/<int:pid>', methods=['POST'])
+@index_blueprint.route('/posts/<int:pid>/delete', methods=['GET','POST'])
 def delete(pid):
     post_delete = repo.get().find_post_id(pid)
     if post_delete is not None:
