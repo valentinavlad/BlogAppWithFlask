@@ -14,7 +14,7 @@ def posts():
 @index_blueprint.route('/posts/new', methods=['GET','POST'])
 def new():
     if request.method == 'POST':
-        date_now = datetime.datetime.now().strftime("%B %d, %Y")
+        date_now = datetime.datetime.now()
         post = Post(title=request.form.get("title"),owner= request.form.get("owner"),
                     contents=request.form.get("contents"), created_at =date_now,
                     modified_at = date_now)

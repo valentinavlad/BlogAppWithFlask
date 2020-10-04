@@ -23,7 +23,7 @@ class DbOperations():
                 title VARCHAR(255) NOT NULL,
                 owner VARCHAR(255) NOT NULL,
                 contents Text NOT NULL,
-                created_at DATE NOT NULL DEFAULT CURRENT_DATE,
+                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 modified_at DATE NULL
                 )
             """
