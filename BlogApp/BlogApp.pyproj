@@ -36,9 +36,6 @@
     <Compile Include="setup\config.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="setup\connect.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="models\post.py">
       <SubType>Code</SubType>
     </Compile>
@@ -103,11 +100,13 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="templates\edit_post.html" />
+    <Content Include="templates\head.html" />
     <Content Include="templates\header.html" />
     <Content Include="templates\list_posts.html" />
     <Content Include="templates\layout.html" />
     <Content Include="templates\navigation.html" />
     <Content Include="templates\add_post.html" />
+    <Content Include="templates\setup.html" />
     <Content Include="templates\view_post.html" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Web.targets" />

@@ -6,12 +6,12 @@ from models.post import Post
 index_blueprint = Blueprint('index', __name__, template_folder='templates',
                             static_folder='static')
 repo.testing = False
-@index_blueprint.route('/')
-@index_blueprint.route('/posts/', methods=['GET', 'POST'])
+@index_blueprint.route('/', methods=['GET', 'POST'])
+#@index_blueprint.route('/posts/', methods=['GET', 'POST'])
 def posts():
     return render_template('list_posts.html', content=repo.get().view_posts())
 
-@index_blueprint.route('/posts/new', methods=['GET', 'POST'])
+@index_blueprint.route('/new', methods=['GET', 'POST'])
 def new():
     if request.method == 'POST':
         date_now = datetime.datetime.now()
@@ -22,12 +22,12 @@ def new():
         return redirect(url_for('index.posts'))
     return render_template('add_post.html')
 
-@index_blueprint.route('/posts/<int:pid>', methods=['GET'])
+@index_blueprint.route('/<int:pid>', methods=['GET'])
 def view_post(pid):
     post = repo.get().find_post_id(pid)
     return render_template('view_post.html', post=post)
 
-@index_blueprint.route('/posts/<int:pid>/edit', methods=['GET', 'POST'])
+@index_blueprint.route('/<int:pid>/edit', methods=['GET', 'POST'])
 def edit(pid):
     found_post = repo.get().find_post_id(pid)
     if request.method == 'POST':
@@ -43,7 +43,7 @@ def edit(pid):
         return redirect(url_for('index.view_post', pid=post.post_id))
     return render_template('edit_post.html', post=found_post)
 
-@index_blueprint.route('/posts/<int:pid>/delete', methods=['GET', 'POST'])
+@index_blueprint.route('/<int:pid>/delete', methods=['GET', 'POST'])
 def delete(pid):
     post_delete = repo.get().find_post_id(pid)
     if post_delete is not None:
