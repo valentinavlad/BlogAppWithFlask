@@ -38,7 +38,7 @@ def edit(pid):
             post.owner = request.form.get("owner")
             post.contents = request.form.get("contents")
             post.created_at = found_post.created_at
-            post.modified_at = date_now.strftime("%B %d, %Y")
+            post.modified_at = date_now
             repo.get().edit_post(post)
         return redirect(url_for('index.view_post', pid=post.post_id))
     return render_template('edit_post.html', post=found_post)

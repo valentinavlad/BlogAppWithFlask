@@ -1,12 +1,12 @@
 import psycopg2
-from setup.config import config
+from setup.config import Config
 
 class DbOperations():
     conn = None
-
+    config = Config()
     @classmethod
     def connect(cls):
-        params = config()
+        params = cls.config.config()
         return psycopg2.connect(**params)
 
     @classmethod
@@ -14,8 +14,9 @@ class DbOperations():
         cls.conn = cls.connect()
         #return conn.cursor() if cls.conn is not None  else None
         return cls.conn.cursor()
-    @staticmethod
-    def create_table():
+
+    @classmethod
+    def create_table(cls):
         """ create tables in the PostgreSQL database"""
         command = """
             CREATE TABLE posts (
@@ -30,7 +31,7 @@ class DbOperations():
         conn = None
         try:
             # read the connection parameters
-            params = config()
+            params = cls.config.config()
             # connect to the PostgreSQL server
             conn = psycopg2.connect(**params)
             cur = conn.cursor()
