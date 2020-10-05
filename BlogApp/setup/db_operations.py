@@ -4,6 +4,7 @@ from setup.config import Config
 class DbOperations():
     conn = None
     config = Config()
+
     @classmethod
     def connect(cls):
         params = cls.config.config()
@@ -12,7 +13,6 @@ class DbOperations():
     @classmethod
     def get_cursor(cls):
         cls.conn = cls.connect()
-        #return conn.cursor() if cls.conn is not None  else None
         return cls.conn.cursor()
 
     @classmethod

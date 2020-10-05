@@ -20,5 +20,14 @@ class Config:
 
         return db_posts
     # save configuration
+    def write_config_data(self, user, password, db):
+        self.parser.add_section('postgresql')
+        self.parser['postgresql']['host'] = 'localhost'
+        self.parser['postgresql']['user'] = user
+        self.parser['postgresql']['password'] = password
+        self.parser['postgresql']['db'] = db
+
+        with open('database.ini', 'w') as configfile:
+            config.write(configfile)
 
     # load configuration
