@@ -31,7 +31,7 @@ class DatabasePostRepo(PostsRepo):
                     modified_at=%s
                     WHERE post_id=%s"""
         record_to_update = (post.title, post.owner, post.contents,
-                            post.created_at, post.modified_at,post.post_id)
+                            post.created_at, post.modified_at, post.post_id)
         try:
             cur = self.db_operations.get_cursor()
             cur.execute(sql, record_to_update)

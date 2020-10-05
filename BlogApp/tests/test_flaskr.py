@@ -1,4 +1,3 @@
-
 def test_index(client):
     response = client.get('/', follow_redirects=True)
     assert response.status_code == 200
@@ -13,10 +12,6 @@ def test_view_post(client):
     assert b'V.W. Craig' in response.data
     assert response.status_code == 200
 
-def test_all_posts(client):
-    response = client.get('/posts')
-    assert response.status_code == 308
-
 def test_post_create(client):
     response = client.get('/posts/new')
     assert response.status_code == 200
@@ -25,7 +20,7 @@ def test_post_create(client):
 
     data = {'title': 'KOKO', 'contents':'hello'}
 
-    response_post = client.post('/posts/new',data=data, follow_redirects=True)
+    response_post = client.post('/posts/new', data=data, follow_redirects=True)
     assert response_post.status_code == 200
     assert b'Check our latest posts in web technologies!' in response_post.data
     assert 'KOKO' in response_post.get_data(as_text=True)
@@ -35,7 +30,7 @@ def test_update_post(client):
     assert response.status_code == 200
     assert b'Edit your post' in response.data
 
-    data={'title': 'updated PHP', 'owner': 'update'}
+    data = {'title': 'updated PHP', 'owner': 'update'}
     response_post = client.post('/posts/2/edit', data=data, follow_redirects=True)
     assert response_post.status_code == 200
     assert b'Edit your post' in response_post.data
@@ -47,7 +42,7 @@ def test_delete_post(client):
     assert res.status_code == 200
     assert b'Delete your post' in res.data
 
-    response = client.post('/posts/4/delete',follow_redirects=True)
+    response = client.post('/posts/4/delete', follow_redirects=True)
     assert response.status_code == 200
     assert b'Javascript' not in response.data
     assert '<h1>Angular</h1>' in response.get_data(as_text=True)

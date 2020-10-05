@@ -5,23 +5,23 @@ class PostsRepo(abc.ABC):
     def __subclasshook__(cls, C):
         if cls is PostsRepo:
             if any("__add_post__" in Q.__dict__
-                    for Q in C.__mro__):
+                   for Q in C.__mro__):
                 return True
             if any("__delete_post__" in Q.__dict__
-                    for Q in C.__mro__):
+                   for Q in C.__mro__):
                 return True
             if any("__edit_post__" in Q.__dict__
-                    for Q in C.__mro__):
+                   for Q in C.__mro__):
                 return True
             if any("__view_posts__" in Q.__dict__
-                    for Q in C.__mro__):
+                   for Q in C.__mro__):
                 return True
             if any("__find_post_id__" in Q.__dict__
-                    for Q in C.__mro__):
+                   for Q in C.__mro__):
                 return True
         return False
     @abc.abstractclassmethod
-    def find_post_id(cls,pid):
+    def find_post_id(cls, pid):
         pass
     @abc.abstractclassmethod
     def view_posts(cls):

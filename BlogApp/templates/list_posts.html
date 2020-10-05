@@ -9,7 +9,7 @@
                 <h1>{{ post.title }}</h1>
             </a>
 
-            <p>By {{ post.owner }} on {{ post.created_at.strftime('%Y-%m-%d %H:%M') }} <small>Id is {{post.post_id}}</small></p>
+            <p>By {{ post.owner }} on {{ post.created_at}} <small>Id is {{post.post_id}}</small></p>
             <p>{{ post.contents[:150] }} ...</p>
         </div>
     </div>
