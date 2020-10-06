@@ -12,8 +12,7 @@ repo.testing = False
 def posts():
     if os.path.isfile('./database.ini'):
         return render_template('list_posts.html', content=repo.get().view_posts())
-    else:
-        return redirect(url_for('setup_blueprint.setup'))
+    return redirect(url_for('setup_blueprint.setup'))
 
 @index_blueprint.route('/new', methods=['GET', 'POST'])
 def new():
@@ -26,16 +25,14 @@ def new():
             repo.get().add_post(post)
             return redirect(url_for('index.posts'))
         return render_template('add_post.html')
-    else:
-        return redirect(url_for('setup_blueprint.setup'))
+    return redirect(url_for('setup_blueprint.setup'))
 
 @index_blueprint.route('/<int:pid>', methods=['GET'])
 def view_post(pid):
     if os.path.isfile('./database.ini'):
         post = repo.get().find_post_id(pid)
         return render_template('view_post.html', post=post)
-    else:
-        return redirect(url_for('setup_blueprint.setup'))
+    return redirect(url_for('setup_blueprint.setup'))
 
 @index_blueprint.route('/<int:pid>/edit', methods=['GET', 'POST'])
 def edit(pid):
@@ -53,8 +50,7 @@ def edit(pid):
                 repo.get().edit_post(post)
             return redirect(url_for('index.view_post', pid=post.post_id))
         return render_template('edit_post.html', post=found_post)
-    else:
-        return redirect(url_for('setup_blueprint.setup'))
+    return redirect(url_for('setup_blueprint.setup'))
 
 @index_blueprint.route('/<int:pid>/delete', methods=['GET', 'POST'])
 def delete(pid):
@@ -64,5 +60,4 @@ def delete(pid):
             repo.get().delete_post(pid)
             return redirect(url_for('index.posts'))
         return render_template('view_post.html')
-    else:
-        return redirect(url_for('setup_blueprint.setup'))
+    return redirect(url_for('setup_blueprint.setup'))

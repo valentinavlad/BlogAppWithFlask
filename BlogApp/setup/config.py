@@ -17,8 +17,8 @@ class Config:
             for param in params:
                 db_posts[param[0]] = param[1]
         else:
-            raise Exception('Section {0} not found in the {1} file'.format(self.section, self.filename))
-        print("In config function!!")
+            raise Exception('Section {0} not found in the {1} file'
+                            .format(self.section, self.filename))
         return db_posts
 
     def write_config_data(self, database, user, password):
@@ -28,6 +28,6 @@ class Config:
         self.parser['postgresql']['user'] = user
         self.parser['postgresql']['password'] = password
         self.parser['postgresql']['port'] = '5432'
-      
+
         with open('database.ini', 'w') as configfile:
             self.parser.write(configfile)

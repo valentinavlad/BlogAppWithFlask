@@ -18,16 +18,14 @@ class DbOperations():
 
     @classmethod
     def create_database(cls):
-        print("@@@@@@@@@@")
         params = cls.config.config()
-
-        try:      
+        try:
             print('Connecting to the PostgreSQL database...')
             cls.conn = psycopg2.connect(host=params['host'], port=params['port'],
-                                          user=params['user'], password=params['password'])
+                                        user=params['user'], password=params['password'])
             print("Database connected")
-        except:
-             print('Database not connected.')
+        except(ConnectionError, psycopg2.DatabaseError) as error:
+            print('Database not connected.', error)
         if cls.conn is not None:
             cls.conn.autocommit = True
             cur = cls.conn.cursor()
