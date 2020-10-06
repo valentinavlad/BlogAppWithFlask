@@ -9,6 +9,7 @@ app.register_blueprint(setup_blueprint, url_prefix="/setup")
 @app.route('/')
 def index():
     return redirect('/posts/')
+
 if __name__ == '__main__':
     # Run the app server on localhost:4449
     app.run(debug=True)

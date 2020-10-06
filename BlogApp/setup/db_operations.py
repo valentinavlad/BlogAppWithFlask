@@ -8,6 +8,7 @@ class DbOperations():
     @classmethod
     def connect(cls):
         params = cls.config.config()
+        print("In connect function")
         return psycopg2.connect(**params)
 
     @classmethod
@@ -16,8 +17,29 @@ class DbOperations():
         return cls.conn.cursor()
 
     @classmethod
+    def create_database(cls):
+        print("@@@@@@@@@@")
+        params = cls.config.config()
+
+        try:      
+            print('Connecting to the PostgreSQL database...')
+            cls.conn = psycopg2.connect(host=params['host'], port=params['port'],
+                                          user=params['user'], password=params['password'])
+            print("Database connected")
+        except:
+             print('Database not connected.')
+        if cls.conn is not None:
+            cls.conn.autocommit = True
+            cur = cls.conn.cursor()
+            database_name = params['database']
+            cur.execute('CREATE DATABASE {};'.format(database_name))
+	        # close the communication with the PostgreSQL
+            cur.close()
+            cls.conn.close()
+            cls.create_table()
+
+    @classmethod
     def create_table(cls):
-        """ create tables in the PostgreSQL database"""
         command = """
             CREATE TABLE posts (
                 post_id SERIAL PRIMARY KEY,
@@ -28,21 +50,17 @@ class DbOperations():
                 modified_at DATE NULL
                 )
             """
-        conn = None
         try:
-            # read the connection parameters
-            params = cls.config.config()
-            # connect to the PostgreSQL server
-            conn = psycopg2.connect(**params)
-            cur = conn.cursor()
+            cls.conn = cls.connect()
+            cur = cls.conn.cursor()
             # create table
             cur.execute(command)
             # close communication with the PostgreSQL database server
             cur.close()
             # commit the changes
-            conn.commit()
+            cls.conn.commit()
         except (ConnectionError, psycopg2.DatabaseError) as error:
             print(error)
         finally:
-            if conn is not None:
-                conn.close()
+            if cls.conn is not None:
+                cls.conn.close()
