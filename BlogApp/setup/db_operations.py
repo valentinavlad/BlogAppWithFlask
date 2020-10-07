@@ -17,24 +17,41 @@ class DbOperations():
         return cls.conn.cursor()
 
     @classmethod
-    def create_database(cls):
-        params = cls.config.config()
-        try:
-            print('Connecting to the PostgreSQL database...')
-            cls.conn = psycopg2.connect(host=params['host'], port=params['port'],
-                                        user=params['user'], password=params['password'])
-            print("Database connected")
-        except(ConnectionError, psycopg2.DatabaseError) as error:
-            print('Database not connected.', error)
-        if cls.conn is not None:
-            cls.conn.autocommit = True
-            cur = cls.conn.cursor()
-            database_name = params['database']
-            cur.execute('CREATE DATABASE {};'.format(database_name))
-	        # close the communication with the PostgreSQL
+    def check_table_exists(cls):
+        cur = cls.conn.cursor()
+        isTable = cur.execute("select exists(select * from information_schema.tables where table_name=%s)", ('posts',))
+        
+        if isTable is None:
             cur.close()
             cls.conn.close()
             cls.create_table()
+            cls.conn = None
+        else:
+           cur.close()
+           cls.conn.close()
+
+    @classmethod
+    def create_database(cls, database_name):
+        cls.conn.autocommit = True
+        cur = cls.conn.cursor()
+        cur.execute('CREATE DATABASE {};'.format(database_name))
+        cur.close()
+        cls.conn.close()
+        cls.create_table()
+
+    @classmethod
+    def connect_to_db(cls):
+        params = cls.config.config()
+        database_name = params['database']
+
+        cls.conn = psycopg2.connect(**params)
+        if cls.conn is not None:
+            cls.check_table_exists()          
+        else:
+            cls.conn = psycopg2.connect(host=params['host'], port=params['port'],
+                                    user=params['user'], password=params['password'])
+            if cls.conn is not None:
+                cls.create_database(database_name)
 
     @classmethod
     def create_table(cls):

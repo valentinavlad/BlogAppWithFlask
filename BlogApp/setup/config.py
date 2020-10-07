@@ -31,3 +31,18 @@ class Config:
 
         with open('database.ini', 'w') as configfile:
             self.parser.write(configfile)
+            configfile.close()
+    def Load(self, database, user, password):
+        self.parser.add_section(self.section)
+        self.parser['postgresql']['host'] = 'localhost'
+        self.parser['postgresql']['database'] = database
+        self.parser['postgresql']['user'] = user
+        self.parser['postgresql']['password'] = password
+        self.parser['postgresql']['port'] = '5432'
+        file = open(self.filename)
+        self.parser.write(file)
+        file.close()
+        with open('database.ini', 'w') as configfile:
+            self.parser.write(configfile)
+            configfile.close()
+

@@ -7,15 +7,14 @@ setup_blueprint = Blueprint('setup_blueprint', __name__, template_folder='templa
 
 @setup_blueprint.route('/', methods=['GET', 'POST'])
 def setup():
+    if os.path.isfile('./database.ini'):
+         return redirect(url_for('index.posts'))
     db_operation = DbOperations()
     if request.method == 'POST':
         user = request.form.get('user')
         database = request.form.get('database')
         password = request.form.get('password')
         db_operation.config.write_config_data(database, user, password)
-        if os.path.isfile('./database.ini'):
-            db_operation.create_database()
-            return redirect(url_for('index.posts'))
-        print('Database.ini does not exist!!')
+        db_operation.connect_to_db()
         return redirect(url_for('index.posts'))
     return render_template('setup.html')
