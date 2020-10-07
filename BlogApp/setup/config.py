@@ -21,7 +21,7 @@ class Config:
                             .format(self.section, self.filename))
         return db_posts
 
-    def write_config_data(self, database, user, password):
+    def load(self, database, user, password):
         self.parser.add_section(self.section)
         self.parser['postgresql']['host'] = 'localhost'
         self.parser['postgresql']['database'] = database

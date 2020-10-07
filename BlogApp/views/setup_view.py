@@ -14,7 +14,7 @@ def setup():
         user = request.form.get('user')
         database = request.form.get('database')
         password = request.form.get('password')
-        db_operation.config.write_config_data(database, user, password)
+        db_operation.config.load(database, user, password)
         db_operation.connect_to_db()
         return redirect(url_for('index.posts'))
     return render_template('setup.html')

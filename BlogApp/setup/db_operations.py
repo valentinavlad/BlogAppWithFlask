@@ -1,6 +1,17 @@
 import psycopg2
 from setup.config import Config
 
+# import sys to get more detailed Python exception info
+import sys
+
+
+
+# import the error handling libraries for psycopg2
+from psycopg2 import OperationalError, errorcodes, errors
+
+
+
+
 class DbOperations():
     conn = None
     config = Config()
@@ -43,15 +54,26 @@ class DbOperations():
     def connect_to_db(cls):
         params = cls.config.config()
         database_name = params['database']
-
-        cls.conn = psycopg2.connect(**params)
-        if cls.conn is not None:
-            cls.check_table_exists()          
-        else:
+        try:
             cls.conn = psycopg2.connect(host=params['host'], port=params['port'],
-                                    user=params['user'], password=params['password'])
-            if cls.conn is not None:
+                        user=params['user'], password=params['password'])      
+        except OperationalError as err:
+            # pass exception to function
+            print_psycopg2_exception(err)
+            cls.conn = None
+             
+        if cls.conn is not None:
+            #verify if db exists
+            cls.conn.autocommit = True
+            cur = cls.conn.cursor()
+            cur.execute("SELECT datname FROM pg_database;")
+            list_database = cur.fetchall()
+            if (database_name,) in list_database:
+                print("'{}' Database already exist".format(database_name))
+                cls.check_table_exists() 
+            else:
                 cls.create_database(database_name)
+                print("'{}' Database not exist.".format(database_name))
 
     @classmethod
     def create_table(cls):
@@ -79,3 +101,18 @@ class DbOperations():
         finally:
             if cls.conn is not None:
                 cls.conn.close()
+    #TO DO move in other class
+    def print_psycopg2_exception(err):
+        err_type, err_obj, traceback = sys.exc_info()
+        # get the line number when exception occured
+        line_num = traceback.tb_lineno
+        # print the connect() error
+        print ("\npsycopg2 ERROR:", err, "on line number:", line_num)
+        print ("psycopg2 traceback:", traceback, "-- type:", err_type)
+
+        # psycopg2 extensions.Diagnostics object attribute
+        print ("\nextensions.Diagnostics:", err.diag)
+
+        # print the pgcode and pgerror exceptions
+        print ("pgerror:", err.pgerror)
+        print ("pgcode:", err.pgcode, "\n")
