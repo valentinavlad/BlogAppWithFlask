@@ -1,22 +1,23 @@
 import datetime
-import os.path
 from flask import Blueprint, render_template, url_for, request, redirect
 from repository.posts_repo_factory import PostsRepoFactory as repo
 from models.post import Post
+from setup.config import Config
 
 index_blueprint = Blueprint('index', __name__, template_folder='templates',
                             static_folder='static')
 repo.testing = False
+config = Config()
 
 @index_blueprint.route('/', methods=['GET', 'POST'])
 def posts():
-    if os.path.isfile('./database.ini'):
+    if config.is_configured():
         return render_template('list_posts.html', content=repo.get().view_posts())
     return redirect(url_for('setup_blueprint.setup'))
 
 @index_blueprint.route('/new', methods=['GET', 'POST'])
 def new():
-    if os.path.isfile('./database.ini'):
+    if config.is_configured():
         if request.method == 'POST':
             date_now = datetime.datetime.now()
             post = Post(title=request.form.get("title"), owner=request.form.get("owner"),
@@ -29,14 +30,14 @@ def new():
 
 @index_blueprint.route('/<int:pid>', methods=['GET'])
 def view_post(pid):
-    if os.path.isfile('./database.ini'):
+    if config.is_configured():
         post = repo.get().find_post_id(pid)
         return render_template('view_post.html', post=post)
     return redirect(url_for('setup_blueprint.setup'))
 
 @index_blueprint.route('/<int:pid>/edit', methods=['GET', 'POST'])
 def edit(pid):
-    if os.path.isfile('./database.ini'):
+    if config.is_configured():
         found_post = repo.get().find_post_id(pid)
         if request.method == 'POST':
             if found_post is not None:
@@ -54,7 +55,7 @@ def edit(pid):
 
 @index_blueprint.route('/<int:pid>/delete', methods=['GET', 'POST'])
 def delete(pid):
-    if os.path.isfile('./database.ini'):
+    if config.is_configured():
         post_delete = repo.get().find_post_id(pid)
         if post_delete is not None:
             repo.get().delete_post(pid)
