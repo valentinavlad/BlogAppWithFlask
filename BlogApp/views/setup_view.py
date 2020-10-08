@@ -8,7 +8,7 @@ setup_blueprint = Blueprint('setup_blueprint', __name__, template_folder='templa
 @setup_blueprint.route('/', methods=['GET', 'POST'])
 def setup():
     if os.path.isfile('./database.ini'):
-         return redirect(url_for('index.posts'))
+        return redirect(url_for('index.posts'))
     db_operation = DbOperations()
     if request.method == 'POST':
         user = request.form.get('user')

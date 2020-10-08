@@ -1,7 +1,5 @@
 import psycopg2
-import sys
 from setup.config import Config
-from psycopg2 import OperationalError, errorcodes, errors
 
 class DbOperations():
     conn = None
@@ -21,16 +19,18 @@ class DbOperations():
     @classmethod
     def check_table_exists(cls):
         cur = cls.conn.cursor()
-        isTable = cur.execute("select exists(select * from information_schema.tables where table_name=%s)", ('posts',))
-        
-        if isTable is None:
+        is_table = cur.execute("""select exists(
+                               select * from
+                               information_schema.tables
+                               where table_name=%s)""", ('posts',))
+        if is_table is None:
             cur.close()
             cls.conn.close()
             cls.create_table()
             cls.conn = None
         else:
-           cur.close()
-           cls.conn.close()
+            cur.close()
+            cls.conn.close()
 
     @classmethod
     def create_database(cls, database_name):
@@ -47,12 +47,11 @@ class DbOperations():
         database_name = params['database']
         try:
             cls.conn = psycopg2.connect(host=params['host'], port=params['port'],
-                        user=params['user'], password=params['password'])      
-        except OperationalError as err:
-            # pass exception to function
-            print_psycopg2_exception(err)
+                                        user=params['user'], password=params['password'])
+        except (ConnectionError, psycopg2.DatabaseError) as error:
+            print(error)
             cls.conn = None
-             
+
         if cls.conn is not None:
             #verify if db exists
             cls.conn.autocommit = True
@@ -61,7 +60,7 @@ class DbOperations():
             list_database = cur.fetchall()
             if (database_name,) in list_database:
                 print("'{}' Database already exist".format(database_name))
-                cls.check_table_exists() 
+                cls.check_table_exists()
             else:
                 cls.create_database(database_name)
                 print("'{}' Database not exist.".format(database_name))
@@ -89,18 +88,3 @@ class DbOperations():
         finally:
             if cls.conn is not None:
                 cls.conn.close()
-    #TO DO move in other class
-    def print_psycopg2_exception(err):
-        err_type, err_obj, traceback = sys.exc_info()
-        # get the line number when exception occured
-        line_num = traceback.tb_lineno
-        # print the connect() error
-        print ("\npsycopg2 ERROR:", err, "on line number:", line_num)
-        print ("psycopg2 traceback:", traceback, "-- type:", err_type)
-
-        # psycopg2 extensions.Diagnostics object attribute
-        print ("\nextensions.Diagnostics:", err.diag)
-
-        # print the pgcode and pgerror exceptions
-        print ("pgerror:", err.pgerror)
-        print ("pgcode:", err.pgcode, "\n")

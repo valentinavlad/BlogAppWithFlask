@@ -12,15 +12,15 @@ class Config:
 
     def save(self):
         self.parser.read(self.filename)
-        db_config = {}
+        db_settings = {}
         if self.parser.has_section(self.section):
             params = self.parser.items(self.section)
             for param in params:
-                db_config[param[0]] = param[1]
+                db_settings[param[0]] = param[1]
         else:
             raise Exception('Section {0} not found in the {1} file'
                             .format(self.section, self.filename))
-        return db_config
+        return db_settings
 
     def load(self, database, user, password):
         self.parser.add_section(self.section)
