@@ -6,9 +6,11 @@ class Config:
         self.parser = ConfigParser()
         self.filename = 'database.ini'
         self.section = 'postgresql'
+
     def is_configured(self):
         return os.path.isfile('./{}'.format(self.filename))
-    def config(self):
+
+    def save(self):
         self.parser.read(self.filename)
         db_config = {}
         if self.parser.has_section(self.section):

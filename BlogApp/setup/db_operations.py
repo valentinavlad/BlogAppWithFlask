@@ -1,16 +1,7 @@
 import psycopg2
-from setup.config import Config
-
-# import sys to get more detailed Python exception info
 import sys
-
-
-
-# import the error handling libraries for psycopg2
+from setup.config import Config
 from psycopg2 import OperationalError, errorcodes, errors
-
-
-
 
 class DbOperations():
     conn = None
@@ -18,7 +9,7 @@ class DbOperations():
 
     @classmethod
     def connect(cls):
-        params = cls.config.config()
+        params = cls.config.save()
         print("In connect function")
         return psycopg2.connect(**params)
 
@@ -52,7 +43,7 @@ class DbOperations():
 
     @classmethod
     def connect_to_db(cls):
-        params = cls.config.config()
+        params = cls.config.save()
         database_name = params['database']
         try:
             cls.conn = psycopg2.connect(host=params['host'], port=params['port'],
@@ -90,11 +81,8 @@ class DbOperations():
         try:
             cls.conn = cls.connect()
             cur = cls.conn.cursor()
-            # create table
             cur.execute(command)
-            # close communication with the PostgreSQL database server
             cur.close()
-            # commit the changes
             cls.conn.commit()
         except (ConnectionError, psycopg2.DatabaseError) as error:
             print(error)
