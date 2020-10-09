@@ -33,6 +33,15 @@
     <Compile Include="app.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="services\dependencies.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="services\repo_service.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="services\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="utils\custom_decorators.py">
       <SubType>Code</SubType>
     </Compile>
@@ -90,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="models\" />
+    <Folder Include="services\" />
     <Folder Include="utils\" />
     <Folder Include="setup\" />
     <Folder Include="tests\" />
