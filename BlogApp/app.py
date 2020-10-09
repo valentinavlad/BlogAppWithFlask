@@ -1,6 +1,6 @@
 from flask import Flask, redirect
 from flask_injector import FlaskInjector
-from injector import inject
+
 from services.dependencies import configure
 from views.posts_view import index_blueprint
 from views.setup_view import setup_blueprint
