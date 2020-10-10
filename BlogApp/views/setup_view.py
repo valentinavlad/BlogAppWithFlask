@@ -5,10 +5,10 @@ from setup.config import Config
 
 setup_blueprint = Blueprint('setup_blueprint', __name__, template_folder='templates',
                             static_folder='static')
-config = Config()
+
 @setup_blueprint.route('/', methods=['GET', 'POST'])
 def setup():
-    if config.is_configured:
+    if os.path.isfile('./database.ini'):
         return redirect(url_for('index.posts'))
     db_operation = DbOperations()
     if request.method == 'POST':
