@@ -1,7 +1,7 @@
 import os.path
 from configparser import ConfigParser
-
-class Config:
+from setup.config_interface import ConfigInterface
+class Config(ConfigInterface):
     def __init__(self):
         self.parser = ConfigParser()
         self.filename = 'database.ini'

@@ -33,6 +33,9 @@
     <Compile Include="app.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="services\config_service.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="services\dependencies.py">
       <SubType>Code</SubType>
     </Compile>
@@ -40,6 +43,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="services\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="setup\config_interface.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="utils\custom_decorators.py">

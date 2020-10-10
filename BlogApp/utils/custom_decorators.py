@@ -1,13 +1,13 @@
+from injector import inject
 from functools import wraps
 from flask import url_for, redirect
-from setup.config import Config
-
-config = Config()
+from services.config_service import ConfigService
 
 def is_config_file(funct):
     @wraps(funct)
-    def decorated_function(*args, **kwargs):
-        if not config.is_configured():
+    @inject
+    def decorated_function(conf:ConfigService, *args, **kwargs):
+        if not conf.config.is_configured():
             return redirect(url_for('setup_blueprint.setup'))
         return funct(*args, **kwargs)
     return decorated_function
