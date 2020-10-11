@@ -48,6 +48,9 @@
     <Compile Include="setup\config_interface.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tests\test_setup_view.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="utils\custom_decorators.py">
       <SubType>Code</SubType>
     </Compile>

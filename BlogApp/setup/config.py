@@ -2,11 +2,12 @@ import os.path
 from configparser import ConfigParser
 from setup.config_interface import ConfigInterface
 class Config(ConfigInterface):
+    db_is_configured = os.path.isfile('./database.ini')
     def __init__(self):
         self.parser = ConfigParser()
         self.filename = 'database.ini'
         self.section = 'postgresql'
-
+   
     def is_configured(self):
         return os.path.isfile('./{}'.format(self.filename))
 

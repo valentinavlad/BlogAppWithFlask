@@ -1,10 +1,12 @@
 import pytest
-from app import app as flask_app
+from flask_injector import FlaskInjector
+from app import app
+from services.dependencies import configure_test
 from repository.posts_repo_factory import PostsRepoFactory as repo
-
-repo.testing = True
-
+from unittest import mock
+from setup.config import Config
 @pytest.fixture
 def client():
-    flask_app.testing = True
-    return flask_app.test_client()
+    #FlaskInjector(app=app, modules=[configure_test])
+    app.testing = True
+    return app.test_client()
