@@ -1,6 +1,5 @@
 def test_index(client):
     response = client.get('/posts/', follow_redirects=True)
-    #response = client.get('/posts/')
     assert response.status_code == 200
     assert '<h1>Angular</h1>' in response.get_data(as_text=True)
     assert '<h1>Php</h1>' in response.get_data(as_text=True)

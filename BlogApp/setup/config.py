@@ -7,7 +7,7 @@ class Config(ConfigInterface):
         self.parser = ConfigParser()
         self.filename = 'database.ini'
         self.section = 'postgresql'
-   
+
     def is_configured(self):
         return os.path.isfile('./{}'.format(self.filename))
 

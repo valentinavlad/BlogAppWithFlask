@@ -1,9 +1,6 @@
 import os.path
-from injector import inject
 from flask import Blueprint, render_template, request, redirect, url_for
 from setup.db_operations import DbOperations
-from setup.config import Config
-from services.config_service import ConfigService
 
 setup_blueprint = Blueprint('setup_blueprint', __name__, template_folder='templates',
                             static_folder='static')

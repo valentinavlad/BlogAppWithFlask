@@ -26,4 +26,3 @@ class ConfigInterface(abc.ABC):
     @abc.abstractclassmethod
     def is_configured(cls):
         pass
-

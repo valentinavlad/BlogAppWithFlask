@@ -8,4 +8,4 @@ class RepoService:
         self.repo = repo
 
     def get_repo(self):
-        return self.repo;
+        return self.repo
