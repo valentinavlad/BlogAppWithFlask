@@ -1,7 +1,7 @@
 from flask import Flask, redirect
 from flask_injector import FlaskInjector
 
-from services.dependencies import configure, configure_db
+from services.dependencies import configure_production
 from views.posts_view import index_blueprint
 from views.setup_view import setup_blueprint
 
@@ -13,7 +13,7 @@ app.register_blueprint(setup_blueprint, url_prefix="/setup")
 def index():
     return redirect('/posts/')
 
-FlaskInjector(app=app, modules=[configure, configure_db])
+FlaskInjector(app=app, modules=[configure_production])
 
 if __name__ == '__main__':
     # Run the app server on localhost:4449

@@ -5,7 +5,6 @@ from services.dependencies import configure_test
 
 @pytest.fixture
 def client():
-
     FlaskInjector(app=app, modules=[configure_test])
     app.testing = True
     return app.test_client()

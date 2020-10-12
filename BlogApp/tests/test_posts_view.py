@@ -47,4 +47,35 @@ def test_delete_post(client):
     assert b'Javascript' not in response.data
     assert '<h1>Angular</h1>' in response.get_data(as_text=True)
     assert '<h1>Php</h1>' in response.get_data(as_text=True)
-        
+
+def test_index_redirect_setup(client):
+    response = client.get('/posts/', follow_redirects=True)
+    assert response.status_code == 200
+    assert '<h1>Your database is not configured</h1>' in response.get_data(as_text=True)
+    assert b'Database name' in response.data
+    assert b'User' in response.data
+    assert b'Password' in response.data
+
+def test_view_post_redirect_setup(client):
+    response = client.get('/posts/5', follow_redirects=True)
+    assert response.status_code == 200
+    assert '<h1>Your database is not configured</h1>' in response.get_data(as_text=True)
+    assert b'Database name' in response.data
+    assert b'User' in response.data
+    assert b'Password' in response.data
+
+def test_post_create_redirect_setup(client):
+    response = client.get('/posts/new', follow_redirects=True)
+    assert response.status_code == 200
+    assert '<h1>Your database is not configured</h1>' in response.get_data(as_text=True)
+    assert b'Database name' in response.data
+    assert b'User' in response.data
+    assert b'Password' in response.data
+    assert 'updated PHP' in response_post.get_data(as_text=True)
+
+
+def test_post_create_redirect_to_post(client):
+    response = client.get('/posts/new')
+    assert response.status_code == 200
+    assert b'Owner' in response.data
+    assert b'Content' in response.data
