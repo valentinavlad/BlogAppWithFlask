@@ -2,7 +2,6 @@ import datetime
 from injector import inject
 from flask import Blueprint, render_template, url_for, request, redirect
 from utils.custom_decorators import is_config_file
-#from repository.posts_repo_factory import PostsRepoFactory as repo
 from services.repo_service import RepoService
 from models.post import Post
 

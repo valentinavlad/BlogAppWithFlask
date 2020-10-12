@@ -1,15 +1,13 @@
-import os.path
 from flask import Blueprint, render_template, request, redirect, url_for
 from setup.db_operations import DbOperations
+from utils.custom_decorators import is_not_config_file
 
 setup_blueprint = Blueprint('setup_blueprint', __name__, template_folder='templates',
                             static_folder='static')
 
 @setup_blueprint.route('/', methods=['GET', 'POST'])
+@is_not_config_file
 def setup():
-    if os.path.isfile('./database.ini'):
-    #if config_db.config.is_configured:
-        return redirect(url_for('index.posts'))
     db_operation = DbOperations()
     if request.method == 'POST':
         user = request.form.get('user')
