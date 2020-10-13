@@ -1,4 +1,5 @@
 import psycopg2
+from injector import inject
 from setup.config import Config
 
 class DbOperations():
@@ -7,7 +8,7 @@ class DbOperations():
 
     @classmethod
     def connect(cls):
-        params = cls.config.save()
+        params = cls.config.load()
         print("In connect function")
         return psycopg2.connect(**params)
 
@@ -43,7 +44,7 @@ class DbOperations():
 
     @classmethod
     def connect_to_db(cls):
-        params = cls.config.save()
+        params = cls.config.load()
         database_name = params['database']
         try:
             cls.conn = psycopg2.connect(host=params['host'], port=params['port'],

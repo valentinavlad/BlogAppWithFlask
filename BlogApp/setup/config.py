@@ -1,8 +1,7 @@
 import os.path
 from configparser import ConfigParser
 
-class Config():
-  
+class Config:
     def __init__(self):
         self.parser = ConfigParser()
         self.filename = 'database.ini'
@@ -12,7 +11,7 @@ class Config():
     def is_configured(self):
        return os.path.isfile('./{}'.format(self.filename))
 
-    def save(self):
+    def load(self):
         self.parser.read(self.filename)
         db_settings = {}
         if self.parser.has_section(self.section):
@@ -24,7 +23,7 @@ class Config():
                             .format(self.section, self.filename))
         return db_settings
 
-    def load(self, database, user, password):
+    def save(self, database, user, password):
         self.parser.add_section(self.section)
         self.parser['postgresql']['host'] = 'localhost'
         self.parser['postgresql']['database'] = database

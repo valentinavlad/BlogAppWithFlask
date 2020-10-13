@@ -14,7 +14,7 @@ def is_config_file(funct):
             return redirect(url_for('setup_blueprint.setup')) 
         return funct(*args, **kwargs)
     return decorated_function
-#aici e buba
+
 def is_not_config_file(funct):
     @wraps(funct)
     @inject
