@@ -2,13 +2,15 @@ import os.path
 from configparser import ConfigParser
 
 class Config():
+  
     def __init__(self):
         self.parser = ConfigParser()
         self.filename = 'database.ini'
         self.section = 'postgresql'
+        self.configured = self.is_configured()
 
     def is_configured(self):
-        return os.path.isfile('./{}'.format(self.filename))
+       return os.path.isfile('./{}'.format(self.filename))
 
     def save(self):
         self.parser.read(self.filename)

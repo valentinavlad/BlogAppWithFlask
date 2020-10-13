@@ -38,7 +38,7 @@ def view_post(repo: PostsRepo, pid):
 @index_blueprint.route('/<int:pid>/edit', methods=['GET', 'POST'])
 @is_config_file
 def edit(repo: PostsRepo, pid):
-    found_post = service.repo.find_post_id(pid)
+    found_post = repo.find_post_id(pid)
     if request.method == 'POST':
         if found_post is not None:
             date_now = datetime.datetime.now()
@@ -56,7 +56,7 @@ def edit(repo: PostsRepo, pid):
 @index_blueprint.route('/<int:pid>/delete', methods=['GET', 'POST'])
 @is_config_file
 def delete(repo: PostsRepo, pid):
-    post_delete = service.repo.find_post_id(pid)
+    post_delete = repo.find_post_id(pid)
     if post_delete is not None:
         repo.delete_post(pid)
         return redirect(url_for('index.posts'))
