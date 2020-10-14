@@ -9,19 +9,15 @@ setup_blueprint = Blueprint('setup_blueprint', __name__, template_folder='templa
 @inject
 @setup_blueprint.route('/', methods=['GET', 'POST'])
 def setup(db_config: DatabaseConfig):
-    if db_config.configured:
+    if db_config.is_configured():
         return redirect(url_for('index.posts'))
     db_operation = DbOperations()
     if request.method == 'POST':
         user = request.form.get('user')
         database = request.form.get('database')
         password = request.form.get('password')
-        #aici trebuie dictionar
         db_credentials = DbCredentials(user, database, password)
-        
         db_config.save_configuration(db_credentials)
-
         db_operation.connect_to_db()
-        db_config.configured = True
         return redirect(url_for('index.posts'))
     return render_template('setup.html')
