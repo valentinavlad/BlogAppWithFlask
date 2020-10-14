@@ -33,6 +33,9 @@
     <Compile Include="app.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="models\db_credentials.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="services\dependencies.py">
       <SubType>Code</SubType>
     </Compile>

@@ -1,16 +1,15 @@
 from setup.config import Config
+from models.db_credentials import DbCredentials
 
 class DatabaseConfig(Config):
+    
     def __init__(self):
         super().__init__('postgresql')
         self.configured = self.is_configured()
 
-    @staticmethod
-    def create_dict(user, database, password):
-        db_settings = {}
-        db_settings['host'] = 'localhost'
-        db_settings['database'] = database
-        db_settings['user'] = user
-        db_settings['password'] = password
-        db_settings['port'] = '5432'
-        return db_settings
+    def load_configuration(self):
+        super().load()
+
+    def save_configuration(self, db_credentials: DbCredentials):
+        db_settings = db_credentials.to_dictionary()
+        super().save(db_settings)
