@@ -5,7 +5,11 @@ disable=
 	C0115, # missing-class-docstring
 	C0116, # missing-function-docstring	
 	R0903, # too-few-public-methods
-	R0913, # too-many-arguments
+	
+[SIMILARITIES]
+
+#Minimum lines number similarities
+min-similarity-lines=5
 
 
 

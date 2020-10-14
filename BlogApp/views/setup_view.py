@@ -18,7 +18,7 @@ def setup(db_config: DatabaseConfig):
         db_settings = db_config.create_dict(user, database, password)
         db_config.save(db_settings)
         db_operation.connect_to_db()
-        #cum pot sa schimb dinamic valoarea???
+
         db_config.configured = True
         return redirect(url_for('index.posts'))
     return render_template('setup.html')

@@ -3,7 +3,6 @@ from flask_injector import FlaskInjector
 from app import app
 from services.dependencies import configure_test
 from setup.database_config import DatabaseConfig
-from setup.config import Config
 
 @pytest.fixture
 def client_is_config():

@@ -1,13 +1,14 @@
+import datetime
 class Post():
     count = 1
-
-    def __init__(self, title, owner, contents, created_at, modified_at):
+    date_now = datetime.datetime.now()
+    def __init__(self, title, owner, contents):
         self.post_id = Post.count
         self.title = title
         self.owner = owner
         self.contents = contents
-        self.created_at = created_at
-        self.modified_at = modified_at
+        self.created_at = datetime.datetime.now()
+        self.modified_at = datetime.datetime.now()
         Post.count += 1
 
     @classmethod
@@ -18,7 +19,9 @@ class Post():
         cls.contents = row[3]
         cls.created_at = row[4]
         cls.modified_at = row[5]
-        obj = cls(cls.title, cls.owner, cls.contents, cls.created_at, cls.modified_at)
+        obj = cls(cls.title, cls.owner, cls.contents)
+        obj.created_at = cls.created_at
+        obj.modified_at = cls.modified_at
         obj.post_id = cls.post_id
         return obj
 

@@ -21,9 +21,9 @@ def new(repo: PostsRepo):
     if request.method == 'POST':
         date_now = datetime.datetime.now()
         post = Post(title=request.form.get("title"), owner=request.form.get("owner"),
-                    contents=request.form.get("contents"), created_at=date_now,
-                    modified_at=date_now)
+                    contents=request.form.get("contents"))
         repo.add_post(post)
+        post.created_at = date_now.strftime("%B %d, %Y")
         return redirect(url_for('index.posts'))
     return render_template('add_post.html')
 
@@ -47,7 +47,7 @@ def edit(repo: PostsRepo, pid):
             post.owner = request.form.get("owner")
             post.contents = request.form.get("contents")
             post.created_at = found_post.created_at
-            post.modified_at = date_now
+            post.modified_at = date_now.strftime("%B %d, %Y")
             repo.edit_post(post)
         return redirect(url_for('index.view_post', pid=post.post_id))
     return render_template('edit_post.html', post=found_post)
