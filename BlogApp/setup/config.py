@@ -36,31 +36,32 @@ class Config:
             configfile.close()
 
 class Config1:
-    def __init__(self):
+    def __init__(self, section):
         self.parser = ConfigParser()
         self.filename = 'config.ini'
         self.configured = self.is_configured()
+        self.section = section
 
-    def load(self, section):
+    def load(self):
         self.parser.read(self.filename)
         db_settings = {}
-        if self.parser.has_section(section):
-            params = self.parser.items(section)
+        if self.parser.has_section(self.section):
+            params = self.parser.items(self.section)
             for param in params:
                 db_settings[param[0]] = param[1]
         else:
             raise Exception('Section {0} not found in the {1} file'
-                            .format(section, self.filename))
+                            .format(self.section, self.filename))
         return db_settings
 
     def is_configured(self):
         return os.path.isfile('./{}'.format(self.filename))
 
-    def save(self, section):
-        self.parser.add_section(section)
+    def save(self):
+        self.parser.add_section(self.section)
         db_settings = {}
         for key in db_settings.keys():
-            self.parser.set(section, key, db_settings[key])
+            self.parser.set(self.section, key, db_settings[key])
 
 
         with open('config.ini', 'w') as configfile:
