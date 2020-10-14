@@ -39,6 +39,9 @@
     <Compile Include="services\__init__.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="setup\database_config.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="tests\test_setup_view.py">
       <SubType>Code</SubType>
     </Compile>

@@ -1,9 +1,9 @@
 import psycopg2
-from setup.config import Config
+from setup.database_config import DatabaseConfig
 
 class DbOperations():
     conn = None
-    config = Config()
+    config = DatabaseConfig()
 
     @classmethod
     def connect(cls):

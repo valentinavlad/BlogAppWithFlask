@@ -1,7 +1,7 @@
 import os.path
 from configparser import ConfigParser
 
-class Config:
+class Config1:
     def __init__(self):
         self.parser = ConfigParser()
         self.filename = 'database.ini'
@@ -35,7 +35,7 @@ class Config:
             self.parser.write(configfile)
             configfile.close()
 
-class Config1:
+class Config:
     def __init__(self, section):
         self.parser = ConfigParser()
         self.filename = 'config.ini'
@@ -57,10 +57,9 @@ class Config1:
     def is_configured(self):
         return os.path.isfile('./{}'.format(self.filename))
 
-    def save(self):
+    def save(self, db_settings):
         self.parser.add_section(self.section)
-        db_settings = {}
-        for key in db_settings.keys():
+        for key in db_settings:
             self.parser.set(self.section, key, db_settings[key])
 
 
