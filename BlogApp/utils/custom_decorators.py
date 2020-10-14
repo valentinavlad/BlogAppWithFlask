@@ -7,11 +7,9 @@ def is_config_file(funct):
     @wraps(funct)
     @inject
     def decorated_function(conf: Config, *args, **kwargs):
-        configured = conf.is_configured()
-        
         #if not conf.is_configured():
         if not conf.configured:
-            return redirect(url_for('setup_blueprint.setup')) 
+            return redirect(url_for('setup_blueprint.setup'))
         return funct(*args, **kwargs)
     return decorated_function
 
@@ -19,8 +17,6 @@ def is_not_config_file(funct):
     @wraps(funct)
     @inject
     def decorated_function(conf: Config, *args, **kwargs):
-        configured = conf.is_configured()
-        #if conf.is_configured():
         if conf.configured:
             return redirect(url_for('index.posts'))
         return funct(*args, **kwargs)

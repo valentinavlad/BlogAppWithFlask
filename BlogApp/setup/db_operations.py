@@ -1,5 +1,4 @@
 import psycopg2
-from injector import inject
 from setup.config import Config
 
 class DbOperations():

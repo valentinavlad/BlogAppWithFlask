@@ -16,6 +16,5 @@ def index():
 FlaskInjector(app=app, modules=[configure_production])
 
 if __name__ == '__main__':
-    # Run the app server on localhost:4449
     #app.run(debug=True)
     app.run('localhost', 4449)

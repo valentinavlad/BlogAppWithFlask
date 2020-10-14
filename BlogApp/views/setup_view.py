@@ -1,7 +1,6 @@
 from injector import inject
 from flask import Blueprint, render_template, request, redirect, url_for
 from setup.db_operations import DbOperations
-from utils.custom_decorators import is_not_config_file
 from setup.config import Config
 
 setup_blueprint = Blueprint('setup_blueprint', __name__, template_folder='templates',
