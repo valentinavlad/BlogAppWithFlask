@@ -39,7 +39,6 @@ class Config:
     def __init__(self, section):
         self.parser = ConfigParser()
         self.filename = 'config.ini'
-        self.configured = self.is_configured()
         self.section = section
 
     def load(self):

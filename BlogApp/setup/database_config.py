@@ -3,6 +3,7 @@ from setup.config import Config
 class DatabaseConfig(Config):
     def __init__(self):
         super().__init__('postgresql')
+        self.configured = self.is_configured()
 
     @staticmethod
     def create_dict(user, database, password):
