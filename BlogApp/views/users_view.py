@@ -28,13 +28,14 @@ def login(repo: DatabaseUsersRepo):
         if error is None:
             session.clear()
             session['user_id'] = user.user_id
+            session['name'] = user.name
             return redirect(url_for('index.posts'))
         flash(error)
     return render_template('login.html')
 
 @users_blueprint.before_app_request
 def display_logged_user(repo: DatabaseUsersRepo):
-    user_id = session['user_id']
+    user_id = session.get('user_id')
     if user_id is None:
         g.user = None
     else:
@@ -42,6 +43,5 @@ def display_logged_user(repo: DatabaseUsersRepo):
 
 @users_blueprint.route('/logout')
 def logout():
-   # remove the username from the session if it is there
-   session.pop('username', None)
+   session.clear()
    return redirect(url_for('index.posts'))
