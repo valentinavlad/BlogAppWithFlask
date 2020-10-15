@@ -96,6 +96,9 @@
     <Compile Include="views\setup_view.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="views\users_view.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="views\__init__.py">
       <SubType>Code</SubType>
     </Compile>
@@ -118,6 +121,7 @@
   <ItemGroup>
     <Content Include="database2.ini" />
     <Content Include="static\img\1.jpg" />
+    <Content Include="static\login_style.css" />
     <Content Include="static\script.js" />
     <Content Include="static\style.css">
       <SubType>Code</SubType>
@@ -127,6 +131,7 @@
     <Content Include="templates\header.html" />
     <Content Include="templates\list_posts.html" />
     <Content Include="templates\layout.html" />
+    <Content Include="templates\login.html" />
     <Content Include="templates\navigation.html" />
     <Content Include="templates\add_post.html" />
     <Content Include="templates\setup.html" />
