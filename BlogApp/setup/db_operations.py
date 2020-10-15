@@ -27,7 +27,7 @@ class DbOperations():
         if is_table is None:
             cur.close()
             cls.conn.close()
-            cls.create_table()
+            cls.create_tables()
             cls.conn = None
         else:
             cur.close()
@@ -40,7 +40,7 @@ class DbOperations():
         cur.execute('CREATE DATABASE {};'.format(database_name))
         cur.close()
         cls.conn.close()
-        cls.create_table()
+        cls.create_tables()
 
     @classmethod
     def connect_to_db(cls):
@@ -82,6 +82,43 @@ class DbOperations():
             cls.conn = cls.connect()
             cur = cls.conn.cursor()
             cur.execute(command)
+            cur.close()
+            cls.conn.commit()
+        except (ConnectionError, psycopg2.DatabaseError) as error:
+            print(error)
+        finally:
+            if cls.conn is not None:
+                cls.conn.close()
+
+    @classmethod
+    def create_tables(cls):
+        commands = (
+            """
+            CREATE TABLE users (
+               user_id SERIAL PRIMARY KEY,
+               name VARCHAR(255) NOT NULL,
+               email VARCHAR(255) NOT NULL,
+               password TEXT NOT NULL,
+               created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+               modified_at DATE NULL)
+            """,
+            """
+            CREATE TABLE posts (
+                post_id SERIAL PRIMARY KEY,
+                user_id INT,
+                title VARCHAR(255) NOT NULL,
+                owner VARCHAR(255) NOT NULL,
+                contents Text NOT NULL,
+                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                modified_at DATE NULL,
+                CONSTRAINT fk_user
+                    FOREIGN KEY (user_id) REFERENCES users(user_id));
+            """)
+        try:
+            cls.conn = cls.connect()
+            cur = cls.conn.cursor()
+            for command in commands:
+                cur.execute(command)
             cur.close()
             cls.conn.commit()
         except (ConnectionError, psycopg2.DatabaseError) as error:
