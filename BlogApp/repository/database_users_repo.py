@@ -1,9 +1,8 @@
 import psycopg2
-from repository.posts_repo import PostsRepo
 from models.user import User
 from setup.db_operations import DbOperations
 
-class DatabaseUsersRepo(PostsRepo):
+class DatabaseUsersRepo:
     db_operations = DbOperations()
 
     def find_by_id(self, pid):
@@ -20,6 +19,24 @@ class DatabaseUsersRepo(PostsRepo):
             if self.db_operations.conn is not None:
                 self.db_operations.conn.close()
         return user
+    def check_user_exists(self, user):
+        try:
+            cur = self.db_operations.get_cursor()
+            sql = "SELECT user_id FROM users WHERE email = %s"
+            cur.execute(sql, (user.email,))
+            user_exists = True
+            row = cur.fetchone()
+            if row is None:
+                user_exists = False
+            else:
+                user_exists = True
+            cur.close()
+        except (ConnectionError, psycopg2.DatabaseError) as error:
+            print(error)
+        finally:
+            if self.db_operations.conn is not None:
+                self.db_operations.conn.close()
+        return user_exists
 
     def edit(self, user):
         sql = """UPDATE users

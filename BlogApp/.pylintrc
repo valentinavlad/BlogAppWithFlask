@@ -9,7 +9,7 @@ disable=
 [SIMILARITIES]
 
 #Minimum lines number similarities
-min-similarity-lines=5
+min-similarity-lines=12
 
 
 

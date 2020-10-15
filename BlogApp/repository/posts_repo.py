@@ -27,11 +27,11 @@ class PostsRepo(abc.ABC):
     def view_all(cls):
         pass
     @abc.abstractclassmethod
-    def edit(cls, entity):
+    def edit(cls, post):
         pass
     @abc.abstractclassmethod
     def delete(cls, pid):
         pass
     @abc.abstractclassmethod
-    def add(cls, entity):
+    def add(cls, post):
         pass

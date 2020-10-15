@@ -19,8 +19,8 @@ class InMemoryPostsRepo(PostsRepo):
         dummy_posts[index] = post
 
     def delete(self, pid):
-        post = self.find_post_id(pid)
+        post = self.find_by_id(pid)
         dummy_posts.remove(post)
 
-    def add_(self, post):
+    def add(self, post):
         dummy_posts.insert(0, post)

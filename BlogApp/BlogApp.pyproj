@@ -39,6 +39,9 @@
     <Compile Include="models\user.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="repository\database_users_repo.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="services\dependencies.py">
       <SubType>Code</SubType>
     </Compile>
