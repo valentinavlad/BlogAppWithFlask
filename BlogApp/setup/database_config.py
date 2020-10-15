@@ -6,7 +6,10 @@ class DatabaseConfig(Config):
         super().__init__('postgresql')
 
     def load_configuration(self):
-        super().load()
+        db_settings = super().load()
+        db_credentials = \
+            DbCredentials(db_settings['user'], db_settings['database'], db_settings['password'])
+        return db_credentials
 
     def save_configuration(self, db_credentials: DbCredentials):
         db_settings = db_credentials.to_dictionary()

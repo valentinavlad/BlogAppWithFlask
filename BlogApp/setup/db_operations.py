@@ -7,7 +7,8 @@ class DbOperations():
 
     @classmethod
     def connect(cls):
-        params = cls.config.load()
+        db_credentials = cls.config.load_configuration()
+        params = db_credentials.to_dictionary()
         print("In connect function")
         return psycopg2.connect(**params)
 
