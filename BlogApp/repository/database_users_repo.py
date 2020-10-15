@@ -1,37 +1,35 @@
 import psycopg2
 from repository.posts_repo import PostsRepo
-from models.post import Post
+from models.user import User
 from setup.db_operations import DbOperations
 
-class DatabasePostRepo(PostsRepo):
+class DatabaseUsersRepo(PostsRepo):
     db_operations = DbOperations()
-    def __init__(self):
-        pass
 
     def find_by_id(self, pid):
         try:
             cur = self.db_operations.get_cursor()
-            sql = "SELECT * FROM posts WHERE post_id=%s"
+            sql = "SELECT * FROM users WHERE user_id=%s"
             cur.execute(sql, (pid,))
             row = cur.fetchone()
-            post = Post.get_post(row)
+            user = User.get_user(row)
             cur.close()
         except (ConnectionError, psycopg2.DatabaseError) as error:
             print(error)
         finally:
             if self.db_operations.conn is not None:
                 self.db_operations.conn.close()
-        return post
+        return user
 
-    def edit(self, post):
-        sql = """UPDATE posts
-                    SET title=%s, owner=%s,
-                    contents=%s,
+    def edit(self, user):
+        sql = """UPDATE users
+                    SET name=%s, email=%s,
+                    password=%s,
                     created_at=%s,
                     modified_at=%s
-                    WHERE post_id=%s"""
-        record_to_update = (post.title, post.owner, post.contents,
-                            post.created_at, post.modified_at, post.post_id)
+                    WHERE user_id=%s"""
+        record_to_update = (user.name, user.email, user.password,
+                            user.created_at, user.modified_at, user.user_id)
         try:
             cur = self.db_operations.get_cursor()
             cur.execute(sql, record_to_update)
@@ -47,7 +45,7 @@ class DatabasePostRepo(PostsRepo):
     def delete(self, pid):
         try:
             cur = self.db_operations.get_cursor()
-            sql = "DELETE FROM posts WHERE post_id=%s"
+            sql = "DELETE FROM users WHERE user_id=%s"
             cur.execute(sql, (pid, ))
             conn = self.db_operations.conn
             conn.commit()
@@ -58,17 +56,17 @@ class DatabasePostRepo(PostsRepo):
             if self.db_operations.conn is not None:
                 self.db_operations.conn.close()
 
-    def add(self, post):
-        sql = """INSERT INTO posts(title, owner,contents,
+    def add(self, user):
+        sql = """INSERT INTO users(name, email, password,
                         created_at,modified_at)
-                 VALUES(%s,%s,%s,%s,%s) RETURNING post_id;"""
-        record_to_insert = (post.title, post.owner, post.contents,
-                            post.created_at, post.modified_at)
-        post_id = None
+                 VALUES(%s,%s,%s,%s,%s) RETURNING user_id;"""
+        record_to_insert = (user.name, user.email, user.password,
+                            user.created_at, user.modified_at)
+        user_id = None
         try:
             cur = self.db_operations.get_cursor()
             cur.execute(sql, record_to_insert)
-            post_id = cur.fetchone()[0]
+            user_id = cur.fetchone()[0]
             conn = self.db_operations.conn
             conn.commit()
             cur.close()
@@ -77,17 +75,17 @@ class DatabasePostRepo(PostsRepo):
         finally:
             if self.db_operations.conn is not None:
                 self.db_operations.conn.close()
-        return post_id
+        return user_id
 
     def view_all(self):
-        posts = []
+        users = []
         try:
             cur = self.db_operations.get_cursor()
-            cur.execute("SELECT * FROM posts ORDER BY created_at desc")
+            cur.execute("SELECT * FROM users")
             row = cur.fetchone()
             while row is not None:
-                post = Post.get_post(row)
-                posts.append(post)
+                user = User.get_user(row)
+                users.append(user)
                 row = cur.fetchone()
             cur.close()
         except (ConnectionError, psycopg2.DatabaseError) as error:
@@ -95,4 +93,4 @@ class DatabasePostRepo(PostsRepo):
         finally:
             if self.db_operations.conn is not None:
                 self.db_operations.conn.close()
-        return posts
+        return users

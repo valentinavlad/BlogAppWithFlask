@@ -4,23 +4,23 @@ from repository.posts_repo import PostsRepo
 class InMemoryPostsRepo(PostsRepo):
     def __init__(self):
         pass
-    def find_post_id(self, pid):
+    def find_by_id(self, pid):
         found_post = None
         for post in dummy_posts:
             if post.post_id == pid:
                 found_post = post
         return found_post
 
-    def view_posts(self):
+    def view_all(self):
         return dummy_posts
 
-    def edit_post(self, post):
+    def edit(self, post):
         index = dummy_posts.index(post)
         dummy_posts[index] = post
 
-    def delete_post(self, pid):
+    def delete(self, pid):
         post = self.find_post_id(pid)
         dummy_posts.remove(post)
 
-    def add_post(self, post):
+    def add_(self, post):
         dummy_posts.insert(0, post)
