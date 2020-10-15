@@ -26,6 +26,6 @@ class User:
         return obj
 
     def __str__(self):
-        return self.title + " " + self.owner
+        return self.name + " " + self.email
 
     __repr__ = __str__
