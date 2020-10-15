@@ -1,7 +1,7 @@
 import datetime
 from injector import inject
 from flask import Blueprint, render_template, url_for, request, redirect
-from utils.custom_decorators import is_config_file
+from utils.custom_decorators import is_config_file, login_required
 from repository.posts_repo import PostsRepo
 from models.post import Post
 
@@ -16,6 +16,7 @@ def posts(repo: PostsRepo):
 
 @inject
 @index_blueprint.route('/new', methods=['GET', 'POST'])
+@login_required
 @is_config_file
 def new(repo: PostsRepo):
     if request.method == 'POST':

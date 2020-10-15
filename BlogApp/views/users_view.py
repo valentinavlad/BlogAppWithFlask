@@ -1,10 +1,13 @@
 from injector import inject
-from flask import Blueprint, render_template, url_for, request, redirect, flash, session
+from flask import Blueprint, render_template, url_for, \
+    request, redirect, flash, session, g
 from repository.database_users_repo import DatabaseUsersRepo
 from models.user import User
 
 users_blueprint = Blueprint('users', __name__, template_folder='templates',
                             static_folder='static')
+
+
 @inject
 @users_blueprint.route('/login', methods=['GET', 'POST'])
 def login(repo: DatabaseUsersRepo):
@@ -28,6 +31,14 @@ def login(repo: DatabaseUsersRepo):
             return redirect(url_for('index.posts'))
         flash(error)
     return render_template('login.html')
+
+@users_blueprint.before_app_request
+def display_logged_user(repo: DatabaseUsersRepo):
+    user_id = session['user_id']
+    if user_id is None:
+        g.user = None
+    else:
+        g.user = repo.find_by_id(user_id)
 
 @users_blueprint.route('/logout')
 def logout():

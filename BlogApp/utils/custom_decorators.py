@@ -1,6 +1,6 @@
 from functools import wraps
 from injector import inject
-from flask import url_for, redirect
+from flask import url_for, redirect, g
 from setup.database_config import DatabaseConfig
 
 def is_config_file(funct):
@@ -20,3 +20,11 @@ def is_not_config_file(funct):
             return redirect(url_for('index.posts'))
         return funct(*args, **kwargs)
     return decorated_function
+
+def login_required(view):
+    @wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return redirect(url_for('users.login'))
+        return view(**kwargs)
+    return wrapped_view
