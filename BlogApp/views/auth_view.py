@@ -12,13 +12,12 @@ auth_blueprint = Blueprint('auth', __name__, template_folder='templates', static
 def login(repo: UsersRepo):
     if request.method == 'POST':
         error = None
-        user = User(name=request.form.get("name"), email=request.form.get("email"),
-                    password=request.form.get("password"))
-        user_exists = repo.check_user_exists(user)
-        if not user_exists:
+        email = request.form['email']
+        password = request.form['password']
+        user = repo.check_user_exists(email)
+       
+        if user is None:
             error = 'User {} is not registered.'.format(user.name)
-        if not user.name:
-            error = 'Name is required.'
         elif not user.email:
             error = 'Email is required.'
         elif not user.password:

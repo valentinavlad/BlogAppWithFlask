@@ -20,24 +20,21 @@ class DatabaseUsersRepo(UsersRepo):
             if self.db_operations.conn is not None:
                 self.db_operations.conn.close()
         return user
-    def check_user_exists(self, user):
+
+    def check_user_exists(self, email):
         try:
             cur = self.db_operations.get_cursor()
-            sql = "SELECT user_id FROM users WHERE email = %s"
-            cur.execute(sql, (user.email,))
-            user_exists = True
+            sql = "SELECT * FROM users WHERE email = %s"
+            cur.execute(sql, (email,))
             row = cur.fetchone()
-            if row is None:
-                user_exists = False
-            else:
-                user_exists = True
+            user = User.get_user(row)
             cur.close()
         except (ConnectionError, psycopg2.DatabaseError) as error:
             print(error)
         finally:
             if self.db_operations.conn is not None:
                 self.db_operations.conn.close()
-        return user_exists
+        return user
 
     def edit(self, user):
         sql = """UPDATE users
