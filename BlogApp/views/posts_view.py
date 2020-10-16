@@ -56,6 +56,7 @@ def edit(repo: PostsRepo, pid):
 
 @inject
 @index_blueprint.route('/<int:pid>/delete', methods=['GET', 'POST'])
+@login_required
 @is_config_file
 def delete(repo: PostsRepo, pid):
     post_delete = repo.find_by_id(pid)

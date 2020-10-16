@@ -35,4 +35,3 @@ class UsersRepo(abc.ABC):
     @abc.abstractclassmethod
     def add(cls, user):
         pass
-

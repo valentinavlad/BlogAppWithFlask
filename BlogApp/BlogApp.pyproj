@@ -42,6 +42,12 @@
     <Compile Include="repository\database_users_repo.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="repository\in_memory_users_repo.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="repository\users_data.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="repository\users_repo.py">
       <SubType>Code</SubType>
     </Compile>

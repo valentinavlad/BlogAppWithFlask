@@ -6,6 +6,7 @@ from repository.users_repo import UsersRepo
 from repository.database_posts_repo import DatabasePostRepo
 from repository.database_users_repo import DatabaseUsersRepo
 from repository.in_memory_posts_repo import InMemoryPostsRepo
+from repository.in_memory_users_repo import InMemoryUsersRepo
 from setup.database_config import DatabaseConfig
 
 def configure_production(binder):
@@ -15,5 +16,5 @@ def configure_production(binder):
 
 def configure_test(binder):
     binder.bind(PostsRepo, to=InMemoryPostsRepo, scope=singleton)
-    #TO DO IN MEMMORY REPO USERS
+    binder.bind(UsersRepo, to=InMemoryUsersRepo, scope=singleton)
     binder.bind(DatabaseConfig, to=Mock(DatabaseConfig), scope=request)
