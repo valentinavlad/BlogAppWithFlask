@@ -19,6 +19,9 @@ class UsersRepo(abc.ABC):
             if any("__find_by_id__" in Q.__dict__
                    for Q in C.__mro__):
                 return True
+            if any("__check_user_exists__" in Q.__dict__
+                   for Q in C.__mro__):
+                return True
         return False
     @abc.abstractclassmethod
     def find_by_id(cls, pid):
@@ -34,4 +37,7 @@ class UsersRepo(abc.ABC):
         pass
     @abc.abstractclassmethod
     def add(cls, user):
+        pass   
+    @abc.abstractclassmethod
+    def check_user_exists(cls, email):
         pass
