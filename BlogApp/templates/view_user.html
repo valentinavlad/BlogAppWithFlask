@@ -1,0 +1,22 @@
+﻿{% extends "layout.html" %}
+{% block content %}
+
+<div class="text-center">
+    <h2>User data</h2>
+</div>
+<div class="row posts">
+    <div class="col-lg-8 col-md-10 mx-auto">
+        <p>Name: {{user.name}}</p>
+        <p>Email: {{ user.email }}</p>
+        <p>Created at: {{ user.created_at }}</p>
+        <p>Modified at: {{ user.modified_at }}</p>
+
+        <a href="{{url_for('users.edit', pid=user.user_id)}}" class="btn btn-primary">Edit user</a>
+        <a href="{{url_for('users.delete', pid=user.user_id)}}"
+           class="btn btn-warning"
+           onclick="if (!confirm('Delete selected user?') ) return false">
+            Delete user
+        </a>
+    </div>
+</div>
+{% endblock content %}

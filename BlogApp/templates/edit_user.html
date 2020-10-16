@@ -1,0 +1,25 @@
+﻿{% extends "layout.html" %}
+{% block content %}
+
+<div class="text-center">
+    <h2>Hi! Edit your personal data</h2>
+</div>
+
+<form method="POST" action="">
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" name="name" value="{{user.name}}">
+
+    </div>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" name="email" value="{{user.email}}">
+    </div>
+    <div class="form-group">
+        <label for="contents">Password</label>
+        <input type="password" class="form-control" id="password" name="password" value="{{user.password}}">
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a href="{{url_for('users.view_user', pid=user.user_id)}}" class="btn btn-warning">Cancel</a>
+</form>
+{% endblock content %}

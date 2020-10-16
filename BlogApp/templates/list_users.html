@@ -6,19 +6,27 @@
         <table class="table">
             <thead>
                 <tr>
-      
+
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
-                    <th scope="col">Created At</th>
+                    <th scope="col">Operations</th>
                 </tr>
             </thead>
             <tbody>
                 {% for user in content %}
                 <tr>
-              
+
                     <td>{{ user.name }}</td>
                     <td>{{ user.email }}</td>
-                    <td>{{ user.created_at }}</td>
+                    <td>
+                        <a href="{{url_for('users.view_user', pid=user.user_id)}}" class="btn btn-outline-primary">
+                            See more
+                        </a>
+                        |
+                        <a href="{{url_for('users.view_user', pid=user.user_id)}}" class="btn btn-outline-secondary">
+                            Update
+                        </a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
