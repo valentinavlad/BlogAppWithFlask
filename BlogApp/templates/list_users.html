@@ -1,0 +1,29 @@
+﻿{% extends "layout.html" %}
+{% block content %}
+
+<div class="row posts">
+    <div class="col-lg-8 col-md-10 mx-auto">
+        <table class="table">
+            <thead>
+                <tr>
+      
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in content %}
+                <tr>
+              
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock content %}

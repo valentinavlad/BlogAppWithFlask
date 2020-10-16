@@ -16,7 +16,7 @@ def posts(repo: PostsRepo):
 
 @inject
 @index_blueprint.route('/new', methods=['GET', 'POST'])
-
+@login_required
 @is_config_file
 def new(repo: PostsRepo):
     if request.method == 'POST':
@@ -37,7 +37,7 @@ def view_post(repo: PostsRepo, pid):
 
 @inject
 @index_blueprint.route('/<int:pid>/edit', methods=['GET', 'POST'])
-
+@login_required
 @is_config_file
 def edit(repo: PostsRepo, pid):
     found_post = repo.find_by_id(pid)

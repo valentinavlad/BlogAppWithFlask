@@ -1,8 +1,9 @@
 import psycopg2
 from models.user import User
 from setup.db_operations import DbOperations
+from repository.users_repo import UsersRepo
 
-class DatabaseUsersRepo:
+class DatabaseUsersRepo(UsersRepo):
     db_operations = DbOperations()
 
     def find_by_id(self, pid):

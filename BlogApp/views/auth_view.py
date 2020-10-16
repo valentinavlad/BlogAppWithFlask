@@ -1,7 +1,7 @@
 from injector import inject
 from flask import Blueprint, render_template, url_for, \
     request, redirect, flash, session, g
-from repository.database_users_repo import DatabaseUsersRepo
+from repository.users_repo import UsersRepo
 from models.user import User
 
 auth_blueprint = Blueprint('auth', __name__, template_folder='templates', static_folder='static')
@@ -9,7 +9,7 @@ auth_blueprint = Blueprint('auth', __name__, template_folder='templates', static
 
 @inject
 @auth_blueprint.route('/login', methods=['GET', 'POST'])
-def login(repo: DatabaseUsersRepo):
+def login(repo: UsersRepo):
     if request.method == 'POST':
         error = None
         user = User(name=request.form.get("name"), email=request.form.get("email"),
@@ -33,7 +33,7 @@ def login(repo: DatabaseUsersRepo):
     return render_template('login.html')
 
 @auth_blueprint.before_app_request
-def display_logged_user(repo: DatabaseUsersRepo):
+def display_logged_user(repo: UsersRepo):
     user_id = session.get('user_id')
     if user_id is None:
         g.user = None

@@ -42,6 +42,9 @@
     <Compile Include="repository\database_users_repo.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="repository\users_repo.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="services\dependencies.py">
       <SubType>Code</SubType>
     </Compile>
@@ -105,6 +108,9 @@
     <Compile Include="views\auth_view.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="views\users_view.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="views\__init__.py">
       <SubType>Code</SubType>
     </Compile>
@@ -137,6 +143,7 @@
     <Content Include="templates\header.html" />
     <Content Include="templates\list_posts.html" />
     <Content Include="templates\layout.html" />
+    <Content Include="templates\list_users.html" />
     <Content Include="templates\login.html" />
     <Content Include="templates\navigation.html" />
     <Content Include="templates\add_post.html" />
