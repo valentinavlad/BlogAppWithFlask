@@ -102,7 +102,7 @@
     <Compile Include="views\setup_view.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="views\users_view.py">
+    <Compile Include="views\auth_view.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="views\__init__.py">

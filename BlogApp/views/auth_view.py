@@ -4,12 +4,11 @@ from flask import Blueprint, render_template, url_for, \
 from repository.database_users_repo import DatabaseUsersRepo
 from models.user import User
 
-users_blueprint = Blueprint('users', __name__, template_folder='templates',
-                            static_folder='static')
+auth_blueprint = Blueprint('auth', __name__, template_folder='templates', static_folder='static')
 
 
 @inject
-@users_blueprint.route('/login', methods=['GET', 'POST'])
+@auth_blueprint.route('/login', methods=['GET', 'POST'])
 def login(repo: DatabaseUsersRepo):
     if request.method == 'POST':
         error = None
@@ -33,7 +32,7 @@ def login(repo: DatabaseUsersRepo):
         flash(error)
     return render_template('login.html')
 
-@users_blueprint.before_app_request
+@auth_blueprint.before_app_request
 def display_logged_user(repo: DatabaseUsersRepo):
     user_id = session.get('user_id')
     if user_id is None:
@@ -41,7 +40,7 @@ def display_logged_user(repo: DatabaseUsersRepo):
     else:
         g.user = repo.find_by_id(user_id)
 
-@users_blueprint.route('/logout')
+@auth_blueprint.route('/logout')
 def logout():
-   session.clear()
-   return redirect(url_for('index.posts'))
+    session.clear()
+    return redirect(url_for('index.posts'))
