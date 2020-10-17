@@ -111,6 +111,12 @@
     <Compile Include="utils\__init__.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="validators\login_validator.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="validators\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="views\setup_view.py">
       <SubType>Code</SubType>
     </Compile>
@@ -129,6 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="models\" />
+    <Folder Include="validators\" />
     <Folder Include="services\" />
     <Folder Include="utils\" />
     <Folder Include="setup\" />

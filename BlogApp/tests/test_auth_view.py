@@ -2,7 +2,7 @@ def test_login(client_is_config):
     response = client_is_config.get('/auth/login')
 
     assert response.status_code == 200
-    assert b'Email' in response.data    
+    assert b'Email' in response.data
     assert b'Password' in response.data
     data = {'name': 'tia', 'email':'tia@gmail.com', 'password':'123'}
 
