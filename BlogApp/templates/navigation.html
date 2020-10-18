@@ -7,14 +7,17 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-                {% if g.user %}
-                <li class="nav-item mt-2"><span>Hello {{ session['name']| capitalize  }} !</span></li>
+                {% if g.user.email == 'admin@gmail.com' %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('auth.logout') }}">Log Out</a>
+                    <a class="nav-link" href="{{url_for('users.users')}}">Manage Users</a>
                 </li>
+                {% endif %}
+
+                {% if g.user %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{url_for('index.new')}}">Add a post</a>
                 </li>
+
                 {% else %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{url_for('auth.login')}}">Login</a>
@@ -25,6 +28,11 @@
                     <a class="nav-link" href="{{url_for('index.posts')}}">See all posts</a>
                 </li>
 
+                {% if g.user %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('auth.logout') }}">Log Out</a>
+                </li>
+                {%endif%}
             </ul>
         </div>
     </div>

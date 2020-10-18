@@ -11,7 +11,7 @@
         <p>Created at: {{ user.created_at }}</p>
         <p>Modified at: {{ user.modified_at }}</p>
 
-        <a href="{{url_for('users.edit', pid=user.user_id)}}" class="btn btn-primary">Edit user</a>
+        <a href="{{url_for('users.edit', pid=user.user_id)}}" class="btn btn-primary"> Update</a>
         <a href="{{url_for('users.delete', pid=user.user_id)}}"
            class="btn btn-warning"
            onclick="if (!confirm('Delete selected user?') ) return false">

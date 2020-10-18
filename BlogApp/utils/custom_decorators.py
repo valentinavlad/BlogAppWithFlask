@@ -28,3 +28,11 @@ def login_required(view):
             return redirect(url_for('auth.login'))
         return view(**kwargs)
     return wrapped_view
+
+def admin_required(view):
+    @wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user.email != 'admin@gmail.com':
+            return redirect(url_for('index.posts'))
+        return view(**kwargs)
+    return wrapped_view

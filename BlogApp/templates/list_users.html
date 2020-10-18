@@ -3,6 +3,7 @@
 
 <div class="row posts">
     <div class="col-lg-8 col-md-10 mx-auto">
+        <a href="{{url_for('users.new')}}" class="btn btn-outline-warning"> Add new user</a>
         <table class="table">
             <thead>
                 <tr>
@@ -19,13 +20,11 @@
                     <td>{{ user.name }}</td>
                     <td>{{ user.email }}</td>
                     <td>
-                        <a href="{{url_for('users.view_user', pid=user.user_id)}}" class="btn btn-outline-primary">
-                            See more
-                        </a>
-                        |
+                        {% if g.user.user_id == user.user_id or g.user.name == 'admin' %}
                         <a href="{{url_for('users.view_user', pid=user.user_id)}}" class="btn btn-outline-secondary">
-                            Update
+                            Edit User
                         </a>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}

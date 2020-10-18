@@ -66,6 +66,9 @@
     <Compile Include="tests\test_setup_view.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tests\test_users_view.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="utils\custom_decorators.py">
       <SubType>Code</SubType>
     </Compile>
@@ -154,6 +157,7 @@
     <Content Include="static\style.css">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="templates\add_user.html" />
     <Content Include="templates\edit_post.html" />
     <Content Include="templates\edit_user.html" />
     <Content Include="templates\head.html" />
