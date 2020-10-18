@@ -24,3 +24,4 @@ FlaskInjector(app=app, modules=[configure_production])
 if __name__ == '__main__':
     #app.run(debug=True)
     app.run('localhost', 4449)
+    

@@ -1,6 +1,6 @@
 import datetime
 from injector import inject
-from flask import Blueprint, render_template, url_for, request, redirect
+from flask import Blueprint, render_template, url_for, request, redirect, g
 from utils.custom_decorators import is_config_file, login_required
 from repository.posts_repo import PostsRepo
 from models.post import Post
@@ -21,8 +21,9 @@ def posts(repo: PostsRepo):
 def new(repo: PostsRepo):
     if request.method == 'POST':
         date_now = datetime.datetime.now()
-        post = Post(title=request.form.get("title"), owner=request.form.get("owner"),
-                    contents=request.form.get("contents"))
+        post = Post(title=request.form.get("title"), contents=request.form.get("contents"))
+        post.owner = g.user['user_id']
+        print(post.owner)
         repo.add(post)
         post.created_at = date_now.strftime("%B %d, %Y")
         return redirect(url_for('index.posts'))
@@ -46,7 +47,6 @@ def edit(repo: PostsRepo, pid):
             date_now = datetime.datetime.now()
             post = found_post
             post.title = request.form.get("title")
-            post.owner = request.form.get("owner")
             post.contents = request.form.get("contents")
             post.created_at = found_post.created_at
             post.modified_at = date_now.strftime("%B %d, %Y")
