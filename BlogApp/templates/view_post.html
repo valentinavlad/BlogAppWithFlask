@@ -9,7 +9,7 @@
         <h3>{{post.title}}</h3>
         <p>By {{ post.owner }} on {{ post.created_at }} <small>Id is {{post.post_id}}</small></p>
         <p><pre id="view_content">{{ post.contents }}</pre></p>
-        {% if g.user %}
+        {% if g.user.user_id == post.user_id %}
         <a href="{{url_for('index.edit', pid=post.post_id)}}" class="btn btn-primary">Edit your post</a>
         <a href="{{url_for('index.delete', pid=post.post_id)}}"
            class="btn btn-warning"

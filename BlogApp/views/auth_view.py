@@ -6,7 +6,12 @@ from utils.custom_decorators import is_config_file
 
 auth_blueprint = Blueprint('auth', __name__, template_folder='templates', static_folder='static')
 
-
+def display_logged_user(repo: UsersRepo):
+    user_id = session.get('user_id')
+    if user_id is None:
+        g.user = None
+    else:
+        g.user = repo.find_by_id(user_id)
 def set_session(user):
     session.clear()
     session['user_id'] = user.user_id

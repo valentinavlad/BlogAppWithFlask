@@ -1,4 +1,5 @@
 import datetime
+from flask import g
 class Post():
     count = 1
     date_now = datetime.datetime.now()
@@ -10,7 +11,7 @@ class Post():
         self.created_at = datetime.datetime.now()
         self.modified_at = datetime.datetime.now()
         Post.count += 1
-        #ar trebui sa  adaug si user_id aici
+
     @classmethod
     def get_post(cls, row):
         cls.post_id = row[0]

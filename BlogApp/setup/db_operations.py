@@ -105,14 +105,13 @@ class DbOperations():
             """
             CREATE TABLE posts (
                 post_id SERIAL PRIMARY KEY,
-                user_id INT,
                 title VARCHAR(255) NOT NULL,
-                owner VARCHAR(255) NOT NULL,
+                owner INT,
                 contents Text NOT NULL,
                 created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 modified_at DATE NULL,
-                CONSTRAINT fk_user
-                    FOREIGN KEY (user_id) REFERENCES users(user_id));
+                CONSTRAINT fk_users
+                    FOREIGN KEY (owner) REFERENCES users(user_id));
             """)
         try:
             cls.conn = cls.connect()
