@@ -21,9 +21,8 @@ def posts(repo: PostsRepo):
 def new(repo: PostsRepo):
     if request.method == 'POST':
         date_now = datetime.datetime.now()
-        post = Post(title=request.form.get("title"), contents=request.form.get("contents"))
-        post.owner = g.user['user_id']
-        print(post.owner)
+        post = Post(title=request.form.get("title"), owner=request.form.get("owner"),
+                    contents=request.form.get("contents"))
         repo.add(post)
         post.created_at = date_now.strftime("%B %d, %Y")
         return redirect(url_for('index.posts'))
@@ -34,6 +33,8 @@ def new(repo: PostsRepo):
 @is_config_file
 def view_post(repo: PostsRepo, pid):
     post = repo.find_by_id(pid)
+    print(post.user_id)
+    print(g.user.user_id)
     return render_template('view_post.html', post=post)
 
 @inject
@@ -47,6 +48,7 @@ def edit(repo: PostsRepo, pid):
             date_now = datetime.datetime.now()
             post = found_post
             post.title = request.form.get("title")
+            post.owner = request.form.get("owner")
             post.contents = request.form.get("contents")
             post.created_at = found_post.created_at
             post.modified_at = date_now.strftime("%B %d, %Y")

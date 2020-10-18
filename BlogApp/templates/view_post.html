@@ -9,7 +9,7 @@
         <h3>{{post.title}}</h3>
         <p>By {{ post.owner }} on {{ post.created_at }} <small>Id is {{post.post_id}}</small></p>
         <p><pre id="view_content">{{ post.contents }}</pre></p>
-        {% if g.user.user_id == post.user_id %}
+        {% if g.user.user_id == post.user_id or g.user.name == 'admin' %}
         <a href="{{url_for('index.edit', pid=post.post_id)}}" class="btn btn-primary">Edit your post</a>
         <a href="{{url_for('index.delete', pid=post.post_id)}}"
            class="btn btn-warning"
@@ -18,10 +18,10 @@
         </a>
         {% endif %}
         <!--
-    <form method="POST" id="delete_form">
-    <button type="submit" class="btn btn-danger" id="confirm-delete" onclick="if (!confirm('Delete selected post?') ) return false">Delete post</button>
-    </form>
-    -->
+        <form method="POST" id="delete_form">
+        <button type="submit" class="btn btn-danger" id="confirm-delete" onclick="if (!confirm('Delete selected post?') ) return false">Delete post</button>
+        </form>
+        -->
     </div>
-</div>   
+</div>
 {% endblock content %}

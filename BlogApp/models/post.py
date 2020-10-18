@@ -1,13 +1,15 @@
 import datetime
-
+from flask import g
 class Post():
     count = 1
+    user_id = 0
     date_now = datetime.datetime.now()
-    def __init__(self, title, contents):
+    def __init__(self, title, owner, contents):
         self.post_id = Post.count
         self.title = title
-        self.owner = 0
+        self.owner = owner
         self.contents = contents
+
         self.created_at = datetime.datetime.now()
         self.modified_at = datetime.datetime.now()
         Post.count += 1
@@ -15,6 +17,7 @@ class Post():
     @classmethod
     def get_post(cls, row):
         cls.post_id = row[0]
+        cls.user_id = row[1]
         cls.title = row[2]
         cls.owner = row[3]
         cls.contents = row[4]
