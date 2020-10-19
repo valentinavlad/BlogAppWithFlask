@@ -1,5 +1,4 @@
 import psycopg2
-from flask import g
 from repository.posts_repo import PostsRepo
 from models.post import Post
 from setup.db_operations import DbOperations

@@ -1,3 +1,4 @@
+#must mock glabal user, login too?
 def login(client_is_config, email, password):
     return client_is_config.post('/auth/login', data=dict(
         email=email,
@@ -18,8 +19,8 @@ def test_view_post(client_is_config):
     assert response.status_code == 200
 
 def test_post_create(client_is_config):
-    rv = login(client_is_config, 'tia@gmail.com', '123')
-    assert b'Hello Tia' in rv.data
+    log = login(client_is_config, 'tia@gmail.com', '123')
+    assert b'Hello Tia' in log.data
     response = client_is_config.get('/posts/new')
     assert response.status_code == 200
     assert b'Owner' in response.data
@@ -33,7 +34,8 @@ def test_post_create(client_is_config):
     assert 'KOKO' in response_post.get_data(as_text=True)
 
 def test_update_post(client_is_config):
-    rv = login(client_is_config, 'tia@gmail.com', '123')
+    log = login(client_is_config, 'tia@gmail.com', '123')
+    assert b'Hello Tia' in log.data
     response = client_is_config.get('/posts/2')
     assert response.status_code == 200
     assert b'Edit your post' in response.data
@@ -46,7 +48,8 @@ def test_update_post(client_is_config):
 
 def test_delete_post(client_is_config):
     #at id 4 is Javascript
-    rv = login(client_is_config, 'tia@gmail.com', '123')
+    log = login(client_is_config, 'tia@gmail.com', '123')
+    assert b'Hello Tia' in log.data
     res = client_is_config.get('/posts/4')
     assert res.status_code == 200
     assert b'Delete your post' in res.data
