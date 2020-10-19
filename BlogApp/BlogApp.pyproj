@@ -51,6 +51,9 @@
     <Compile Include="repository\users_repo.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="services\auth.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="services\dependencies.py">
       <SubType>Code</SubType>
     </Compile>

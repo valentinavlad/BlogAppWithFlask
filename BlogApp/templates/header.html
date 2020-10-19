@@ -7,7 +7,7 @@
                     <h1>Web Tech's Blog</h1>
                     <span class="subheading">Check our latest posts in web technologies!</span>
 
-                    {% if g.user %}
+                    {% if session['user_id'] %}
                     <p class="nav-item mt-2"><span>Hello {{ session['name']| capitalize  }} !</span></p>
                     {%endif%}
                 </div>
