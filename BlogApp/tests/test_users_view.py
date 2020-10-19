@@ -25,6 +25,7 @@ def test_create_user(client_is_config):
     response_post = client_is_config.post('/users/new', data=data, follow_redirects=True)
     assert response_post.status_code == 200
     assert b'Maia' in response_post.data
+    assert b'Bob' in response_post.data
     assert 'Tia' in response_post.get_data(as_text=True)
 
 def test_update_user(client_is_config):
@@ -34,10 +35,11 @@ def test_update_user(client_is_config):
     assert response.status_code == 200
     assert 'Name' in response.get_data(as_text=True)
 
-    data = {'name': 'bob', 'email':'bob@gmail.com', 'password': '123'}
+    data = {'name': 'maia_update'}
     response_post = client_is_config.post('/users/2/edit', data=data, follow_redirects=True)
     assert response_post.status_code == 200
     assert b'User data' in response_post.data
+    assert b'maia_update' in response_post.data
     assert 'Update' in response_post.get_data(as_text=True)
 #delete is not working, because this user id has posts- fail to delete
 def test_delete_user(client_is_config):

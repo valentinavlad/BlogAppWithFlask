@@ -72,12 +72,12 @@ class DatabaseUsersRepo(UsersRepo):
         finally:
             if self.db_operations.conn is not None:
                 self.db_operations.conn.close()
-
+                #generate_password_hash(user.password)
     def add(self, user):
         sql = """INSERT INTO users(name, email, password,
                         created_at,modified_at)
                  VALUES(%s,%s,%s,%s,%s) RETURNING user_id;"""
-        record_to_insert = (user.name, user.email, generate_password_hash(user.password),
+        record_to_insert = (user.name, user.email, user.password,
                             user.created_at, user.modified_at)
         user_id = None
         try:

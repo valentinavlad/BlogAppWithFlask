@@ -24,15 +24,11 @@ def login(repo: UsersRepo, auth: Auth):
         error, user = auth.login(repo, email, password)
         if error is None:
             set_session(user)
-            print("*********")
-            print(session['name'])
             return redirect(url_for('index.posts'))
         flash(error)
     return render_template('login.html')
 
 @inject
 @auth_blueprint.route('/logout')
-@is_config_file
-def logout():
-    session.clear()
-    return redirect(url_for('index.posts'))
+def logout(auth: Auth):
+    return auth.logout_user()

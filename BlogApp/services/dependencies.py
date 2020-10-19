@@ -9,6 +9,7 @@ from repository.in_memory_posts_repo import InMemoryPostsRepo
 from repository.in_memory_users_repo import InMemoryUsersRepo
 from setup.database_config import DatabaseConfig
 from services.auth import Auth
+
 def configure_production(binder):
     binder.bind(PostsRepo, to=DatabasePostRepo, scope=singleton)
     binder.bind(UsersRepo, to=DatabaseUsersRepo, scope=singleton)
@@ -18,5 +19,5 @@ def configure_production(binder):
 
 def configure_test(binder):
     binder.bind(PostsRepo, to=InMemoryPostsRepo, scope=singleton)
-    binder.bind(UsersRepo, to=InMemoryUsersRepo, scope=singleton)
+    binder.bind(UsersRepo, to=InMemoryUsersRepo, scope=request)
     binder.bind(DatabaseConfig, to=Mock(DatabaseConfig), scope=request)

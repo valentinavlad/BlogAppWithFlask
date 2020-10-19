@@ -96,9 +96,6 @@
     <Compile Include="repository\database_posts_repo.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="repository\posts_repo_factory.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="repository\__init__.py">
       <SubType>Code</SubType>
     </Compile>
@@ -115,12 +112,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="utils\__init__.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="validators\login_validator.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="validators\__init__.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="views\setup_view.py">
@@ -141,7 +132,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="models\" />
-    <Folder Include="validators\" />
     <Folder Include="services\" />
     <Folder Include="utils\" />
     <Folder Include="setup\" />

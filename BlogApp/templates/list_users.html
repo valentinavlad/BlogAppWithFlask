@@ -20,7 +20,7 @@
                     <td>{{ user.name }}</td>
                     <td>{{ user.email }}</td>
                     <td>
-                        {% if g.user.user_id == user.user_id or g.user.name == 'admin' %}
+                        {% if session['user_id'] == user.user_id or session['name'] == 'admin' %}
                         <a href="{{url_for('users.view_user', pid=user.user_id)}}" class="btn btn-outline-secondary">
                             Edit User
                         </a>

@@ -1,6 +1,6 @@
 import datetime
 from injector import inject
-from flask import Blueprint, render_template, url_for, request, redirect, session
+from flask import Blueprint, render_template, url_for, request, redirect
 from utils.custom_decorators import is_config_file, login_required
 from repository.posts_repo import PostsRepo
 from models.post import Post
@@ -33,8 +33,6 @@ def new(repo: PostsRepo):
 @is_config_file
 def view_post(repo: PostsRepo, pid):
     post = repo.find_by_id(pid)
-    print(post.user_id)
-    print(session['name'])
     return render_template('view_post.html', post=post)
 
 @inject
