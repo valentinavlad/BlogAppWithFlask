@@ -57,6 +57,8 @@ def edit(repo: UsersRepo, pid):
 @admin_required
 def delete(repo: UsersRepo, pid):
     user_delete = repo.find_by_id(pid)
+    print('delete method')
+    print(user_delete.user_id)
     if user_delete is not None:
         repo.delete(pid)
         return redirect(url_for('users.users'))

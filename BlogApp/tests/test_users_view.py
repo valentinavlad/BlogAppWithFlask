@@ -39,3 +39,15 @@ def test_update_user(client_is_config):
     assert response_post.status_code == 200
     assert b'User data' in response_post.data
     assert 'Update' in response_post.get_data(as_text=True)
+#delete is not working, because this user id has posts- fail to delete
+def test_delete_user(client_is_config):
+    #at id 1 is Tia
+    log = login(client_is_config, 'admin@gmail.com', '123')
+    assert b'Hello Admin' in log.data
+    res = client_is_config.get('/users/1')
+    assert res.status_code == 200
+    assert b'Delete' in res.data
+
+    response = client_is_config.post('/users/1/delete', follow_redirects=True)
+    assert response.status_code == 200
+    assert b'tia' not in response.data
