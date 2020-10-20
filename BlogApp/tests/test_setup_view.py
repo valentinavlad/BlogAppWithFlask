@@ -12,4 +12,3 @@ def test_setup_is_config(client_is_config):
     assert '<h1>Angular</h1>' in response.get_data(as_text=True)
     assert '<h1>Php</h1>' in response.get_data(as_text=True)
     assert b'Check our latest posts in web technologies!' in response.data
-   # assert b'Add a post' in response.data

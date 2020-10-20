@@ -1,5 +1,4 @@
 from flask import session
-#must mock glabal user, login too?
 def login(client_is_config, email, password):
     return client_is_config.post('/auth/login', data=dict(
         email=email,
@@ -22,7 +21,7 @@ def test_view_post(client_is_config):
     assert b'V.W. Craig' in response.data
     assert response.status_code == 200
 
-def test_post_create(client_is_config):
+def test_post_create_by_owner(client_is_config):
     log = login(client_is_config, 'tia@gmail.com', '123')
     assert b'Hello Tia' in log.data
     response = client_is_config.get('/posts/new')
@@ -37,6 +36,13 @@ def test_post_create(client_is_config):
     assert 'KOKO' in response_post.get_data(as_text=True)
     logout(client_is_config)
 
+def test_cannot_create_post_if_not_logged(client_is_config):
+    response = client_is_config.get('/posts/new', follow_redirects=True)
+    assert response.status_code == 200
+    assert b'Email' in response.data
+    assert b'Password' in response.data
+    assert b'Login' in response.data
+
 def test_update_post(client_is_config):
     log = login(client_is_config, 'tia@gmail.com', '123')
     assert b'Hello Tia' in log.data
@@ -49,19 +55,36 @@ def test_update_post(client_is_config):
     assert response_post.status_code == 200
     assert b'Edit your post' in response_post.data
     assert 'updated PHP' in response_post.get_data(as_text=True)
-    logout(client_is_config)
 
-def test_delete_post(client_is_config):
+def test_delete_post_by_other_dont_work(client_is_config):
+    #at id 4 is Javascript
+    log = login(client_is_config, 'maia@gmail.com', '123')
+    with client_is_config.session_transaction() as session:
+        session['user_id'] = '2'
+    assert b'Hello Maia' in log.data
+    res = client_is_config.get('/posts/4')
+    assert res.status_code == 200
+    assert b'Delete your post' in res.data
+    
+    response = client_is_config.post('/posts/4/delete', follow_redirects=True)
+    assert response.status_code == 200
+    assert b'Javascript' in response.data
+    assert '<h1>Angular</h1>' in response.get_data(as_text=True)
+    assert '<h1>Php</h1>' in response.get_data(as_text=True)
+
+def test_delete_post_by_owner(client_is_config):
     #at id 4 is Javascript
     log = login(client_is_config, 'tia@gmail.com', '123')
+    with client_is_config.session_transaction() as session:
+        session['user_id'] = '1'
     assert b'Hello Tia' in log.data
     res = client_is_config.get('/posts/4')
     assert res.status_code == 200
     assert b'Delete your post' in res.data
-
+    
     response = client_is_config.post('/posts/4/delete', follow_redirects=True)
     assert response.status_code == 200
-    assert b'Javascript' not in response.data
+    assert b'Javascript' not  in response.data
     assert '<h1>Angular</h1>' in response.get_data(as_text=True)
     assert '<h1>Php</h1>' in response.get_data(as_text=True)
 

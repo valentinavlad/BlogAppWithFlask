@@ -29,7 +29,10 @@ class DatabaseUsersRepo(UsersRepo):
             sql = "SELECT * FROM users WHERE email = %s"
             cur.execute(sql, (email,))
             row = cur.fetchone()
-            user = User.get_user(row)
+            if row is not None:
+                user = User.get_user(row)
+            else:
+                user = None
             cur.close()
         except (ConnectionError, psycopg2.DatabaseError) as error:
             print(error)

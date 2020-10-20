@@ -1,5 +1,5 @@
 import datetime
-
+from flask import session
 class Post():
     count = 1
     user_id = 0
@@ -29,6 +29,11 @@ class Post():
         obj.post_id = cls.post_id
         return obj
 
+    def is_owner(self):
+        x = self.user_id
+        y = session['user_id']
+        return True if self.user_id == int(session['user_id']) else False
+    
     def __str__(self):
         return self.title + " " + self.owner
 

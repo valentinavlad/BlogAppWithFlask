@@ -1,7 +1,7 @@
 import datetime
 from injector import inject
-from flask import Blueprint, render_template, url_for, request, redirect
-from utils.custom_decorators import is_config_file, login_required
+from flask import Blueprint, render_template, url_for, request, redirect, session
+from utils.custom_decorators import is_config_file, login_required, owner_required
 from repository.posts_repo import PostsRepo
 from models.post import Post
 
@@ -16,8 +16,8 @@ def posts(repo: PostsRepo):
 
 @inject
 @index_blueprint.route('/new', methods=['GET', 'POST'])
-@login_required
 @is_config_file
+@login_required
 def new(repo: PostsRepo):
     if request.method == 'POST':
         date_now = datetime.datetime.now()
@@ -37,8 +37,9 @@ def view_post(repo: PostsRepo, pid):
 
 @inject
 @index_blueprint.route('/<int:pid>/edit', methods=['GET', 'POST'])
-@login_required
 @is_config_file
+@login_required
+
 def edit(repo: PostsRepo, pid):
     found_post = repo.find_by_id(pid)
     if request.method == 'POST':
@@ -50,17 +51,21 @@ def edit(repo: PostsRepo, pid):
             post.contents = request.form.get("contents")
             post.created_at = found_post.created_at
             post.modified_at = date_now.strftime("%B %d, %Y")
+            if not found_post.is_owner():
+                return redirect(url_for('index.posts'))
             repo.edit(post)
         return redirect(url_for('index.view_post', pid=post.post_id))
     return render_template('edit_post.html', post=found_post)
 
 @inject
 @index_blueprint.route('/<int:pid>/delete', methods=['GET', 'POST'])
-@login_required
 @is_config_file
+@login_required
 def delete(repo: PostsRepo, pid):
     post_delete = repo.find_by_id(pid)
     if post_delete is not None:
+        if not post_delete.is_owner():
+            return redirect(url_for('index.posts'))
         repo.delete(pid)
         return redirect(url_for('index.posts'))
     return render_template('view_post.html')

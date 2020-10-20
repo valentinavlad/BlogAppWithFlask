@@ -7,8 +7,10 @@ class Auth:
 
     @staticmethod
     def login(repo, email, password):
-        user = repo.check_user_exists(email)
         error = None
+        user = repo.check_user_exists(email)
+        if user is None:
+            error = "This users is not registered"
         if email is None:
             error = 'Incorrect email.'
         #elif not check_password_hash(user.password, password):

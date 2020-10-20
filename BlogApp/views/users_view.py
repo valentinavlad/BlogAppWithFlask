@@ -3,19 +3,21 @@ from injector import inject
 from flask import Blueprint, render_template, url_for, \
     request, redirect
 from repository.users_repo import UsersRepo
-from utils.custom_decorators import admin_required
+from utils.custom_decorators import admin_required, is_config_file
 from models.user import User
 
 users_blueprint = Blueprint('users', __name__, template_folder='templates', static_folder='static')
 
 @inject
 @users_blueprint.route('/', methods=['GET', 'POST'])
+@is_config_file
 @admin_required
 def users(repo: UsersRepo):
     return render_template('list_users.html', content=repo.view_all())
 
 @inject
 @users_blueprint.route('/<int:pid>', methods=['GET'])
+@is_config_file
 @admin_required
 def view_user(repo: UsersRepo, pid):
     user = repo.find_by_id(pid)
@@ -23,6 +25,7 @@ def view_user(repo: UsersRepo, pid):
 
 @inject
 @users_blueprint.route('/new', methods=['GET', 'POST'])
+@is_config_file
 @admin_required
 def new(repo: UsersRepo):
     if request.method == 'POST':
@@ -36,6 +39,7 @@ def new(repo: UsersRepo):
 
 @inject
 @users_blueprint.route('/<int:pid>/edit', methods=['GET', 'POST'])
+@is_config_file
 @admin_required
 def edit(repo: UsersRepo, pid):
     found_user = repo.find_by_id(pid)
@@ -54,6 +58,7 @@ def edit(repo: UsersRepo, pid):
 
 @inject
 @users_blueprint.route('/<int:pid>/delete', methods=['GET', 'POST'])
+@is_config_file
 @admin_required
 def delete(repo: UsersRepo, pid):
     user_delete = repo.find_by_id(pid)

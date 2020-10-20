@@ -25,7 +25,7 @@ def test_create_user(client_is_config):
     response_post = client_is_config.post('/users/new', data=data, follow_redirects=True)
     assert response_post.status_code == 200
     assert b'Maia' in response_post.data
-    assert b'Bob' in response_post.data
+    assert b'bob' in response_post.data
     assert 'Tia' in response_post.get_data(as_text=True)
 
 def test_update_user(client_is_config):

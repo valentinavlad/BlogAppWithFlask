@@ -1,7 +1,7 @@
 from injector import inject
 from werkzeug.security import check_password_hash
 from flask import Blueprint, render_template, url_for, \
-    request, redirect, flash, session, g
+    request, redirect, flash, session
 from repository.users_repo import UsersRepo
 from services.auth import Auth
 from utils.custom_decorators import is_config_file
@@ -30,5 +30,6 @@ def login(repo: UsersRepo, auth: Auth):
 
 @inject
 @auth_blueprint.route('/logout')
+@is_config_file
 def logout(auth: Auth):
     return auth.logout_user()
