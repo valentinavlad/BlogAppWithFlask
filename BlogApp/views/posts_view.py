@@ -52,8 +52,7 @@ def edit(repo: PostsRepo, pid):
             post.created_at = found_post.created_at
             post.modified_at = date_now.strftime("%B %d, %Y")
             if not found_post.is_owner() and not session['email'] == 'admin@gmail.com':
-                #return redirect(url_for('index.posts'))
-                abort(404, "User {0} doesn't have right to edit this post.".format(session['name']))
+                return render_template('403error.html'), 403
             repo.edit(post)
         return redirect(url_for('index.view_post', pid=post.post_id))
     return render_template('edit_post.html', post=found_post)
@@ -66,7 +65,7 @@ def delete(repo: PostsRepo, pid):
     post_delete = repo.find_by_id(pid)
     if post_delete is not None:
         if not post_delete.is_owner() and not session['email'] == 'admin@gmail.com':
-            return redirect(url_for('index.posts'))
+            return render_template('403error.html'), 403
         repo.delete(pid)
         return redirect(url_for('index.posts'))
     return render_template('view_post.html')

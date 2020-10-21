@@ -19,5 +19,5 @@ def configure_production(binder):
 
 def configure_test(binder):
     binder.bind(PostsRepo, to=InMemoryPostsRepo, scope=singleton)
-    binder.bind(UsersRepo, to=InMemoryUsersRepo, scope=request)
+    binder.bind(UsersRepo, to=InMemoryUsersRepo, scope=singleton)
     binder.bind(DatabaseConfig, to=Mock(DatabaseConfig), scope=request)
