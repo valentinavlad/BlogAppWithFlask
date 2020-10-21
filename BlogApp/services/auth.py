@@ -1,7 +1,4 @@
-from injector import inject
 from flask import session, redirect, url_for
-from werkzeug.security import check_password_hash
-from repository.users_repo import UsersRepo
 
 class Auth:
 
@@ -13,7 +10,6 @@ class Auth:
             error = "This users is not registered"
         if email is None:
             error = 'Incorrect email.'
-        #elif not check_password_hash(user.password, password):
         elif not password:
             error = 'Incorrect password.'
         return error, user
@@ -22,3 +18,10 @@ class Auth:
     def logout_user():
         session.clear()
         return redirect(url_for('index.posts'))
+
+    @staticmethod
+    def is_admin():
+        return session['email'] == 'admin@gmail.com'
+    @staticmethod
+    def is_current_user():
+        return session['user_id']

@@ -53,3 +53,35 @@ def test_delete_user(client_is_config):
     response = client_is_config.post('/users/1/delete', follow_redirects=True)
     assert response.status_code == 200
     assert b'tia' not in response.data
+
+def test_see_all_users_redirect_setup(client_is_not_config):
+    response = client_is_not_config.get('/auth/login', follow_redirects=True)
+    assert response.status_code == 200
+    assert '<h1>Your database is not configured</h1>' in response.get_data(as_text=True)
+    assert b'Database name' in response.data
+    assert b'User' in response.data
+    assert b'Password' in response.data
+
+def test_create_user_redirect_setup(client_is_not_config):
+    response = client_is_not_config.get('/users/new', follow_redirects=True)
+    assert response.status_code == 200
+    assert '<h1>Your database is not configured</h1>' in response.get_data(as_text=True)
+    assert b'Database name' in response.data
+    assert b'User' in response.data
+    assert b'Password' in response.data
+
+def test_update_user_redirect_setup(client_is_not_config):
+    response = client_is_not_config.get('/users/2', follow_redirects=True)
+    assert response.status_code == 200
+    assert '<h1>Your database is not configured</h1>' in response.get_data(as_text=True)
+    assert b'Database name' in response.data
+    assert b'User' in response.data
+    assert b'Password' in response.data
+
+def test_delete_user_redirect_setup(client_is_not_config):
+    response = client_is_not_config.get('/users/2', follow_redirects=True)
+    assert response.status_code == 200
+    assert '<h1>Your database is not configured</h1>' in response.get_data(as_text=True)
+    assert b'Database name' in response.data
+    assert b'User' in response.data
+    assert b'Password' in response.data

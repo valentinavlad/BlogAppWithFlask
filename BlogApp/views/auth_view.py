@@ -1,5 +1,4 @@
 from injector import inject
-from werkzeug.security import check_password_hash
 from flask import Blueprint, render_template, url_for, \
     request, redirect, flash, session
 from repository.users_repo import UsersRepo
@@ -20,7 +19,7 @@ def set_session(user):
 def login(repo: UsersRepo, auth: Auth):
     if request.method == 'POST':
         email = request.form.get("email")
-        password =  request.form.get("password")
+        password = request.form.get("password")
         error, user = auth.login(repo, email, password)
         if error is None:
             set_session(user)

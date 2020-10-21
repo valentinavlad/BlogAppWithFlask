@@ -1,7 +1,7 @@
 import datetime
 from injector import inject
-from flask import Blueprint, render_template, url_for, request, redirect, session
-from utils.custom_decorators import is_config_file, login_required, owner_required
+from flask import Blueprint, render_template, url_for, request, redirect, session, abort
+from utils.custom_decorators import is_config_file, login_required
 from repository.posts_repo import PostsRepo
 from models.post import Post
 
@@ -51,8 +51,9 @@ def edit(repo: PostsRepo, pid):
             post.contents = request.form.get("contents")
             post.created_at = found_post.created_at
             post.modified_at = date_now.strftime("%B %d, %Y")
-            if not found_post.is_owner():
-                return redirect(url_for('index.posts'))
+            if not found_post.is_owner() and not session['email'] == 'admin@gmail.com':
+                #return redirect(url_for('index.posts'))
+                abort(404, "User {0} doesn't have right to edit this post.".format(session['name']))
             repo.edit(post)
         return redirect(url_for('index.view_post', pid=post.post_id))
     return render_template('edit_post.html', post=found_post)
@@ -64,7 +65,7 @@ def edit(repo: PostsRepo, pid):
 def delete(repo: PostsRepo, pid):
     post_delete = repo.find_by_id(pid)
     if post_delete is not None:
-        if not post_delete.is_owner():
+        if not post_delete.is_owner() and not session['email'] == 'admin@gmail.com':
             return redirect(url_for('index.posts'))
         repo.delete(pid)
         return redirect(url_for('index.posts'))

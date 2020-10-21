@@ -1,5 +1,4 @@
 import psycopg2
-from werkzeug.security import  generate_password_hash
 from models.user import User
 from setup.db_operations import DbOperations
 from repository.users_repo import UsersRepo
@@ -75,7 +74,6 @@ class DatabaseUsersRepo(UsersRepo):
         finally:
             if self.db_operations.conn is not None:
                 self.db_operations.conn.close()
-                #generate_password_hash(user.password)
     def add(self, user):
         sql = """INSERT INTO users(name, email, password,
                         created_at,modified_at)
