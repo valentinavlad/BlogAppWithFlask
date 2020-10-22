@@ -1,6 +1,6 @@
 from functools import wraps
 from injector import inject
-from flask import url_for, redirect, session
+from flask import url_for, redirect, session, render_template
 from setup.database_config import DatabaseConfig
 
 def is_config_file(funct):
@@ -35,18 +35,16 @@ def login_required(view):
 def admin_required(view):
     @wraps(view)
     def wrapped_view(**kwargs):
-        for key, value in kwargs.items():
-            print ("%s == %s" %(key, value))
         if session['email'] != 'admin@gmail.com':
-            return redirect(url_for('index.posts'))
+             return render_template('403error.html'), 403
         return view(**kwargs)
     return wrapped_view
 
 def admin_or_owner_required(view):
     @wraps(view)
     def wrapped_view(**kwargs):
-        
-        if session['email'] != 'admin@gmail.com':
-            return redirect(url_for('index.posts'))
+        current_user = kwargs.get("pid")
+        if session['email'] != 'admin@gmail.com' and session['user_id'] != current_user:
+            return render_template('403error.html'), 403
         return view(**kwargs)
     return wrapped_view

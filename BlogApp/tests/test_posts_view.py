@@ -104,7 +104,14 @@ def test_update_post_by_other_wont_work(client_is_config):
 
     assert resp.status == '403 FORBIDDEN'
     assert '<h1>Forbidden</h1>' in resp.get_data(as_text=True)
-    assert "<h1>User Tia doesn't have rights to alter this post.</h1>" in resp.get_data(as_text=True)
+    assert "<h1>User Tia doesn't have rights to alter this page.</h1>" in resp.get_data(as_text=True)
+
+def test_update_not_logged_user(client_is_config):
+    response = client_is_config.get('/posts/8/edit', follow_redirects=True)
+    assert response.status_code == 200
+    assert b'Email' in response.data
+    assert b'Password' in response.data
+    assert b'Login' in response.data
 
 def test_update_post_by_user_not_logged_redirect_login(client_is_config):
     response = client_is_config.post('/posts/4/edit', follow_redirects=True)
@@ -126,7 +133,7 @@ def test_delete_post_by_other_dont_work(client_is_config):
     response = client_is_config.post('/posts/4/delete')
     assert response.status == '403 FORBIDDEN'
     assert '<h1>Forbidden</h1>' in response.get_data(as_text=True)
-    assert "<h1>User Maia doesn't have rights to alter this post.</h1>" in response.get_data(as_text=True)
+    assert "<h1>User Maia doesn't have rights to alter this page.</h1>" in response.get_data(as_text=True)
     logout(client_is_config)
 
 def test_delete_post_by_user_not_logged_redirect_login(client_is_config):
@@ -169,6 +176,13 @@ def test_delete_post_by_admin(client_is_config):
     assert '<h1>Vue Js</h1>' in response.get_data(as_text=True)
     logout(client_is_config)
     sess.clear()
+
+def test_delete_not_logged_user(client_is_config):
+    response = client_is_config.get('/posts/8/delete', follow_redirects=True)
+    assert response.status_code == 200
+    assert b'Email' in response.data
+    assert b'Password' in response.data
+    assert b'Login' in response.data
 
 def test_index_redirect_setup(client_is_not_config):
     response = client_is_not_config.get('/posts/', follow_redirects=True)
