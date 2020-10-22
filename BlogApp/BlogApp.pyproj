@@ -51,6 +51,12 @@
     <Compile Include="repository\users_repo.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="scripts\create_posts_table.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="scripts\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="services\authentication.py">
       <SubType>Code</SubType>
     </Compile>
@@ -135,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="models\" />
+    <Folder Include="scripts\" />
     <Folder Include="services\" />
     <Folder Include="utils\" />
     <Folder Include="setup\" />

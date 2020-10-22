@@ -1,5 +1,6 @@
 import psycopg2
 from setup.database_config import DatabaseConfig
+from scripts.create_posts_table import command
 
 class DbOperations():
     conn = None
@@ -27,7 +28,7 @@ class DbOperations():
         if is_table is None:
             cur.close()
             cls.conn.close()
-            cls.create_tables()
+            cls.create_table()
             cls.conn = None
         else:
             cur.close()
@@ -40,7 +41,7 @@ class DbOperations():
         cur.execute('CREATE DATABASE {};'.format(database_name))
         cur.close()
         cls.conn.close()
-        cls.create_tables()
+        cls.create_table()
 
     @classmethod
     def connect_to_db(cls):
@@ -68,16 +69,6 @@ class DbOperations():
 
     @classmethod
     def create_table(cls):
-        command = """
-            CREATE TABLE posts (
-                post_id SERIAL PRIMARY KEY,
-                title VARCHAR(255) NOT NULL,
-                owner VARCHAR(255) NOT NULL,
-                contents Text NOT NULL,
-                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                modified_at DATE NULL
-                )
-            """
         try:
             cls.conn = cls.connect()
             cur = cls.conn.cursor()
