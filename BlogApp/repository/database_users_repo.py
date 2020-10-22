@@ -1,4 +1,5 @@
 import psycopg2
+from werkzeug.security import generate_password_hash
 from models.user import User
 from setup.db_operations import DbOperations
 from repository.users_repo import UsersRepo
@@ -78,7 +79,7 @@ class DatabaseUsersRepo(UsersRepo):
         sql = """INSERT INTO users(name, email, password,
                         created_at,modified_at)
                  VALUES(%s,%s,%s,%s,%s) RETURNING user_id;"""
-        record_to_insert = (user.name, user.email, user.password,
+        record_to_insert = (user.name, user.email, generate_password_hash(user.password),
                             user.created_at, user.modified_at)
         user_id = None
         try:
