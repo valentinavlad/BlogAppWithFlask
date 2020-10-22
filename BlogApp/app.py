@@ -4,7 +4,7 @@ from flask_injector import FlaskInjector
 from services.dependencies import configure_production
 from views.posts_view import index_blueprint
 from views.setup_view import setup_blueprint
-from views.auth_view import auth_blueprint
+from views.login_view import login_blueprint
 from views.users_view import users_blueprint
 
 app = Flask(__name__)
@@ -12,7 +12,7 @@ app.secret_key = 'any random string'
 
 app.register_blueprint(index_blueprint, url_prefix="/posts")
 app.register_blueprint(setup_blueprint, url_prefix="/setup")
-app.register_blueprint(auth_blueprint, url_prefix="/auth")
+app.register_blueprint(login_blueprint, url_prefix="/auth")
 app.register_blueprint(users_blueprint, url_prefix="/users")
 
 @app.route('/')

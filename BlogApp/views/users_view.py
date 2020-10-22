@@ -3,7 +3,8 @@ from injector import inject
 from flask import Blueprint, render_template, url_for, \
     request, redirect
 from repository.users_repo import UsersRepo
-from utils.custom_decorators import admin_required, is_config_file, admin_or_owner_required, login_required
+from utils.setup_decorators import is_config_file
+from utils.authorization import admin_required, admin_or_owner_required, login_required
 from models.user import User
 
 users_blueprint = Blueprint('users', __name__, template_folder='templates', static_folder='static')

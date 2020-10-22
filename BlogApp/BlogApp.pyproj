@@ -51,7 +51,7 @@
     <Compile Include="repository\users_repo.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="services\auth.py">
+    <Compile Include="services\authentication.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="services\dependencies.py">
@@ -63,7 +63,7 @@
     <Compile Include="setup\database_config.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="tests\test_auth_view.py">
+    <Compile Include="tests\test_login_view.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="tests\test_setup_view.py">
@@ -72,7 +72,7 @@
     <Compile Include="tests\test_users_view.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="utils\custom_decorators.py">
+    <Compile Include="utils\authorization.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="setup\config.py">
@@ -111,13 +111,16 @@
     <Compile Include="tests\test_posts_view.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="utils\setup_decorators.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="utils\__init__.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="views\setup_view.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="views\auth_view.py">
+    <Compile Include="views\login_view.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="views\users_view.py">

@@ -2,10 +2,10 @@ from injector import inject
 from flask import Blueprint, render_template, url_for, \
     request, redirect, flash, session
 from repository.users_repo import UsersRepo
-from services.auth import Auth
-from utils.custom_decorators import is_config_file
+from services.authentication import Authentication
+from utils.setup_decorators import is_config_file
 
-auth_blueprint = Blueprint('auth', __name__, template_folder='templates', static_folder='static')
+login_blueprint = Blueprint('auth', __name__, template_folder='templates', static_folder='static')
 
 def set_session(user):
     session.clear()
@@ -14,9 +14,9 @@ def set_session(user):
     session['email'] = user.email
 
 @inject
-@auth_blueprint.route('/login', methods=['GET', 'POST'])
+@login_blueprint.route('/login', methods=['GET', 'POST'])
 @is_config_file
-def login(repo: UsersRepo, auth: Auth):
+def login(repo: UsersRepo, auth: Authentication):
     if request.method == 'POST':
         email = request.form.get("email")
         password = request.form.get("password")
@@ -28,7 +28,7 @@ def login(repo: UsersRepo, auth: Auth):
     return render_template('login.html')
 
 @inject
-@auth_blueprint.route('/logout')
+@login_blueprint.route('/logout')
 @is_config_file
-def logout(auth: Auth):
+def logout(auth: Authentication):
     return auth.logout_user()
