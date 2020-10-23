@@ -1,5 +1,4 @@
 from functools import wraps
-from injector import inject
 from flask import url_for, redirect, session, render_template
 
 def login_required(view):
@@ -17,7 +16,7 @@ def admin_required(view):
     @wraps(view)
     def wrapped_view(**kwargs):
         if session['email'] != 'admin@gmail.com':
-             return render_template('403error.html'), 403
+            return render_template('403error.html'), 403
         return view(**kwargs)
     return wrapped_view
 

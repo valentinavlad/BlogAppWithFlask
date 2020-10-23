@@ -1,6 +1,6 @@
 import datetime
 from injector import inject
-from flask import Blueprint, render_template, url_for, request, redirect, session, abort
+from flask import Blueprint, render_template, url_for, request, redirect, session
 from utils.setup_decorators import is_config_file
 from utils.authorization import login_required
 from repository.posts_repo import PostsRepo

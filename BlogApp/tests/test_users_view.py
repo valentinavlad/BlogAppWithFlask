@@ -36,10 +36,12 @@ def test_create_user_by_non_logged_user(client_is_config):
     assert b'Login' in response.data
 def test_create_user_by_logged_user_not_work(client_is_config):
     log = login(client_is_config, 'ben@gmail.com', '123')
+    assert b'Hello Ben' in log.data
     response = client_is_config.get('/users/new', follow_redirects=True)
     assert response.status == '403 FORBIDDEN'
     assert '<h1>Forbidden</h1>' in response.get_data(as_text=True)
-    assert "<h1>User Ben doesn't have rights to alter this page.</h1>" in response.get_data(as_text=True)
+    assert "<h1>User Ben doesn't have rights to alter this page.</h1>" \
+        in response.get_data(as_text=True)
 def test_update_user_by_admin(client_is_config):
     log = login(client_is_config, 'admin@gmail.com', '123')
     assert b'Hello Admin' in log.data
@@ -57,8 +59,7 @@ def test_update_user_by_admin(client_is_config):
 def test_update_user_by_owner(client_is_config):
     log = login(client_is_config, 'kolo@gmail.com', '123')
     assert b'Hello Kolo' in log.data
-    
-    response =  client_is_config.get('/users/5')
+    response = client_is_config.get('/users/5')
     assert b'Name: Kolo' in response.data
     assert 'User data' in response.get_data(as_text=True)
     data = {'name': 'kolo_update', 'email': 'kolo@gmail.com', 'password': '123'}
@@ -91,7 +92,8 @@ def test_delete_user_by_other_should_not_work(client_is_config):
     response = client_is_config.post('/users/1/delete', follow_redirects=True)
     assert response.status == '403 FORBIDDEN'
     assert '<h1>Forbidden</h1>' in response.get_data(as_text=True)
-    assert "<h1>User Bobby doesn't have rights to alter this page.</h1>" in response.get_data(as_text=True)
+    assert "<h1>User Bobby doesn't have rights to alter this page.</h1>" \
+        in response.get_data(as_text=True)
 
 def test_delete_user_by_non_logged_user(client_is_config):
     response = client_is_config.get('/users/1/delete', follow_redirects=True)

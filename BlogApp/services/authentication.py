@@ -8,6 +8,7 @@ class Authentication:
         user = repo.check_user_exists(email)
         if user is None:
             error = "This user is not registered"
+            return error, user
         if email != user.email or not check_password_hash(user.password, password):
             error = 'Invalid credentials.'
         return error, user

@@ -1,5 +1,5 @@
-from models.user import User
 from werkzeug.security import generate_password_hash
+from models.user import User
 
 password = generate_password_hash('123')
 user_one = User(name='Maia', email='maia@gmail.com', password=password)

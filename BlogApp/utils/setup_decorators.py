@@ -1,6 +1,6 @@
 from functools import wraps
 from injector import inject
-from flask import url_for, redirect, session, render_template
+from flask import url_for, redirect
 from setup.database_config import DatabaseConfig
 
 def is_config_file(funct):

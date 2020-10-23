@@ -43,7 +43,7 @@ post_five.created_at = 'March 13, 2020'
 post_five.modified_at = 'June 13, 2020'
 post_five.user_id = 2
 post_six = Post(title='C++', owner='V.W. Craig',
-                 contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+                contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
                     Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, 
                     tellus eget condimentum rhoncus, sem quam semper libero, 
                     sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id,
@@ -56,7 +56,7 @@ post_six.modified_at = 'June 13, 2020'
 post_six.user_id = 1
 
 post_seven = Post(title='Vue Js', owner='D.B.Higgins',
-                contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+                  contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
                     Aenean commodo ligula eget dolor.Lorem ipsum dolor sit amet, 
                     consectetuer adipiscing elit.Lorem ipsum dolor sit amet,
                     consectetuer adipiscing elit.""")
@@ -65,12 +65,13 @@ post_seven.modified_at = 'January 8, 2018'
 post_seven.user_id = 1
 
 post_eight = Post(title='Laravel', owner='D.B.Higgins',
-                contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+                  contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
                     Aenean commodo ligula eget dolor.Lorem ipsum dolor sit amet, 
                     consectetuer adipiscing elit.Lorem ipsum dolor sit amet,
                     consectetuer adipiscing elit.""")
 post_eight.created_at = 'January 6, 2018'
 post_eight.modified_at = 'January 8, 2018'
 post_eight.user_id = 2
-dummy_posts = [post_one, post_two, post_three, post_four, post_five, post_six, post_seven, post_eight]
+dummy_posts = [post_one, post_two, post_three, post_four, post_five,\
+   post_six, post_seven, post_eight]
 dummy_posts.sort(key=lambda x: x.created_at, reverse=True)

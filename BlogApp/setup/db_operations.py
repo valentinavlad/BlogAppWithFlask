@@ -1,6 +1,6 @@
 import psycopg2
 from setup.database_config import DatabaseConfig
-from scripts.create_posts_table import command
+from scripts.create_posts_table import COMMAND as command
 
 class DbOperations():
     conn = None
