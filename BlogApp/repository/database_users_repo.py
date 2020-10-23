@@ -25,6 +25,7 @@ class DatabaseUsersRepo(UsersRepo):
 
     def check_user_exists(self, email):
         try:
+            user = None
             cur = self.db_operations.get_cursor()
             sql = "SELECT * FROM users WHERE email = %s"
             cur.execute(sql, (email,))
