@@ -104,8 +104,7 @@ def test_update_post_by_other_wont_work(client_is_config):
 
     assert resp.status == '403 FORBIDDEN'
     assert '<h1>Forbidden</h1>' in resp.get_data(as_text=True)
-    assert "<h1>User Tia doesn't have rights to alter this page.</h1>"\
-       in resp.get_data(as_text=True)
+    assert "<h1>User Tia doesn't have rights to alter this page.</h1>" in resp.get_data(as_text=True)
 
 def test_update_not_logged_user(client_is_config):
     response = client_is_config.get('/posts/8/edit', follow_redirects=True)
@@ -134,8 +133,7 @@ def test_delete_post_by_other_dont_work(client_is_config):
     response = client_is_config.post('/posts/4/delete')
     assert response.status == '403 FORBIDDEN'
     assert '<h1>Forbidden</h1>' in response.get_data(as_text=True)
-    assert "<h1>User Maia doesn't have rights to alter this page.</h1>" \
-        in response.get_data(as_text=True)
+    assert "<h1>User Maia doesn't have rights to alter this page.</h1>"  in response.get_data(as_text=True)
     logout(client_is_config)
 
 def test_delete_post_by_user_not_logged_redirect_login(client_is_config):

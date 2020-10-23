@@ -1,4 +1,4 @@
-COMMAND = """
+command = """
     CREATE TABLE posts (
         post_id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
