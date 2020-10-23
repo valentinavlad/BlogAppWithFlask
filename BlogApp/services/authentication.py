@@ -1,7 +1,6 @@
 from flask import session, redirect, url_for
-from werkzeug.security import check_password_hash
+from services.password_manager import PasswordManager
 class Authentication:
-
     @staticmethod
     def login(repo, email, password):
         error = None
@@ -9,7 +8,7 @@ class Authentication:
         if user is None:
             error = "This user is not registered"
             return error, user
-        if email != user.email or not check_password_hash(user.password, password):
+        if email != user.email or not PasswordManager.is_correct_password(password, user):
             error = 'Invalid credentials.'
         return error, user
 

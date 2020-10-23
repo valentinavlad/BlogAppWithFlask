@@ -1,5 +1,3 @@
-def test_fd(client_is_config):
-    assert True
 def test_login(client_is_config):
     response = client_is_config.get('/auth/login')
 

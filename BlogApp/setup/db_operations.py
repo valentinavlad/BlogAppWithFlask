@@ -1,6 +1,5 @@
 import psycopg2
 from setup.database_config import DatabaseConfig
-from scripts.create_posts_table import command
 
 class DbOperations():
     conn = None
@@ -28,7 +27,7 @@ class DbOperations():
         if is_table is None:
             cur.close()
             cls.conn.close()
-            cls.create_table()
+            cls.scriptexecution('scripts/{}'.format('create_posts_table.sql'))
             cls.conn = None
         else:
             cur.close()
@@ -41,7 +40,20 @@ class DbOperations():
         cur.execute('CREATE DATABASE {};'.format(database_name))
         cur.close()
         cls.conn.close()
-        cls.create_table()
+        cls.scriptexecution('scripts/{}'.format('create_posts_table.sql'))
+    @classmethod
+    def scriptexecution(cls, filename):
+        file = open(filename, 'r')
+        command = file.read()
+        file.close()
+        try:
+            cls.conn = cls.connect()
+            cursor = cls.conn.cursor()
+            cursor.execute(command)
+            cursor.close()
+            cls.conn.commit()
+        except (ConnectionError, psycopg2.DatabaseError) as error:
+            print(error)
 
     @classmethod
     def connect_to_db(cls):
@@ -66,20 +78,6 @@ class DbOperations():
             else:
                 cls.create_database(database_name)
                 print("'{}' Database not exist.".format(database_name))
-
-    @classmethod
-    def create_table(cls):
-        try:
-            cls.conn = cls.connect()
-            cur = cls.conn.cursor()
-            cur.execute(command)
-            cur.close()
-            cls.conn.commit()
-        except (ConnectionError, psycopg2.DatabaseError) as error:
-            print(error)
-        finally:
-            if cls.conn is not None:
-                cls.conn.close()
 
     @classmethod
     def create_tables(cls):
