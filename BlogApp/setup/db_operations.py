@@ -32,7 +32,8 @@ class DbOperations():
         else:
             cur.close()
             cls.conn.close()
-
+    def check_db_version():
+        pass
     @classmethod
     def create_database(cls, database_name):
         cls.conn.autocommit = True
