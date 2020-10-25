@@ -1,4 +1,5 @@
 import psycopg2
+from flask import session
 from repository.posts_repo import PostsRepo
 from models.post import Post
 from setup.db_operations import DbOperations
@@ -30,7 +31,7 @@ class DatabasePostRepo(PostsRepo):
                     created_at=%s,
                     modified_at=%s
                     WHERE post_id=%s"""
-        record_to_update = (post.title, post.owner, post.contents,
+        record_to_update = (post.title, session['user_id'], post.contents,
                             post.created_at, post.modified_at, post.post_id)
         try:
             cur = self.db_operations.get_cursor()
@@ -62,7 +63,7 @@ class DatabasePostRepo(PostsRepo):
         sql = """INSERT INTO posts(title, owner,contents,
                         created_at,modified_at)
                  VALUES(%s,%s,%s,%s,%s) RETURNING post_id;"""
-        record_to_insert = (post.title, post.owner, post.contents,
+        record_to_insert = (post.title, session['user_id'], post.contents,
                             post.created_at, post.modified_at)
         post_id = None
         try:

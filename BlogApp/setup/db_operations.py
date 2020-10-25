@@ -1,5 +1,5 @@
-import psycopg2
 import os
+import psycopg2
 from setup.database_config import DatabaseConfig
 
 class DbOperations():
@@ -20,13 +20,13 @@ class DbOperations():
 
     @staticmethod
     def read_all_sql_files_from_scripts():
-        sqlFiles = []
+        sql_files = []
         files = os.listdir('./scripts')
         for file in files:
             if file.endswith('.sql'):
-                sqlFiles.append(file)
-        print(sqlFiles)
-        return sqlFiles
+                sql_files.append(file)
+        print(sql_files)
+        return sql_files
 
     @classmethod
     def create_database(cls, database_name):
@@ -35,32 +35,30 @@ class DbOperations():
         cur.execute('CREATE DATABASE {};'.format(database_name))
         cur.close()
         cls.conn.close()
-        cls.executeScriptsFromFile()
+        cls.execute_scripts_from_file()
         #cls.scriptexecution('scripts/{}'.format('1_create_posts_table.sql'))
 
     @classmethod
-    def executeScriptsFromFile(cls):
+    def execute_scripts_from_file(cls):
         file_list = cls.read_all_sql_files_from_scripts()
 
         for filename in file_list:
-            
             file = open('scripts/{}'.format(filename), 'r')
-            sqlFile = file.read()
+            sql_file = file.read()
             file.close()
-            sqlCommands = sqlFile.split(';')
-            for command in sqlCommands:
+            sql_commands = sql_file.split(';')
+            for command in sql_commands:
                 cls.conn = cls.connect()
                 cursor = cls.conn.cursor()
-                if command != "" and command != '\n':
+                if command not in ('', '\\n'):
                     cursor.execute(command)
                 else:
-                    continue    
+                    continue
                 cursor.close()
                 cls.conn.commit()
     @classmethod
     def connect_to_db(cls):
         params = cls.config.load()
-      
         database_name = params['database']
         try:
             cls.conn = psycopg2.connect(host=params['host'], port=params['port'],
@@ -78,9 +76,7 @@ class DbOperations():
             if (database_name,) in list_database:
                 print("'{}' Database already exist".format(database_name))
                 #check db version???????
-                cls.executeScriptsFromFile()
+                cls.execute_scripts_from_file()
             else:
                 cls.create_database(database_name)
                 print("'{}' Database not exist.".format(database_name))
-
-
