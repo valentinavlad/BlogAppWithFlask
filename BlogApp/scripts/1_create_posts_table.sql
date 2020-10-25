@@ -1,4 +1,5 @@
-CREATE TABLE posts (
+
+CREATE TABLE IF NOT EXISTS posts (
         post_id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
         owner VARCHAR(255) NOT NULL,

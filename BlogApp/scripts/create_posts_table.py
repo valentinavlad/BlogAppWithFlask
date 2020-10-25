@@ -1,3 +1,5 @@
+version = 1
+
 COMMAND = """
     CREATE TABLE posts (
         post_id SERIAL PRIMARY KEY,

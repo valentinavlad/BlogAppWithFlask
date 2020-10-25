@@ -5,7 +5,7 @@ class DbCredentials:
         self.database = database
         self.port = '5432'
         self.host = 'localhost'
-        self.version = 1
+        self.version = '0'
 
     def to_dictionary(self):
         db_settings = {}

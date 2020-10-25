@@ -1,4 +1,5 @@
 import psycopg2
+import os
 from setup.database_config import DatabaseConfig
 
 class DbOperations():
@@ -32,8 +33,15 @@ class DbOperations():
         else:
             cur.close()
             cls.conn.close()
-    def check_db_version():
-        pass
+    @staticmethod
+    def read_all_files_from_scripts():
+        sqlFiles = []
+        files = os.listdir('./scripts')
+        for file in files:
+            if file.endswith('.sql'):
+                sqlFiles.append(file)
+        print(sqlFiles)
+        return sqlFiles
     @classmethod
     def create_database(cls, database_name):
         cls.conn.autocommit = True
@@ -41,7 +49,7 @@ class DbOperations():
         cur.execute('CREATE DATABASE {};'.format(database_name))
         cur.close()
         cls.conn.close()
-        cls.scriptexecution('scripts/{}'.format('create_posts_table.sql'))
+        cls.scriptexecution('scripts/{}'.format('1_create_posts_table.sql'))
     @classmethod
     def scriptexecution(cls, filename):
         file = open(filename, 'r')
@@ -55,10 +63,21 @@ class DbOperations():
             cls.conn.commit()
         except (ConnectionError, psycopg2.DatabaseError) as error:
             print(error)
-
+    @classmethod
+    def executeScriptsFromFile(filename):
+        fd = open(filename, 'r')
+        sqlFile = fd.read()
+        fd.close()
+        sqlCommands = sqlFile.split(';')
+        for command in sqlCommands:
+            try:
+                c.execute(command)
+            except (ConnectionError, psycopg2.DatabaseError) as error:
+                print(error)
     @classmethod
     def connect_to_db(cls):
         params = cls.config.load()
+        cls.read_all_files_from_scripts()
         database_name = params['database']
         try:
             cls.conn = psycopg2.connect(host=params['host'], port=params['port'],
@@ -75,6 +94,8 @@ class DbOperations():
             list_database = cur.fetchall()
             if (database_name,) in list_database:
                 print("'{}' Database already exist".format(database_name))
+                #check db version???????
+                cls.scriptexecution('scripts/{}'.format('1_create_posts_table.sql'))
                 cls.check_table_exists()
             else:
                 cls.create_database(database_name)
@@ -116,3 +137,4 @@ class DbOperations():
         finally:
             if cls.conn is not None:
                 cls.conn.close()
+
