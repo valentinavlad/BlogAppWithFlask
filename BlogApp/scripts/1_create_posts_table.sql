@@ -1,4 +1,3 @@
-
 CREATE TABLE IF NOT EXISTS posts (
         post_id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
@@ -6,4 +5,4 @@ CREATE TABLE IF NOT EXISTS posts (
         contents Text NOT NULL,
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         modified_at DATE NULL
-        )
+        );

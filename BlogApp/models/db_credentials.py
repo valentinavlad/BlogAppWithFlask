@@ -5,7 +5,7 @@ class DbCredentials:
         self.database = database
         self.port = '5432'
         self.host = 'localhost'
-        self.version = '0'
+        #self.version = '0'
 
     def to_dictionary(self):
         db_settings = {}
@@ -14,5 +14,5 @@ class DbCredentials:
         db_settings['user'] = self.user
         db_settings['password'] = self.password
         db_settings['port'] = self.port
-        db_settings['version'] = self.version
+        #db_settings['version'] = self.version
         return db_settings
