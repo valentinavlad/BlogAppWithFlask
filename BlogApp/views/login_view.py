@@ -16,11 +16,11 @@ def set_session(user):
 @inject
 @login_blueprint.route('/login', methods=['GET', 'POST'])
 @is_config_file
-def login(repo: UsersRepo, auth: Authentication):
+def login(auth: Authentication):
     if request.method == 'POST':
         email = request.form.get("email")
         password = request.form.get("password")
-        error, user = auth.login(repo, email, password)
+        error, user = auth.login(email, password)
         if error is None:
             set_session(user)
             return redirect(url_for('index.posts'))

@@ -1,12 +1,16 @@
+from injector import inject
 import psycopg2
-from werkzeug.security import generate_password_hash
 from models.user import User
 from setup.db_operations import DbOperations
 from repository.users_repo import UsersRepo
-
+from services.password_manager import PasswordManager
 
 class DatabaseUsersRepo(UsersRepo):
     db_operations = DbOperations()
+
+    @inject
+    def __init__(self, secure_pass: PasswordManager):
+        self.secure_pass = secure_pass
 
     def find_by_id(self, pid):
         try:
@@ -76,11 +80,12 @@ class DatabaseUsersRepo(UsersRepo):
         finally:
             if self.db_operations.conn is not None:
                 self.db_operations.conn.close()
+    @inject
     def add(self, user):
         sql = """INSERT INTO users(name, email, password,
                         created_at,modified_at)
                  VALUES(%s,%s,%s,%s,%s) RETURNING user_id;"""
-        record_to_insert = (user.name, user.email, generate_password_hash(user.password),
+        record_to_insert = (user.name, user.email, self.secure_pass.generate_secured_pass(user.password),
                             user.created_at, user.modified_at)
         user_id = None
         try:

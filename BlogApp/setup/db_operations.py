@@ -1,32 +1,23 @@
-import os
 import psycopg2
 from setup.database_config import DatabaseConfig
 
-class DbOperations():
+
+class DbOperations:
+    FILENAME = 'queries.sql'
     conn = None
     config = DatabaseConfig()
+    version = 0
 
     @classmethod
     def connect(cls):
         db_credentials = cls.config.load_configuration()
         params = db_credentials.to_dictionary()
-        print("In connect function")
         return psycopg2.connect(**params)
 
     @classmethod
     def get_cursor(cls):
         cls.conn = cls.connect()
         return cls.conn.cursor()
-
-    @staticmethod
-    def read_all_sql_files_from_scripts():
-        sql_files = []
-        files = os.listdir('./scripts')
-        for file in files:
-            if file.endswith('.sql'):
-                sql_files.append(file)
-        print(sql_files)
-        return sql_files
 
     @classmethod
     def create_database(cls, database_name):
@@ -36,26 +27,25 @@ class DbOperations():
         cur.close()
         cls.conn.close()
         cls.execute_scripts_from_file()
-        #cls.scriptexecution('scripts/{}'.format('1_create_posts_table.sql'))
 
     @classmethod
     def execute_scripts_from_file(cls):
-        file_list = cls.read_all_sql_files_from_scripts()
+        filename = 'queries.sql'
+        file = open('scripts/{}'.format(filename), 'r')
+        sql_file = file.read()
+        file.close()
+        sql_commands = sql_file.split(';')
+        for command in sql_commands:
+            cls.conn = cls.connect()
+            cursor = cls.conn.cursor()
+            if command not in ('', '\\n'):
+                cursor.execute(command)
+            else:
+                continue
+            cursor.close()
+            cls.conn.commit()
+            cls.version += 1
 
-        for filename in file_list:
-            file = open('scripts/{}'.format(filename), 'r')
-            sql_file = file.read()
-            file.close()
-            sql_commands = sql_file.split(';')
-            for command in sql_commands:
-                cls.conn = cls.connect()
-                cursor = cls.conn.cursor()
-                if command not in ('', '\\n'):
-                    cursor.execute(command)
-                else:
-                    continue
-                cursor.close()
-                cls.conn.commit()
     @classmethod
     def connect_to_db(cls):
         params = cls.config.load()
