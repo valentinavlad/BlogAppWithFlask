@@ -6,9 +6,7 @@ CREATE TABLE IF NOT EXISTS posts (
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         modified_at DATE NULL
         );
-
-insert into posts (title, owner, contents) values ('99','tia','dummy content');
-
+insert into posts (title, owner, contents) values ('Ella','tia','dummy content');
 insert into posts (title, owner, contents) values ('Las Vegas','bob','dummy content');
 
 CREATE TABLE IF NOT EXISTS users (

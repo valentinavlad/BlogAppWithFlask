@@ -36,6 +36,9 @@
     <Compile Include="models\db_credentials.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="models\db_info.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="models\user.py">
       <SubType>Code</SubType>
     </Compile>
@@ -70,6 +73,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="setup\db_connect.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="setup\db_info_config.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="tests\test_login_view.py">

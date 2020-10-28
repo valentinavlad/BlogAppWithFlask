@@ -1,4 +1,5 @@
 class DbCredentials:
+    version = '0'
     def __init__(self, user, database, password):
         self.user = user
         self.password = password
@@ -14,5 +15,5 @@ class DbCredentials:
         db_settings['user'] = self.user
         db_settings['password'] = self.password
         db_settings['port'] = self.port
-       # db_settings['version'] = self.version
+        db_settings['version'] = self.version
         return db_settings

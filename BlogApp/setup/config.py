@@ -31,3 +31,10 @@ class Config:
         with open(self.filename, 'w') as configfile:
             self.parser.write(configfile)
             configfile.close()
+
+    def update_values(self, system, value):
+        self.parser.read(self.filename)
+        cfgfile = open(self.filename, 'w')
+        self.parser.set(self.section, system, value)
+        self.parser.write(cfgfile)
+        cfgfile.close()
