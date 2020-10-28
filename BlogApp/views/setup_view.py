@@ -1,6 +1,6 @@
 from injector import inject
 from flask import Blueprint, render_template, request, redirect, url_for
-from setup.db_operations import DbOperations
+from setup.db_connect import DbConnect
 from setup.database_config import DatabaseConfig
 from models.db_credentials import DbCredentials
 
@@ -11,7 +11,7 @@ setup_blueprint = Blueprint('setup_blueprint', __name__, template_folder='templa
 def setup(db_config: DatabaseConfig):
     if db_config.is_configured():
         return redirect(url_for('index.posts'))
-    db_operation = DbOperations()
+    db_operation = DbConnect()
     if request.method == 'POST':
         user = request.form.get('user')
         database = request.form.get('database')

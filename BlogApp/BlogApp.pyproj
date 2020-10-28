@@ -69,6 +69,9 @@
     <Compile Include="setup\database_config.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="setup\db_connect.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="tests\test_login_view.py">
       <SubType>Code</SubType>
     </Compile>
@@ -153,7 +156,6 @@
     <Folder Include="templates\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="database2.ini" />
     <Content Include="scripts\queries.sql" />
     <Content Include="static\img\1.jpg" />
     <Content Include="static\login_style.css" />

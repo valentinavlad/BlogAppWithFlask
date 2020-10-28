@@ -1,6 +1,5 @@
 from flask import Flask, redirect
 from flask_injector import FlaskInjector
-
 from services.dependencies import configure_production
 from views.posts_view import index_blueprint
 from views.setup_view import setup_blueprint
@@ -18,6 +17,8 @@ app.register_blueprint(users_blueprint, url_prefix="/users")
 @app.route('/')
 def index():
     return redirect('/posts/')
+
+
 
 FlaskInjector(app=app, modules=[configure_production])
 

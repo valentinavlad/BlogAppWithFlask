@@ -40,7 +40,6 @@ def view_post(repo: PostsRepo, pid):
 @index_blueprint.route('/<int:pid>/edit', methods=['GET', 'POST'])
 @is_config_file
 @login_required
-
 def edit(repo: PostsRepo, pid):
     found_post = repo.find_by_id(pid)
     if request.method == 'POST':
