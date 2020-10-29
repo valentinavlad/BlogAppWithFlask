@@ -20,7 +20,4 @@ class DatabaseConfig(Config):
         return int(config_params['version'])
 
     def update_version(self, current_version):
-        super().update_value('version', str(current_version))
-
-    def update_version(self, new_value):
-        return super().update_version('version', str(new_value))
+        super().update_db_version('version', str(current_version))

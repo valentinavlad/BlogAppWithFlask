@@ -1,10 +1,11 @@
+import psycopg2
 from injector import inject
 from setup.db_connect import DbConnect
 
 FILENAME = 'queries.sql'
 VERSION = 1
 class DbOperations:
-   
+
     @inject
     def __init__(self, db_connect: DbConnect):
         self.db_connect = db_connect
@@ -17,12 +18,11 @@ class DbOperations:
         cur.close()
         #self.db_connect.conn.close()
         self.execute_scripts_from_file()
-
-        self.db_connect.config.update_version(VERSION)        
+        self.db_connect.config.update_version(VERSION)
 
     def execute_scripts_from_file(self):
         try:
-            self.db_connect.conn = self.db_connect.connect() 
+            self.db_connect.conn = self.db_connect.connect()
         except (ConnectionError, psycopg2.DatabaseError) as error:
             print(error)
         if self.db_connect.conn is not None:
@@ -32,9 +32,8 @@ class DbOperations:
             file.close()
             sql_commands = sql_file.split(';')
             for command in sql_commands:
-                cursor = self.db_connect.conn.cursor()
                 cur = self.db_connect.get_cursor()
-                if command not in (''):
+                if command not in ('', '\\n'):
                     cur.execute(command)
                 else:
                     continue

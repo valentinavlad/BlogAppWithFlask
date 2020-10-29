@@ -6,9 +6,17 @@ CREATE TABLE IF NOT EXISTS posts (
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         modified_at DATE NULL
         );
-insert into posts (title, owner, contents) values ('Ella','tia','dummy content') RETURNING post_id;
-insert into posts (title, owner, contents) values ('Las Vegas','bob','dummy content');
+INSERT INTO posts (title, owner, contents) 
+    SELECT  'Ella','tia','dummy content'
+WHERE NOT EXISTS (
+    SELECT 1 FROM posts WHERE owner='tia'
+);
 
+INSERT INTO posts (title, owner, contents) 
+    SELECT  'Las Vegas','bob','dummy content'
+WHERE NOT EXISTS (
+    SELECT 1 FROM posts WHERE owner='bob'
+);
 CREATE TABLE IF NOT EXISTS users (
     user_id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,

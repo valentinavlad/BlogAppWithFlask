@@ -1,5 +1,5 @@
 import datetime
-from flask import session
+
 class Post():
     count = 1
     user_id = 0

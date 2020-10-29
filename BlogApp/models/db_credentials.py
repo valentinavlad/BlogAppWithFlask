@@ -1,5 +1,5 @@
 class DbCredentials:
-    
+
     def __init__(self, user, database, password, version='0'):
         self.user = user
         self.password = password
