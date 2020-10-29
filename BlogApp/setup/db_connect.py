@@ -2,14 +2,17 @@ import psycopg2
 from setup.database_config import DatabaseConfig
 
 class DbConnect:
-    conn = None
+    def __init__(self):
+        self.conn = None
 
     config = DatabaseConfig()
 
     def connect(self):
         db_credentials = self.config.load_configuration()
         params = db_credentials.to_dictionary()
-        return psycopg2.connect(**params)
+        return psycopg2.connect(host=params['host'], port=params['port'],
+                                user=params['user'], password=params['password'],
+                                database=params['database'])
 
     def get_cursor(self):
         self.conn = self.connect()

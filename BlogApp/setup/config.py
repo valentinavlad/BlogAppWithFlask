@@ -1,5 +1,11 @@
 import os.path
+import fileinput
+import sys
+from tempfile import mkstemp
+from shutil import move
+from os import remove
 from configparser import ConfigParser
+from configupdater import ConfigUpdater
 
 PATH = 'config.ini'
 class Config:
@@ -31,10 +37,12 @@ class Config:
         with open(self.filename, 'w') as configfile:
             self.parser.write(configfile)
             configfile.close()
-
-    def update_values(self, system, value):
+    
+    def update_version(self, key, new_value):
         self.parser.read(self.filename)
-        cfgfile = open(self.filename, 'w')
-        self.parser.set(self.section, system, value)
-        self.parser.write(cfgfile)
-        cfgfile.close()
+        postgres_section = self.parser[self.section]
+        postgres_section[key] = new_value
+        with open(self.filename, 'w') as configfile:
+            self.parser.write(configfile)
+            configfile.close()
+

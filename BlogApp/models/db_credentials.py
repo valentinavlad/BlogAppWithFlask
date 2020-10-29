@@ -1,12 +1,12 @@
 class DbCredentials:
-    version = '0'
-    def __init__(self, user, database, password):
+    
+    def __init__(self, user, database, password, version='0'):
         self.user = user
         self.password = password
         self.database = database
         self.port = '5432'
         self.host = 'localhost'
-        #self.version = '0'
+        self.version = version
 
     def to_dictionary(self):
         db_settings = {}

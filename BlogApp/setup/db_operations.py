@@ -15,29 +15,36 @@ class DbOperations:
         cur = self.db_connect.conn.cursor()
         cur.execute('CREATE DATABASE {};'.format(database_name))
         cur.close()
-        self.db_connect.conn.close()
+        #self.db_connect.conn.close()
         self.execute_scripts_from_file()
 
+        self.db_connect.config.update_version(VERSION)        
+
     def execute_scripts_from_file(self):
-        self.db_connect.connect_to_db()
-        cursor = self.db_connect.conn.cursor()
-        filename = 'queries.sql'
-        file = open('scripts/{}'.format(filename), 'r')
-        sql_file = file.read()
-        file.close()
-        sql_commands = sql_file.split(';')
-        for command in sql_commands:
-            #cls.db_connect.conn = cls.db_connect.connect_to_db()
-            if command not in ('', '\\n'):
-                cursor.execute(command)
-            else:
-                continue
-        cursor.close()
-        self.db_connect.conn.commit()
+        try:
+            self.db_connect.conn = self.db_connect.connect() 
+        except (ConnectionError, psycopg2.DatabaseError) as error:
+            print(error)
+        if self.db_connect.conn is not None:
+            filename = 'queries.sql'
+            file = open('scripts/{}'.format(filename), 'r')
+            sql_file = file.read()
+            file.close()
+            sql_commands = sql_file.split(';')
+            for command in sql_commands:
+                cursor = self.db_connect.conn.cursor()
+                cur = self.db_connect.get_cursor()
+                if command not in (''):
+                    cur.execute(command)
+                else:
+                    continue
+                cur.close()
+                self.db_connect.conn.commit()
 
     def check_version(self):
         config_version = self.db_connect.config.get_version()
         if config_version < VERSION:
+            self.db_connect.conn.close()
             self.execute_scripts_from_file()
             self.db_connect.config.update_version(VERSION)
 
