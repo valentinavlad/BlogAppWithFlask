@@ -1,5 +1,6 @@
 import psycopg2
 from injector import inject
+from flask import session
 from repository.posts_repo import PostsRepo
 from models.post import Post
 from setup.db_connect import DbConnect
@@ -32,7 +33,7 @@ class DatabasePostRepo(PostsRepo):
                     created_at=%s,
                     modified_at=%s
                     WHERE post_id=%s"""
-        record_to_update = (post.title, post.owner, post.contents,
+        record_to_update = (post.title, session['user_id'], post.contents,
                             post.created_at, post.modified_at, post.post_id)
         try:
             cur = self.db_connect.get_cursor()
@@ -64,7 +65,7 @@ class DatabasePostRepo(PostsRepo):
         sql = """INSERT INTO posts(title, owner,contents,
                         created_at,modified_at)
                  VALUES(%s,%s,%s,%s,%s) RETURNING post_id;"""
-        record_to_insert = (post.title, post.owner, post.contents,
+        record_to_insert = (post.title, session['user_id'], post.contents,
                             post.created_at, post.modified_at)
         post_id = None
         try:
@@ -85,7 +86,9 @@ class DatabasePostRepo(PostsRepo):
         posts = []
         try:
             cur = self.db_connect.get_cursor()
-            cur.execute("SELECT * FROM posts ORDER BY created_at desc")
+            cur.execute('SELECT post_id, title, name, contents, posts.created_at, posts.modified_at\
+                         FROM posts INNER JOIN users ON owner = user_id')
+            #cur.execute("SELECT * FROM posts ORDER BY created_at desc")
             row = cur.fetchone()
             while row is not None:
                 post = Post.get_post(row)

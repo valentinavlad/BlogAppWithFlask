@@ -16,9 +16,7 @@ class DbOperations:
         cur = self.db_connect.conn.cursor()
         cur.execute('CREATE DATABASE {};'.format(database_name))
         cur.close()
-        #self.db_connect.conn.close()
         self.execute_scripts_from_file()
-        self.db_connect.config.update_version(VERSION)
 
     def execute_scripts_from_file(self):
         try:
@@ -39,6 +37,7 @@ class DbOperations:
                     continue
                 cur.close()
                 self.db_connect.conn.commit()
+        self.db_connect.config.update_version(VERSION)
 
     def check_version(self):
         config_version = self.db_connect.config.get_version()

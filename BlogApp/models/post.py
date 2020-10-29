@@ -1,9 +1,9 @@
 import datetime
-
+from flask import session
 class Post():
     count = 1
     user_id = 0
-    date_now = datetime.datetime.now()
+
     def __init__(self, title, owner, contents):
         self.post_id = Post.count
         self.title = title
@@ -28,8 +28,7 @@ class Post():
         return obj
 
     def is_owner(self):
-        pass
-        #return self.owner == int(session['user_id'])
+        return self.owner == int(session['user_id'])
 
     def __str__(self):
         return self.title + " " + self.owner
