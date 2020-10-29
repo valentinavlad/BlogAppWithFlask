@@ -21,5 +21,5 @@ def setup(db_config: DatabaseConfig, db_operations: DbOperations):
         db_config.save_configuration(db_credentials)
         db_connect.connect_to_db()
         db_operations.check_database()
-        return redirect(url_for('index.posts'))
+        return redirect(url_for('credentials_blueprint.set_credentials'))
     return render_template('setup.html')

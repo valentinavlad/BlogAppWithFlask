@@ -44,3 +44,10 @@ FROM   users u
 WHERE  p.owner_cp = u.name;
 
 ALTER TABLE posts DROP COLUMN owner_cp;
+
+insert into users (name, email)
+select 
+    'admin', 'admin@gmail.com'
+where not exists (
+    select 1 from users where name = 'admin' and email = 'admin@gmail.com'
+);

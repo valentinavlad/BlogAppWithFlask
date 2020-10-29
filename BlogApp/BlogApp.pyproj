@@ -132,6 +132,9 @@
     <Compile Include="views\login_view.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="views\set_credentials_view.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="views\users_view.py">
       <SubType>Code</SubType>
     </Compile>
@@ -177,6 +180,7 @@
     <Content Include="templates\add_post.html" />
     <Content Include="templates\register.html" />
     <Content Include="templates\setup.html" />
+    <Content Include="templates\set_credentials.html" />
     <Content Include="templates\view_post.html" />
     <Content Include="templates\view_user.html" />
   </ItemGroup>

@@ -31,3 +31,9 @@ class InMemoryUsersRepo(UsersRepo):
             if user.email == email:
                 found_user = user
         return found_user
+    def check_user_exists_by_name(self, name):
+        found_user = None
+        for user in dummy_users:
+            if user.name == name:
+                found_user = user
+        return found_user

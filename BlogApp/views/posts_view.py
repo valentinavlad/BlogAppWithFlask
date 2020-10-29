@@ -22,7 +22,7 @@ def posts(repo: PostsRepo):
 def new(repo: PostsRepo):
     if request.method == 'POST':
         date_now = datetime.datetime.now()
-        post = Post(title=request.form.get("title"), owner=request.form.get("owner"),
+        post = Post(title=request.form.get("title"), owner=int(session['user_id']),
                     contents=request.form.get("contents"))
         repo.add(post)
         post.created_at = date_now.strftime("%B %d, %Y")

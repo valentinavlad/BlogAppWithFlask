@@ -46,6 +46,24 @@ class DatabaseUsersRepo(UsersRepo):
                 self.db_connect.conn.close()
         return user
 
+    def check_user_exists_by_name(self, name):
+        try:
+            user = None
+            cur = self.db_connect.get_cursor()
+            sql = "SELECT * FROM users WHERE name = %s"
+            cur.execute(sql, (name,))
+            row = cur.fetchone()
+            if row is not None:
+                user = User.get_user(row)
+            else:
+                user = None
+            cur.close()
+        except (ConnectionError, psycopg2.DatabaseError) as error:
+            print(error)
+        finally:
+            if self.db_connect.conn is not None:
+                self.db_connect.conn.close()
+        return user
     def edit(self, user):
         sql = """UPDATE users
                     SET name=%s, email=%s,
