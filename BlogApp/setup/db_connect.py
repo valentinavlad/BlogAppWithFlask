@@ -23,6 +23,7 @@ class DbConnect:
         try:
             self.conn = psycopg2.connect(host=params['host'], port=params['port'],
                                          user=params['user'], password=params['password'])
+            print("Connected to database")
         except (ConnectionError, psycopg2.DatabaseError) as error:
             print(error)
             self.conn = None

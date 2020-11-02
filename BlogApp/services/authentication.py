@@ -9,13 +9,15 @@ class Authentication():
         self.secure_pass = secure_pass
         self.repo = repo
 
-    def login(self, email, password):
+    def login(self, name, password):
         error = None
-        user = self.repo.check_user_exists(email)
+        user = self.repo.check_user_exists_by_name(name)
         if user is None:
             error = "This user is not registered"
             return error, user
-        if email != user.email or not self.secure_pass.is_correct_password(password, user):
+        if user.password is None:
+            return error, user
+        if name != user.name or not self.secure_pass.is_correct_password(password, user):
             error = 'Invalid credentials.'
         return error, user
 

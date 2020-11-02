@@ -32,7 +32,7 @@ class Config:
             self.parser.write(configfile)
             configfile.close()
 
-    def update_db_version(self, key, new_value):
+    def update_value(self, key, new_value):
         self.parser.read(self.filename)
         postgres_section = self.parser[self.section]
         postgres_section[key] = new_value

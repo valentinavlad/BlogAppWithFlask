@@ -18,25 +18,37 @@ class DbOperations:
         cur.close()
         self.execute_scripts_from_file()
 
+    def check_owner_data_type(self):
+        cur = self.db_connect.get_cursor()
+        verify_owner_type_sql = "SELECT data_type FROM information_schema.columns\
+                                 WHERE table_name = 'posts' AND column_name = 'owner';"
+        cur.execute(verify_owner_type_sql)
+        row = cur.fetchone()
+        return row
+
     def execute_scripts_from_file(self):
         try:
             self.db_connect.conn = self.db_connect.connect()
         except (ConnectionError, psycopg2.DatabaseError) as error:
             print(error)
         if self.db_connect.conn is not None:
-            filename = 'queries.sql'
-            file = open('scripts/{}'.format(filename), 'r')
-            sql_file = file.read()
-            file.close()
-            sql_commands = sql_file.split(';')
-            for command in sql_commands:
-                cur = self.db_connect.get_cursor()
-                if command not in ('', '\\n'):
-                    cur.execute(command)
-                else:
-                    continue
-                cur.close()
-                self.db_connect.conn.commit()
+            row = self.check_owner_data_type()
+            if row[0] == 'integer':
+                print("Database already configured!")
+            else:
+                filename = 'queries.sql'
+                file = open('scripts/{}'.format(filename), 'r')
+                sql_file = file.read()
+                file.close()
+                sql_commands = sql_file.split(';')
+                for command in sql_commands:
+                    cur = self.db_connect.get_cursor()
+                    if command not in ('', '\\n'):
+                        cur.execute(command)
+                    else:
+                        continue
+                    cur.close()
+                    self.db_connect.conn.commit()
         self.db_connect.config.update_version(VERSION)
 
     def check_version(self):
@@ -53,7 +65,6 @@ class DbOperations:
             self.db_connect.connect_to_db()
             if self.db_connect.conn is not None:
                 self.db_connect.conn.autocommit = True
-                #cur = cls.db_connect.get_cursor()
                 cur = self.db_connect.conn.cursor()
                 cur.execute("SELECT datname FROM pg_database;")
                 list_database = cur.fetchall()

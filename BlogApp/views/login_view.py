@@ -18,9 +18,11 @@ def set_session(user):
 @is_config_file
 def login(auth: Authentication):
     if request.method == 'POST':
-        email = request.form.get("email")
+        name = request.form.get('name')
         password = request.form.get("password")
-        error, user = auth.login(email, password)
+        error, user = auth.login(name, password)
+        if user.password is None:
+            return redirect(url_for('users.set_credentials', uid=user.user_id))
         if error is None:
             set_session(user)
             return redirect(url_for('index.posts'))
