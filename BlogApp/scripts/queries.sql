@@ -51,18 +51,3 @@ select
 where not exists (
     select 1 from users where name = 'admin'
 );
-
-
-alter table posts rename to oldposts;
-
-create table posts (
-        post_id SERIAL PRIMARY KEY,
-        title VARCHAR(255) NOT NULL,
-        owner INT NOT NULL,
-        contents Text NOT NULL,
-        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        modified_at DATE NULL
-        );
-
-insert into posts (title, owner, contents, created_at, modified_at) 
-select title, owner, contents, created_at, modified_at from oldposts;
