@@ -14,9 +14,9 @@ class DatabasePostRepo(PostsRepo):
     def find_by_id(self, pid):
         try:
             cur = self.db_connect.get_cursor()
-            sql1 = 'SELECT post_id, title, name, contents, posts.created_at, posts.modified_at\
+            sql = 'SELECT post_id, title, owner, name, contents, posts.created_at, posts.modified_at\
                          FROM posts INNER JOIN users ON owner = user_id WHERE post_id=%s'
-            sql = "SELECT * FROM posts WHERE post_id=%s"
+            sql1 = "SELECT * FROM posts WHERE post_id=%s"
             cur.execute(sql, (pid,))
             row = cur.fetchone()
             post = Post.get_post(row)
@@ -67,7 +67,7 @@ class DatabasePostRepo(PostsRepo):
         sql = """INSERT INTO posts(title, owner,contents,
                         created_at,modified_at)
                  VALUES(%s,%s,%s,%s,%s) RETURNING post_id;"""
-        record_to_insert = (post.title, session['user_id'], post.contents,
+        record_to_insert = (post.title, post.owner, post.contents,
                             post.created_at, post.modified_at)
         post_id = None
         try:
@@ -88,15 +88,19 @@ class DatabasePostRepo(PostsRepo):
         posts = []
         try:
             cur = self.db_connect.get_cursor()
-            cur.execute('SELECT post_id, title, name, contents, posts.created_at, posts.modified_at\
+            cur.execute('SELECT post_id, title, owner, name, contents, posts.created_at, posts.modified_at\
                          FROM posts INNER JOIN users ON owner = user_id')
             #cur.execute("SELECT * FROM posts ORDER BY created_at desc")
             row = cur.fetchone()
             while row is not None:
                 post = Post.get_post(row)
+                print(post.name)
                 posts.append(post)
                 row = cur.fetchone()
             cur.close()
+            for post in posts:  
+                print('....in db posts')
+                print(post.name)
         except (ConnectionError, psycopg2.DatabaseError) as error:
             print(error)
         finally:
