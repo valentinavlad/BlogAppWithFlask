@@ -11,10 +11,13 @@
         <input type="text" class="form-control" id="title" name="title" value="{{post.title}}">
 
     </div>
-    <div class="form-group">
+    <!--
+            <div class="form-group">
         <label for="owner">Owner</label>
-        <input type="text" class="form-control" id="owner" name="owner" value="{{post.owner}}">
+        <input type="text" class="form-control" id="owner" name="owner" value="{{session['name']}}">
     </div>
+    -->
+
     <div class="form-group">
         <label for="contents">Content</label>
         <textarea class="form-control" id="contents" rows="10" name="contents">{{post.contents}}</textarea>

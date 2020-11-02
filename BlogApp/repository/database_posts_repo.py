@@ -14,6 +14,8 @@ class DatabasePostRepo(PostsRepo):
     def find_by_id(self, pid):
         try:
             cur = self.db_connect.get_cursor()
+            sql1 = 'SELECT post_id, title, name, contents, posts.created_at, posts.modified_at\
+                         FROM posts INNER JOIN users ON owner = user_id WHERE post_id=%s'
             sql = "SELECT * FROM posts WHERE post_id=%s"
             cur.execute(sql, (pid,))
             row = cur.fetchone()
