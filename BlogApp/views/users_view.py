@@ -79,9 +79,11 @@ def delete(repo: UsersRepo, pid):
 @inject
 @users_blueprint.route('/set_credentials/<int:uid>', methods=['GET', 'POST'])
 def set_credentials(repo: UsersRepo, secure_pass: PasswordManager, uid):
+    user = repo.find_by_id(uid)
+    if user.password is not None:
+        return render_template('403error.html'), 403
     if request.method == 'POST':
         error = None
-        user = repo.find_by_id(uid)
         name = request.form.get("name")
         email = request.form.get("email")
         password = request.form.get("password")
@@ -95,4 +97,4 @@ def set_credentials(repo: UsersRepo, secure_pass: PasswordManager, uid):
             repo.edit(user)
             return redirect(url_for('auth.login'))
         flash(error)
-    return render_template('set_credentials.html')
+    return render_template('set_credentials.html', user=user)

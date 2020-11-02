@@ -22,7 +22,6 @@ def login(auth: Authentication):
         password = request.form.get("password")
         error, user = auth.login(name, password)
         if user is not None and user.password is None:
-        #if user.password is None:
             return redirect(url_for('users.set_credentials', uid=user.user_id))
         if error is None:
             set_session(user)
