@@ -31,4 +31,10 @@ user_six = User(name='ben', email='ben@gmail.com', password=password)
 user_six.created_at = 'May 6, 2017'
 user_six.modified_at = 'January 9, 2018'
 user_six.user_id = 6
-dummy_users = [user_one, user_two, user_three, user_four, user_five, user_six]
+
+user_seven = User(name='goia', email='', password='')
+user_seven.created_at = 'May 6, 2017'
+user_seven.modified_at = 'January 9, 2018'
+user_seven.user_id = 7
+
+dummy_users = [user_one, user_two, user_three, user_four, user_five, user_six, user_seven]
