@@ -14,3 +14,10 @@ class DatabaseConfig(Config):
     def save_configuration(self, db_credentials: DbCredentials):
         db_settings = db_credentials.to_dictionary()
         super().save(db_settings)
+
+    def get_version(self):
+        config_params = super().load()
+        return int(config_params['version'])
+
+    def update_version(self, current_version):
+        super().update_value('version', str(current_version))

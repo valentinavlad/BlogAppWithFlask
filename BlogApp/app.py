@@ -1,7 +1,9 @@
 from flask import Flask, redirect
+from injector import inject
 from flask_injector import FlaskInjector
-
+from utils.setup_decorators import is_config_file
 from services.dependencies import configure_production
+from setup.db_operations import DbOperations
 from views.posts_view import index_blueprint
 from views.setup_view import setup_blueprint
 from views.login_view import login_blueprint
@@ -18,6 +20,13 @@ app.register_blueprint(users_blueprint, url_prefix="/users")
 @app.route('/')
 def index():
     return redirect('/posts/')
+
+@inject
+@app.before_first_request
+@is_config_file
+def db_version_checking(db_operation: DbOperations):
+    if not db_operation.is_db_updated():
+        db_operation.update_version()
 
 FlaskInjector(app=app, modules=[configure_production])
 

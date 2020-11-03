@@ -7,11 +7,12 @@
 <div class="row posts">
     <div class="col-lg-8 col-md-10 mx-auto">
         <h3>{{post.title}}</h3>
-        <p>By {{ post.owner }} on {{ post.created_at }} <small>Id is {{post.post_id}}</small></p>
+        <p> {{ post.created_at }} <small>Post Id is {{post.post_id}}</small></p>
         <p><pre id="view_content">{{ post.contents }}</pre></p>
-        <p>Post user id: {{post.user_id}}</p>
+        <p>Post owner id {{post.owner}}</p>
         <p>User id {{session['user_id']}}</p>
-      
+       
+   
         <a href="{{url_for('index.edit', pid=post.post_id)}}" class="btn btn-primary">Edit your post</a>
         <a href="{{url_for('index.delete', pid=post.post_id)}}"
            class="btn btn-warning"

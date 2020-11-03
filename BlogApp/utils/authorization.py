@@ -15,7 +15,7 @@ def login_required(view):
 def admin_required(view):
     @wraps(view)
     def wrapped_view(**kwargs):
-        if session['email'] != 'admin@gmail.com':
+        if session['name'] != 'admin':
             return render_template('403error.html'), 403
         return view(**kwargs)
     return wrapped_view
@@ -24,7 +24,18 @@ def admin_or_owner_required(view):
     @wraps(view)
     def wrapped_view(**kwargs):
         current_user = kwargs.get("pid")
-        if session['email'] != 'admin@gmail.com' and session['user_id'] != current_user:
+        if session['name'] != 'admin' and session['user_id'] != current_user:
+            return render_template('403error.html'), 403
+        return view(**kwargs)
+    return wrapped_view
+
+def first_loggin(view):
+    @wraps(view)
+    def wrapped_view(**kwargs):
+        current_user_id = kwargs.get("uid")
+        repo = kwargs.get("repo")
+        user = repo.find_by_id(current_user_id)
+        if user.password is not None:
             return render_template('403error.html'), 403
         return view(**kwargs)
     return wrapped_view

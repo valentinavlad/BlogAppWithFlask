@@ -1,6 +1,6 @@
-def login(client_is_config, email, password):
+def login(client_is_config, name, password):
     return client_is_config.post('/auth/login', data=dict(
-        email=email,
+        name=name,
         password=password
     ), follow_redirects=True)
 
@@ -17,11 +17,10 @@ def test_index(client_is_config):
 def test_view_post(client_is_config):
     response = client_is_config.get('/posts/5')
     assert '<h3>Angular</h3>' in response.get_data(as_text=True)
-    assert b'V.W. Craig' in response.data
     assert response.status_code == 200
 
 def test_post_create_by_owner(client_is_config):
-    log = login(client_is_config, 'tia@gmail.com', '123')
+    log = login(client_is_config, 'tia', '123')
     assert b'Hello Tia' in log.data
     response = client_is_config.get('/posts/new')
     assert response.status_code == 200
@@ -36,7 +35,7 @@ def test_post_create_by_owner(client_is_config):
     logout(client_is_config)
 
 def test_post_create_by_admin(client_is_config):
-    log = login(client_is_config, 'admin@gmail.com', '123')
+    log = login(client_is_config, 'admin', '123')
     assert b'Hello Admin' in log.data
     response = client_is_config.get('/posts/new')
     assert response.status_code == 200
@@ -58,7 +57,7 @@ def test_cannot_create_post_if_not_logged(client_is_config):
     assert b'Login' in response.data
 #C++
 def test_update_post_by_owner(client_is_config):
-    log = login(client_is_config, 'tia@gmail.com', '123')
+    log = login(client_is_config, 'tia', '123')
     with client_is_config.session_transaction() as sess:
         sess['user_id'] = '1'
     assert b'Hello Tia' in log.data
@@ -75,7 +74,7 @@ def test_update_post_by_owner(client_is_config):
     sess.clear()
 #php
 def test_update_post_by_admin(client_is_config):
-    log = login(client_is_config, 'admin@gmail.com', '123')
+    log = login(client_is_config, 'admin', '123')
     with client_is_config.session_transaction() as sess:
         sess['user_id'] = '3'
     assert b'Hello Admin' in log.data
@@ -91,7 +90,7 @@ def test_update_post_by_admin(client_is_config):
 
 #Laravel
 def test_update_post_by_other_wont_work(client_is_config):
-    log = login(client_is_config, 'tia@gmail.com', '123')
+    log = login(client_is_config, 'tia', '123')
     assert b'Hello Tia' in log.data
     with client_is_config.session_transaction() as sess:
         sess['user_id'] = '1'
@@ -104,7 +103,7 @@ def test_update_post_by_other_wont_work(client_is_config):
 
     assert resp.status == '403 FORBIDDEN'
     assert '<h1>Forbidden</h1>' in resp.get_data(as_text=True)
-    assert "<h1>User Tia doesn't have rights to alter this page.</h1>"\
+    assert "<h1>User tia doesn't have rights to alter this page.</h1>"\
        in resp.get_data(as_text=True)
 
 def test_update_not_logged_user(client_is_config):
@@ -123,7 +122,7 @@ def test_update_post_by_user_not_logged_redirect_login(client_is_config):
 #javascript
 def test_delete_post_by_other_dont_work(client_is_config):
     #at id 4 is Javascript
-    log = login(client_is_config, 'maia@gmail.com', '123')
+    log = login(client_is_config, 'maia', '123')
     with client_is_config.session_transaction() as sess:
         sess['user_id'] = '2'
     assert b'Hello Maia' in log.data
@@ -134,7 +133,7 @@ def test_delete_post_by_other_dont_work(client_is_config):
     response = client_is_config.post('/posts/4/delete')
     assert response.status == '403 FORBIDDEN'
     assert '<h1>Forbidden</h1>' in response.get_data(as_text=True)
-    assert "<h1>User Maia doesn't have rights to alter this page.</h1>"\
+    assert "<h1>User maia doesn't have rights to alter this page.</h1>"\
        in response.get_data(as_text=True)
     logout(client_is_config)
 
@@ -147,13 +146,15 @@ def test_delete_post_by_user_not_logged_redirect_login(client_is_config):
 
 def test_delete_post_by_owner(client_is_config):
     #at id 4 is Javascript
-    log = login(client_is_config, 'tia@gmail.com', '123')
+    log = login(client_is_config, 'tia', '123')
     with client_is_config.session_transaction() as session:
         session['user_id'] = '1'
     assert b'Hello Tia' in log.data
     res = client_is_config.get('/posts/4')
     assert res.status_code == 200
-    assert b'Delete your post' in res.data
+    assert b'Hi! View your post' in res.data
+    assert b'Javascript' in res.data
+    #assert b'Delete your post' in res.data
     response = client_is_config.post('/posts/4/delete', follow_redirects=True)
     assert response.status_code == 200
     assert b'Javascript' not  in response.data
@@ -163,7 +164,7 @@ def test_delete_post_by_owner(client_is_config):
 #python
 def test_delete_post_by_admin(client_is_config):
     #at id 4 is Javascript
-    log = login(client_is_config, 'admin@gmail.com', '123')
+    log = login(client_is_config, 'admin', '123')
     with client_is_config.session_transaction() as sess:
         sess['user_id'] = '3'
     assert b'Hello Admin' in log.data

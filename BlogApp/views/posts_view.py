@@ -22,7 +22,7 @@ def posts(repo: PostsRepo):
 def new(repo: PostsRepo):
     if request.method == 'POST':
         date_now = datetime.datetime.now()
-        post = Post(title=request.form.get("title"), owner=request.form.get("owner"),
+        post = Post(title=request.form.get("title"), owner=int(session['user_id']),
                     contents=request.form.get("contents"))
         repo.add(post)
         post.created_at = date_now.strftime("%B %d, %Y")
@@ -40,7 +40,6 @@ def view_post(repo: PostsRepo, pid):
 @index_blueprint.route('/<int:pid>/edit', methods=['GET', 'POST'])
 @is_config_file
 @login_required
-
 def edit(repo: PostsRepo, pid):
     found_post = repo.find_by_id(pid)
     if request.method == 'POST':
@@ -48,11 +47,10 @@ def edit(repo: PostsRepo, pid):
             date_now = datetime.datetime.now()
             post = found_post
             post.title = request.form.get("title")
-            post.owner = request.form.get("owner")
             post.contents = request.form.get("contents")
             post.created_at = found_post.created_at
             post.modified_at = date_now.strftime("%B %d, %Y")
-            if not found_post.is_owner() and not session['email'] == 'admin@gmail.com':
+            if session['name'] != 'admin' and not found_post.is_owner():
                 return render_template('403error.html'), 403
             repo.edit(post)
         return redirect(url_for('index.view_post', pid=post.post_id))

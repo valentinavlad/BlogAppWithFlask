@@ -38,3 +38,6 @@ class UsersRepo(abc.ABC):
     @abc.abstractclassmethod
     def check_user_exists(cls, email):
         pass
+    @abc.abstractclassmethod
+    def check_user_exists_by_name(cls, name):
+        pass

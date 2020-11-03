@@ -1,117 +1,76 @@
 import psycopg2
-from setup.database_config import DatabaseConfig
+from injector import inject
+from setup.db_connect import DbConnect
 
-class DbOperations():
-    conn = None
-    config = DatabaseConfig()
+FILENAME = 'queries.sql'
+VERSION = 1
+class DbOperations:
 
-    @classmethod
-    def connect(cls):
-        db_credentials = cls.config.load_configuration()
-        params = db_credentials.to_dictionary()
-        print("In connect function")
-        return psycopg2.connect(**params)
+    @inject
+    def __init__(self, db_connect: DbConnect):
+        self.db_connect = db_connect
+        self.filename = FILENAME
 
-    @classmethod
-    def get_cursor(cls):
-        cls.conn = cls.connect()
-        return cls.conn.cursor()
-
-    @classmethod
-    def check_table_exists(cls):
-        cur = cls.conn.cursor()
-        is_table = cur.execute("""select exists(
-                               select * from
-                               information_schema.tables
-                               where table_name=%s)""", ('posts',))
-        if is_table is None:
-            cur.close()
-            cls.conn.close()
-            cls.scriptexecution('scripts/{}'.format('create_posts_table.sql'))
-            cls.conn = None
-        else:
-            cur.close()
-            cls.conn.close()
-
-    @classmethod
-    def create_database(cls, database_name):
-        cls.conn.autocommit = True
-        cur = cls.conn.cursor()
-        cur.execute('CREATE DATABASE {};'.format(database_name))
+    def check_owner_data_type(self):
+        self.db_connect.connect_to_db()
+        cur = self.db_connect.get_cursor()
+        verify_owner_type_sql = "SELECT data_type FROM information_schema.columns\
+                                 WHERE table_name = 'posts' AND column_name = 'owner';"
+        cur.execute(verify_owner_type_sql)
+        row = cur.fetchone()
         cur.close()
-        cls.conn.close()
-        cls.scriptexecution('scripts/{}'.format('create_posts_table.sql'))
-    @classmethod
-    def scriptexecution(cls, filename):
-        file = open(filename, 'r')
-        command = file.read()
-        file.close()
+        self.db_connect.conn.close()
+        return row
+
+    def is_db_updated(self):
+        return self.db_connect.config.get_version() == VERSION
+
+    def execute_scripts_from_file(self):
         try:
-            cls.conn = cls.connect()
-            cursor = cls.conn.cursor()
-            cursor.execute(command)
-            cursor.close()
-            cls.conn.commit()
+            self.db_connect.conn = self.db_connect.connect()
         except (ConnectionError, psycopg2.DatabaseError) as error:
             print(error)
+        if self.db_connect.conn is not None:
+            file = open('scripts/{}'.format(self.filename), 'r')
+            sql_file = file.read()
+            file.close()
+            sql_commands = sql_file.split(';')
+            for command in sql_commands:
+                cur = self.db_connect.get_cursor()
+                if command not in ('', '\\n'):
+                    cur.execute(command)
+                else:
+                    continue
+                cur.close()
+                self.db_connect.conn.commit()
+        self.db_connect.config.update_version(VERSION)
 
-    @classmethod
-    def connect_to_db(cls):
-        params = cls.config.load()
-        database_name = params['database']
-        try:
-            cls.conn = psycopg2.connect(host=params['host'], port=params['port'],
-                                        user=params['user'], password=params['password'])
-        except (ConnectionError, psycopg2.DatabaseError) as error:
-            print(error)
-            cls.conn = None
+    def update_version(self):
+        self.execute_scripts_from_file()
+        self.db_connect.config.update_version(VERSION)
 
-        if cls.conn is not None:
-            #verify if db exists
-            cls.conn.autocommit = True
-            cur = cls.conn.cursor()
-            cur.execute("SELECT datname FROM pg_database;")
-            list_database = cur.fetchall()
-            if (database_name,) in list_database:
-                print("'{}' Database already exist".format(database_name))
-                cls.check_table_exists()
-            else:
-                cls.create_database(database_name)
-                print("'{}' Database not exist.".format(database_name))
+    def is_database_created(self, database_name):
+        self.db_connect.conn.autocommit = True
+        cur = self.db_connect.conn.cursor()
+        cur.execute("SELECT datname FROM pg_database;")
+        list_database = cur.fetchall()
+        return (database_name,) in list_database
 
-    @classmethod
-    def create_tables(cls):
-        commands = (
-            """
-            CREATE TABLE users (
-               user_id SERIAL PRIMARY KEY,
-               name VARCHAR(255) NOT NULL,
-               email VARCHAR(255) NOT NULL,
-               password TEXT NOT NULL,
-               created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-               modified_at DATE NULL)
-            """,
-            """
-            CREATE TABLE posts (
-                post_id SERIAL PRIMARY KEY,
-                user_id INT,
-                title VARCHAR(255) NOT NULL,
-                owner VARCHAR(255) NOT NULL,
-                contents Text NOT NULL,
-                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                modified_at DATE NULL,
-                CONSTRAINT fk_users
-                    FOREIGN KEY (user_id) REFERENCES users(user_id));
-            """)
-        try:
-            cls.conn = cls.connect()
-            cur = cls.conn.cursor()
-            for command in commands:
-                cur.execute(command)
-            cur.close()
-            cls.conn.commit()
-        except (ConnectionError, psycopg2.DatabaseError) as error:
-            print(error)
-        finally:
-            if cls.conn is not None:
-                cls.conn.close()
+    def create_database(self):
+        if self.db_connect.config.is_configured:
+            self.db_connect.connect_to_db()
+            if self.db_connect.conn is not None:
+                params = self.db_connect.config.load()
+                database_name = params['database']
+                if not self.is_database_created(database_name):
+                    self.db_connect.autocommit = True
+                    cur = self.db_connect.conn.cursor()
+                    cur.execute('CREATE DATABASE {};'.format(database_name))
+                    cur.close()
+
+                owner_type = self.check_owner_data_type()
+                if owner_type is None or owner_type[0] == 'character varying':
+                    self.update_version()
+                if owner_type is not None and owner_type[0] == 'integer':
+                    self.db_connect.config.update_version(VERSION)
+            self.db_connect.conn.close()

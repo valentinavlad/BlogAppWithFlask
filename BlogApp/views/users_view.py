@@ -1,11 +1,13 @@
 import datetime
 from injector import inject
 from flask import Blueprint, render_template, url_for, \
-    request, redirect
+    request, redirect, flash
 from repository.users_repo import UsersRepo
 from utils.setup_decorators import is_config_file
-from utils.authorization import admin_required, admin_or_owner_required, login_required
+from utils.authorization import admin_required, admin_or_owner_required,\
+   login_required, first_loggin
 from models.user import User
+from services.password_manager import PasswordManager
 
 users_blueprint = Blueprint('users', __name__, template_folder='templates', static_folder='static')
 
@@ -68,9 +70,30 @@ def edit(repo: UsersRepo, pid):
 @admin_required
 def delete(repo: UsersRepo, pid):
     user_delete = repo.find_by_id(pid)
-    print('delete method')
-    print(user_delete.user_id)
     if user_delete is not None:
         repo.delete(pid)
         return redirect(url_for('users.users'))
     return render_template('view_user.html')
+
+@inject
+@users_blueprint.route('/set_credentials/<int:uid>', methods=['GET', 'POST'])
+@first_loggin
+def set_credentials(repo: UsersRepo, secure_pass: PasswordManager, uid):
+    user = repo.find_by_id(uid)
+
+    if request.method == 'POST':
+        error = None
+        name = request.form.get("name")
+        email = request.form.get("email")
+        password = request.form.get("password")
+        cf_password = request.form.get("cf_password")
+        if password != cf_password:
+            error = "Pass must mach"
+        if error is None:
+            user.name = name
+            user.email = email
+            user.password = secure_pass.generate_secured_pass(password)
+            repo.edit(user)
+            return redirect(url_for('auth.login'))
+        flash(error)
+    return render_template('set_credentials.html', user=user)

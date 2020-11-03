@@ -1,21 +1,21 @@
 from models.post import Post
 
-post_one = Post(title='Python', owner='D.B.Higgins',
+post_one = Post(title='Python', owner='2',
                 contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
                     Aenean commodo ligula eget dolor.Lorem ipsum dolor sit amet, 
                     consectetuer adipiscing elit.Lorem ipsum dolor sit amet,
                     consectetuer adipiscing elit.""")
 post_one.created_at = 'January 6, 2018'
 post_one.modified_at = 'January 8, 2018'
-post_one.user_id = 2
-post_two = Post(title='Php', owner='D.B.Poppask',
+post_one.name = 'maia'
+post_two = Post(title='Php', owner='1',
                 contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
                     Aenean commodo ligula eget dolor.Lorem ipsum dolor sit amet,
                     consectetuer adipiscing elit.""")
 post_two.created_at = 'December 10, 2017'
 post_two.modified_at = 'December 15, 2017'
-post_two.user_id = 1
-post_three = Post(title='Java', owner='D.B.Goliloaw',
+post_two.name = 'tia'
+post_three = Post(title='Java', owner='2',
                   contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
                     Aenean commodo ligula eget dolor.Lorem ipsum dolor sit amet, 
                     consectetuer adipiscing elit.Lorem ipsum dolor sit amet, consectetuer 
@@ -23,14 +23,14 @@ post_three = Post(title='Java', owner='D.B.Goliloaw',
                     Lorem ipsum dolor sit amet, consectetuer adipiscing elit.""")
 post_three.created_at = 'December 2, 2017'
 post_three.modified_at = 'May 2, 2018'
-post_three.user_id = 2
-post_four = Post(title='Javascript', owner='D.B.Poppask',
+post_three.name = 'maia'
+post_four = Post(title='Javascript', owner='1',
                  contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
                     Aenean commodo ligula eget dolor. Aenean commodo ligula eget dolor""")
 post_four.created_at = 'June 13, 2019'
 post_four.modified_at = 'June 15, 2019'
-post_four.user_id = 1
-post_five = Post(title='Angular', owner='V.W. Craig',
+post_four.name = 'tia'
+post_five = Post(title='Angular', owner='2',
                  contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
                     Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, 
                     tellus eget condimentum rhoncus, sem quam semper libero, 
@@ -41,8 +41,8 @@ post_five = Post(title='Angular', owner='V.W. Craig',
                     Aenean commodo ligula eget dolor.""")
 post_five.created_at = 'March 13, 2020'
 post_five.modified_at = 'June 13, 2020'
-post_five.user_id = 2
-post_six = Post(title='C++', owner='V.W. Craig',
+post_five.name = 'maia'
+post_six = Post(title='C++', owner='1',
                 contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
                     Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, 
                     tellus eget condimentum rhoncus, sem quam semper libero, 
@@ -53,25 +53,23 @@ post_six = Post(title='C++', owner='V.W. Craig',
                     Aenean commodo ligula eget dolor.""")
 post_six.created_at = 'March 13, 2020'
 post_six.modified_at = 'June 13, 2020'
-post_six.user_id = 1
-
-post_seven = Post(title='Vue Js', owner='D.B.Higgins',
+post_six.name = 'tia'
+post_seven = Post(title='Vue Js', owner='1',
                   contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
                     Aenean commodo ligula eget dolor.Lorem ipsum dolor sit amet, 
                     consectetuer adipiscing elit.Lorem ipsum dolor sit amet,
                     consectetuer adipiscing elit.""")
 post_seven.created_at = 'January 6, 2018'
 post_seven.modified_at = 'January 8, 2018'
-post_seven.user_id = 1
-
-post_eight = Post(title='Laravel', owner='D.B.Higgins',
+post_seven.name = 'tia'
+post_eight = Post(title='Laravel', owner='2',
                   contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
                     Aenean commodo ligula eget dolor.Lorem ipsum dolor sit amet, 
                     consectetuer adipiscing elit.Lorem ipsum dolor sit amet,
                     consectetuer adipiscing elit.""")
 post_eight.created_at = 'January 6, 2018'
 post_eight.modified_at = 'January 8, 2018'
-post_eight.user_id = 2
+post_eight.name = 'maia'
 dummy_posts = [post_one, post_two, post_three, post_four, post_five,\
    post_six, post_seven, post_eight]
 dummy_posts.sort(key=lambda x: x.created_at, reverse=True)
