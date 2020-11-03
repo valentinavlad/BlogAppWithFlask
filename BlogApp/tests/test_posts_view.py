@@ -154,7 +154,6 @@ def test_delete_post_by_owner(client_is_config):
     assert res.status_code == 200
     assert b'Hi! View your post' in res.data
     assert b'Javascript' in res.data
-    #din cauza ca pe html am pus conditia de ascundere buton daca nu e owner, nu se mai vede in test, desi e owner??
     #assert b'Delete your post' in res.data
     response = client_is_config.post('/posts/4/delete', follow_redirects=True)
     assert response.status_code == 200

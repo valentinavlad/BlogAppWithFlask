@@ -31,7 +31,7 @@ def admin_or_owner_required(view):
 
 def first_loggin(view):
     @wraps(view)
-    def wrapped_view (**kwargs):
+    def wrapped_view(**kwargs):
         current_user_id = kwargs.get("uid")
         repo = kwargs.get("repo")
         user = repo.find_by_id(current_user_id)

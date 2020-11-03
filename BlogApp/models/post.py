@@ -2,7 +2,6 @@ import datetime
 from flask import session
 class Post():
     count = 1
-    
     def __init__(self, title, owner, contents):
         self.post_id = Post.count
         self.title = title
@@ -10,7 +9,6 @@ class Post():
         self.contents = contents
         self.created_at = datetime.datetime.now()
         self.modified_at = datetime.datetime.now()
-        name = ''
         Post.count += 1
 
     @classmethod
@@ -30,12 +28,10 @@ class Post():
         return obj
 
     def is_owner(self):
-        x = self.owner
-        y= session['user_id']
         return self.owner == session['user_id']
 
     def is_admin(self):
-        return self.is_owner() and session['name'] == 'admin';
+        return self.is_owner() and session['name'] == 'admin'
 
     def __str__(self):
         return self.title + " " + self.owner

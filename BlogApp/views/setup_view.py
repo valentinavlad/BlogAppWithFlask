@@ -17,6 +17,6 @@ def setup(db_config: DatabaseConfig, db_operations: DbOperations):
         password = request.form.get('password')
         db_credentials = DbCredentials(user, database, password)
         db_config.save_configuration(db_credentials)
-        db_operations.check_database()
+        db_operations.create_database()
         return redirect(url_for('index.posts'))
     return render_template('setup.html')

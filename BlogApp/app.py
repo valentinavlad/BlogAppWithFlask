@@ -21,12 +21,12 @@ app.register_blueprint(users_blueprint, url_prefix="/users")
 def index():
     return redirect('/posts/')
 
-
 @inject
 @app.before_first_request
 @is_config_file
 def db_version_checking(db_operation: DbOperations):
-    db_operation.check_database()
+    if not db_operation.is_db_updated():
+        db_operation.update_version()
 
 FlaskInjector(app=app, modules=[configure_production])
 

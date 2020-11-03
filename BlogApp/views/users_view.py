@@ -76,7 +76,7 @@ def delete(repo: UsersRepo, pid):
     return render_template('view_user.html')
 
 @inject
-@users_blueprint.route('/set_credentials/<int:uid>', methods=['GET','POST'])
+@users_blueprint.route('/set_credentials/<int:uid>', methods=['GET', 'POST'])
 @first_loggin
 def set_credentials(repo: UsersRepo, secure_pass: PasswordManager, uid):
     user = repo.find_by_id(uid)

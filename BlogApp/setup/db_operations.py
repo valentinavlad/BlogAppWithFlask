@@ -11,21 +11,19 @@ class DbOperations:
         self.db_connect = db_connect
         self.filename = FILENAME
 
-    def create_database(self, database_name):
-        self.db_connect.autocommit = True
-        cur = self.db_connect.conn.cursor()
-        cur.execute('CREATE DATABASE {};'.format(database_name))
-        cur.close()
-        self.execute_scripts_from_file()
-
     def check_owner_data_type(self):
+        self.db_connect.connect_to_db()
         cur = self.db_connect.get_cursor()
         verify_owner_type_sql = "SELECT data_type FROM information_schema.columns\
                                  WHERE table_name = 'posts' AND column_name = 'owner';"
         cur.execute(verify_owner_type_sql)
         row = cur.fetchone()
         cur.close()
+        self.db_connect.conn.close()
         return row
+
+    def is_db_updated(self):
+        return self.db_connect.config.get_version() == VERSION
 
     def execute_scripts_from_file(self):
         try:
@@ -33,8 +31,7 @@ class DbOperations:
         except (ConnectionError, psycopg2.DatabaseError) as error:
             print(error)
         if self.db_connect.conn is not None:
-            filename = 'queries.sql'
-            file = open('scripts/{}'.format(filename), 'r')
+            file = open('scripts/{}'.format(self.filename), 'r')
             sql_file = file.read()
             file.close()
             sql_commands = sql_file.split(';')
@@ -48,29 +45,32 @@ class DbOperations:
                 self.db_connect.conn.commit()
         self.db_connect.config.update_version(VERSION)
 
-    def check_version(self):
-        config_version = self.db_connect.config.get_version()
-        if config_version < VERSION:
-            self.db_connect.conn.close()
-            self.execute_scripts_from_file()
-            self.db_connect.config.update_version(VERSION)
+    def update_version(self):
+        self.execute_scripts_from_file()
+        self.db_connect.config.update_version(VERSION)
 
-    def check_database(self):
+    def is_database_created(self, database_name):
+        self.db_connect.conn.autocommit = True
+        cur = self.db_connect.conn.cursor()
+        cur.execute("SELECT datname FROM pg_database;")
+        list_database = cur.fetchall()
+        return (database_name,) in list_database
+
+    def create_database(self):
         if self.db_connect.config.is_configured:
-            params = self.db_connect.config.load()
-            database_name = params['database']
             self.db_connect.connect_to_db()
             if self.db_connect.conn is not None:
-                self.db_connect.conn.autocommit = True
-                cur = self.db_connect.conn.cursor()
-                cur.execute("SELECT datname FROM pg_database;")
-                list_database = cur.fetchall()
-                if (database_name,) in list_database:
-                    owner_type = self.check_owner_data_type()
-                    if owner_type is None or owner_type[0] == 'character varying':
-                        self.check_version()
-                    if owner_type[0] == 'integer':
-                        self.db_connect.config.update_version(VERSION)
-                        print("kkkk")
-                else:
-                    self.create_database(database_name)
+                params = self.db_connect.config.load()
+                database_name = params['database']
+                if not self.is_database_created(database_name):
+                    self.db_connect.autocommit = True
+                    cur = self.db_connect.conn.cursor()
+                    cur.execute('CREATE DATABASE {};'.format(database_name))
+                    cur.close()
+
+                owner_type = self.check_owner_data_type()
+                if owner_type is None or owner_type[0] == 'character varying':
+                    self.update_version()
+                if owner_type is not None and owner_type[0] == 'integer':
+                    self.db_connect.config.update_version(VERSION)
+            self.db_connect.conn.close()
