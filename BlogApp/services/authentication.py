@@ -23,5 +23,6 @@ class Authentication():
 
     @staticmethod
     def logout_user():
+        session.pop('logged_in', None)
         session.clear()
         return redirect(url_for('index.posts'))

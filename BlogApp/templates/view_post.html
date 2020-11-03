@@ -11,14 +11,17 @@
         <p><pre id="view_content">{{ post.contents }}</pre></p>
         <p>Post owner id {{post.owner}}</p>
         <p>User id {{session['user_id']}}</p>
-       
-   
+        {% if session['logged_in'] is sameas true  %}
+        {% if post.is_owner() or session['name'] == 'admin' %}
         <a href="{{url_for('index.edit', pid=post.post_id)}}" class="btn btn-primary">Edit your post</a>
         <a href="{{url_for('index.delete', pid=post.post_id)}}"
            class="btn btn-warning"
            onclick="if (!confirm('Delete selected post?') ) return false">
             Delete your post
         </a>
+        {% endif %}
+        {%endif%}
+
 
     </div>
 </div>

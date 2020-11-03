@@ -12,6 +12,7 @@ def set_session(user):
     session['user_id'] = user.user_id
     session['name'] = user.name
     session['email'] = user.email
+    session['logged_in'] = True
 
 @inject
 @login_blueprint.route('/login', methods=['GET', 'POST'])
