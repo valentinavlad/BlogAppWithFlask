@@ -128,8 +128,6 @@ def test_delete_post_by_other_dont_work(client_is_config):
     assert b'Hello Maia' in log.data
     res = client_is_config.get('/posts/4')
     assert res.status_code == 200
-    assert b'Delete your post' in res.data
-
     response = client_is_config.post('/posts/4/delete')
     assert response.status == '403 FORBIDDEN'
     assert '<h1>Forbidden</h1>' in response.get_data(as_text=True)
@@ -154,7 +152,6 @@ def test_delete_post_by_owner(client_is_config):
     assert res.status_code == 200
     assert b'Hi! View your post' in res.data
     assert b'Javascript' in res.data
-    #assert b'Delete your post' in res.data
     response = client_is_config.post('/posts/4/delete', follow_redirects=True)
     assert response.status_code == 200
     assert b'Javascript' not  in response.data

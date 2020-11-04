@@ -27,6 +27,6 @@ def configure_test(binder):
     binder.bind(UsersRepo, to=InMemoryUsersRepo, scope=singleton)
     binder.bind(DatabaseConfig, to=Mock(DatabaseConfig), scope=request)
     binder.bind(Authentication, to=Authentication, scope=request)
-    binder.bind(PasswordManager, to=PasswordManager, scope=singleton)
+    binder.bind(PasswordManager, to=PasswordManager, scope=request)
     binder.bind(DbConnect, to=Mock(DbConnect), scope=singleton)
     binder.bind(DbOperations, to=Mock(DbOperations), scope=singleton)

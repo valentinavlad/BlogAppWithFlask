@@ -106,11 +106,23 @@ def test_delete_user_by_non_logged_user(client_is_config):
     assert b'Login' in response.data
 
 def test_user_first_loggin_no_pass(client_is_config):
-   #TO DO.....
-    data = {'name': 'goia', 'password':''}
-    res = client_is_config.post('auth/login', data=data, follow_redirects=True)
-    assert b'Set login info' in res.data
-    #response = client_is_config.get('users/set_credentials/7', follow_redirects=True)
+    response = client_is_config.get('users/set_credentials/7', follow_redirects=True)
+    assert b'Set login info' in response.data
+    data = {'name': 'goia', 'email': 'goia@gmail.com', 'password':'123', 'cf_password':'123'}
+    response_two = client_is_config.post('users/set_credentials/7',\
+                                        data=data, follow_redirects=True)
+    assert b'Login' in response_two.data
+    assert b'Name' in response_two.data
+    assert b'Email' in response_two.data
+
+def test_access_set_creential_with_pass_forbidden(client_is_config):
+    data = {'name': 'marc', 'password':'123'}
+    response_post = client_is_config.post('auth/login', data=data, follow_redirects=True)
+    assert '<h1>Angular</h1>' in response_post.get_data(as_text=True)
+    assert b'Php' in response_post.data
+    assert b'Hello Marc !' in response_post.data
+    response = client_is_config.get('users/set_credentials/8', follow_redirects=True)
+    assert b'Forbidden' in response.data
 
 def test_see_all_users_redirect_setup(client_is_not_config):
     response = client_is_not_config.get('/auth/login', follow_redirects=True)

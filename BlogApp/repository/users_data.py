@@ -32,9 +32,15 @@ user_six.created_at = 'May 6, 2017'
 user_six.modified_at = 'January 9, 2018'
 user_six.user_id = 6
 
-user_seven = User(name='goia', email='', password='')
+user_seven = User(name='goia', email='', password=None)
 user_seven.created_at = 'May 6, 2017'
 user_seven.modified_at = 'January 9, 2018'
 user_seven.user_id = 7
 
-dummy_users = [user_one, user_two, user_three, user_four, user_five, user_six, user_seven]
+user_eight = User(name='marc', email='marc@gmail.com', password=password)
+user_eight.created_at = 'May 6, 2017'
+user_eight.modified_at = 'January 9, 2018'
+user_eight.user_id = 8
+
+dummy_users = [user_one, user_two, user_three, user_four,\
+              user_five, user_six, user_seven, user_eight]
