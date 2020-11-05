@@ -1,5 +1,5 @@
 /************HEADER*********/
-header.masthead {
+header.masthead{
     background-image: url('https://images7.alphacoders.com/110/1102604.jpg');
     margin-bottom: 50px;
     background-color: #868e96;
@@ -9,7 +9,7 @@ header.masthead {
     color: black;
 }
 
-header.masthead .overlay {
+.overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -20,10 +20,26 @@ header.masthead .overlay {
     text-decoration: none;
 }
 
-header.masthead .page-heading, header.masthead .site-heading {
+.site-heading {
     text-align: center;
+    color: black;
+    text-shadow: 2px -1px 4px rgba(163, 150, 150, 1);
 }
 
+.site-heading h1{
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.site-heading p {
+    font-weight: 500;
+    font-style: italic;
+}
+
+.jumbotron {
+    background-image: url('https://images7.alphacoders.com/110/1102604.jpg');
+    background-size: cover;
+}
 header.masthead .page-heading, header.masthead .post-heading, header.masthead .site-heading {
     color: #fff;
 }
@@ -31,6 +47,9 @@ header.masthead .page-heading, header.masthead .post-heading, header.masthead .s
 @media only screen and (min-width: 768px) {
     header.masthead .page-heading, header.masthead .post-heading, header.masthead .site-heading {
         padding: 200px 0;
+    }
+    .site-heading {
+        padding: 100px 0;
     }
 }
 

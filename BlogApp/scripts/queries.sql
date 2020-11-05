@@ -1,23 +1,11 @@
-
 CREATE TABLE IF NOT EXISTS posts (
         post_id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
         owner VARCHAR(255) NOT NULL,
         contents Text NOT NULL,
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        modified_at DATE NULL
-        );
-INSERT INTO posts (title, owner, contents) 
-    SELECT  'Ella','tia','dummy content'
-WHERE NOT EXISTS (
-    SELECT 1 FROM posts WHERE owner='tia'
-);
+        modified_at DATE NULL);
 
-INSERT INTO posts (title, owner, contents) 
-    SELECT  'Las Vegas','bob','dummy content'
-WHERE NOT EXISTS (
-    SELECT 1 FROM posts WHERE owner='bob'
-);
 CREATE TABLE IF NOT EXISTS users (
     user_id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -26,47 +14,19 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     modified_at DATE NULL);
 
-INSERT INTO users(name) SELECT owner FROM posts;
+INSERT INTO users (name) SELECT 'admin' WHERE not exists (
+    select user_id from users where user_id='1'
+) LIMIT 1;
 
-ALTER TABLE posts ADD COLUMN owner_cp VARCHAR (64);
+INSERT INTO users(name) SELECT DISTINCT owner FROM posts 
+WHERE EXISTS (SELECT data_type FROM information_schema.columns
+WHERE table_name = 'posts' AND column_name = 'owner' AND data_type = 'character varying');
 
-UPDATE posts SET owner_cp = owner;
+UPDATE posts set owner=users.user_id from users where posts.owner::varchar = users.name;
 
-ALTER TABLE posts DROP COLUMN owner;
+ALTER TABLE posts ALTER COLUMN owner TYPE INT USING owner::integer;
 
-ALTER TABLE posts ADD COLUMN owner INT NULL;
-
-ALTER TABLE posts add constraint fk_owner foreign key(owner) 
-REFERENCES users(user_id) ON UPDATE CASCADE ON DELETE CASCADE;
-
-UPDATE posts p
-SET    owner = u.user_id
-FROM   users u
-WHERE  p.owner_cp = u.name;
-
-ALTER TABLE posts DROP COLUMN owner_cp;
-
-insert into users (name)
-select 
-    'admin'
-where not exists (
-    select 1 from users where name = 'admin'
-);
-
-alter table posts rename to oldposts;
-
-create table posts (
-        post_id SERIAL PRIMARY KEY,
-        title VARCHAR(255) NOT NULL,
-        owner INT NOT NULL,
-        contents Text NOT NULL,
-        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        modified_at DATE NULL
-        );
-
-insert into posts (title, owner, contents, created_at, modified_at) 
-select title, owner, contents, created_at, modified_at from oldposts;
+ALTER TABLE POSTS DROP CONSTRAINT IF EXISTS fk_owner;
 
 ALTER TABLE posts add constraint fk_owner foreign key(owner) 
 REFERENCES users(user_id) ON UPDATE CASCADE ON DELETE CASCADE;
-drop table oldposts;

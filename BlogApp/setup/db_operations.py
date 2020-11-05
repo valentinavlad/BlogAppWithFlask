@@ -11,17 +11,6 @@ class DbOperations:
         self.db_connect = db_connect
         self.filename = FILENAME
 
-    def check_owner_data_type(self):
-        self.db_connect.connect_to_db()
-        cur = self.db_connect.get_cursor()
-        verify_owner_type_sql = "SELECT data_type FROM information_schema.columns\
-                                 WHERE table_name = 'posts' AND column_name = 'owner';"
-        cur.execute(verify_owner_type_sql)
-        row = cur.fetchone()
-        cur.close()
-        self.db_connect.conn.close()
-        return row
-
     def is_db_updated(self):
         return self.db_connect.config.get_version() == VERSION
 
@@ -67,10 +56,5 @@ class DbOperations:
                     cur = self.db_connect.conn.cursor()
                     cur.execute('CREATE DATABASE {};'.format(database_name))
                     cur.close()
-
-                owner_type = self.check_owner_data_type()
-                if owner_type is None or owner_type[0] == 'character varying':
-                    self.update_version()
-                if owner_type is not None and owner_type[0] == 'integer':
-                    self.db_connect.config.update_version(VERSION)
+                self.update_version()
             self.db_connect.conn.close()

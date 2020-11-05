@@ -7,7 +7,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-                {% if session['email'] == 'admin@gmail.com' %}
+                {% if session['user_id'] == 1 %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{url_for('users.users')}}">Manage Users</a>
                 </li>

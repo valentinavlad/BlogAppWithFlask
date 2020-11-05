@@ -90,7 +90,7 @@ class DatabasePostRepo(PostsRepo):
             cur = self.db_connect.get_cursor()
             cur.execute('SELECT post_id, title, owner, name, contents, posts.created_at,\
                         posts.modified_at FROM posts INNER JOIN users \
-                        ON owner = user_id')
+                        ON owner = user_id ORDER BY created_at desc')
             #cur.execute("SELECT * FROM posts ORDER BY created_at desc")
             row = cur.fetchone()
             while row is not None:

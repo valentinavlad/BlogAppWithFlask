@@ -42,6 +42,8 @@ def view_post(repo: PostsRepo, pid):
 @login_required
 def edit(repo: PostsRepo, pid):
     found_post = repo.find_by_id(pid)
+    if session['name'] != 'admin' and not found_post.is_owner():
+            return render_template('403error.html'), 403
     if request.method == 'POST':
         if found_post is not None:
             date_now = datetime.datetime.now()
@@ -50,8 +52,7 @@ def edit(repo: PostsRepo, pid):
             post.contents = request.form.get("contents")
             post.created_at = found_post.created_at
             post.modified_at = date_now.strftime("%B %d, %Y")
-            if session['name'] != 'admin' and not found_post.is_owner():
-                return render_template('403error.html'), 403
+           
             repo.edit(post)
         return redirect(url_for('index.view_post', pid=post.post_id))
     return render_template('edit_post.html', post=found_post)
