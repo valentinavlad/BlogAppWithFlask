@@ -35,12 +35,16 @@ def view_user(repo: UsersRepo, pid):
 @admin_required
 def new(repo: UsersRepo):
     if request.method == 'POST':
+        error = None
         date_now = datetime.datetime.now()
         user = User(name=request.form.get("name"), email=request.form.get("email"),
                     password=request.form.get("password"))
-        repo.add(user)
-        user.created_at = date_now.strftime("%B %d, %Y")
-        return redirect(url_for('users.users'))
+        if repo.check_user_exists_by_name(user.name) is None:
+            repo.add(user)
+            user.created_at = date_now.strftime("%B %d, %Y")
+            return redirect(url_for('users.users'))
+        error = "This user already exists! Use another name"
+        flash(error)
     return render_template('add_user.html')
 
 @inject

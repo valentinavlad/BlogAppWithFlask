@@ -15,8 +15,7 @@ CREATE TABLE IF NOT EXISTS users (
     modified_at DATE NULL);
 
 INSERT INTO users (name) SELECT 'admin' WHERE not exists (
-    select user_id from users where user_id='1'
-) LIMIT 1;
+    select 1 from users where name = 'admin');
 
 INSERT INTO users(name) SELECT DISTINCT owner FROM posts 
 WHERE EXISTS (SELECT data_type FROM information_schema.columns
