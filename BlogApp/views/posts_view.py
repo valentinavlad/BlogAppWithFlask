@@ -15,6 +15,13 @@ index_blueprint = Blueprint('index', __name__, template_folder='templates',
 def posts(repo: PostsRepo):
     return render_template('list_posts.html', content=repo.view_all())
 
+#@inject
+#@index_blueprint.route('/', defaults={'page': 1})
+#@index_blueprint.route('/<page>')
+#@is_config_file
+#def list_of_posts(repo: PostsRepo, page):
+#    pass
+
 @inject
 @index_blueprint.route('/new', methods=['GET', 'POST'])
 @is_config_file
@@ -43,7 +50,7 @@ def view_post(repo: PostsRepo, pid):
 def edit(repo: PostsRepo, pid):
     found_post = repo.find_by_id(pid)
     if session['name'] != 'admin' and not found_post.is_owner():
-            return render_template('403error.html'), 403
+        return render_template('403error.html'), 403
     if request.method == 'POST':
         if found_post is not None:
             date_now = datetime.datetime.now()
@@ -52,7 +59,6 @@ def edit(repo: PostsRepo, pid):
             post.contents = request.form.get("contents")
             post.created_at = found_post.created_at
             post.modified_at = date_now.strftime("%B %d, %Y")
-           
             repo.edit(post)
         return redirect(url_for('index.view_post', pid=post.post_id))
     return render_template('edit_post.html', post=found_post)
