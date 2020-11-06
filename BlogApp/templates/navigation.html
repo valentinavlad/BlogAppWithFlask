@@ -7,7 +7,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-                {% if session['user_id'] == 1 %}
+                {% if session['name'] == 'admin' %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{url_for('users.users')}}">Manage Users</a>
                 </li>
@@ -21,9 +21,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{url_for('index.posts')}}">See all posts</a>
                 </li>
+                <!--
                 <li class="nav-item">
                     <a class="nav-link" href="{{url_for('auth.register')}}">Register</a>
                 </li>
+                 -->
                 {% if session['user_id']  %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('auth.logout') }}">Log Out</a>
