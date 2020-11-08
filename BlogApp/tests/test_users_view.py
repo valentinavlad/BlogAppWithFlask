@@ -115,11 +115,10 @@ def test_user_first_loggin_no_pass(client_is_config):
     assert b'Name' in response_two.data
     assert b'Email' in response_two.data
 
-def test_access_set_creential_with_pass_forbidden(client_is_config):
+def test_access_set_credential_with_pass_forbidden(client_is_config):
     data = {'name': 'marc', 'password':'123'}
     response_post = client_is_config.post('auth/login', data=data, follow_redirects=True)
     assert '<h1>Angular</h1>' in response_post.get_data(as_text=True)
-    assert b'Php' in response_post.data
     assert b'Hello Marc !' in response_post.data
     response = client_is_config.get('users/8/set_credentials', follow_redirects=True)
     assert b'Forbidden' in response.data

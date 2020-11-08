@@ -9,5 +9,5 @@ def test_setup_is_not_config(client_is_not_config):
 def test_setup_is_config(client_is_config):
     response = client_is_config.get('/setup', follow_redirects=True)
     assert response.status_code == 200
-    assert '<h1>Vue Js</h1>' in response.get_data(as_text=True)
+    assert '<h1>Angular</h1>' in response.get_data(as_text=True)
     assert b'Check our latest posts in web technologies!' in response.data

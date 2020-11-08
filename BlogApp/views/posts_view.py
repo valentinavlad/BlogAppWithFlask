@@ -16,7 +16,7 @@ index_blueprint = Blueprint('index', __name__, template_folder='templates',
 def posts(repo: PostsRepo):
     page = request.args.get('page', 1, type=int)
 
-    pagination = Pagination(page)
+    pagination = Pagination(page, repo)
     posts = pagination.get_posts_paginated()
     next_url = url_for('index.posts', page=str(pagination.next_page)) \
                if pagination.has_next() else None
@@ -28,7 +28,7 @@ def posts(repo: PostsRepo):
 #@index_blueprint.route('/', methods=['GET', 'POST'])
 #@is_config_file
 #def posts(repo: PostsRepo):
-#    return render_template('list_posts_paginated.html', content=repo.view_all())
+#    return render_template('list_posts.html', content=repo.view_all())
 
 @inject
 @index_blueprint.route('/new', methods=['GET', 'POST'])

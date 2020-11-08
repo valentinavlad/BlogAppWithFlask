@@ -1,3 +1,4 @@
+from itertools import islice
 from repository.posts_data import dummy_posts
 from repository.posts_repo import PostsRepo
 
@@ -24,3 +25,7 @@ class InMemoryPostsRepo(PostsRepo):
 
     def add(self, post):
         dummy_posts.insert(0, post)
+
+    def get_all_by_offset(cls, records_per_page=3, offset=0):
+        posts = list(islice(dummy_posts, offset, records_per_page + offset))
+        return posts

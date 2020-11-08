@@ -12,6 +12,7 @@ from setup.db_connect import DbConnect
 from setup.db_operations import DbOperations
 from services.authentication import Authentication
 from services.password_manager import PasswordManager
+from functionality.pagination import Pagination
 
 def configure_production(binder):
     binder.bind(PostsRepo, to=DatabasePostRepo, scope=singleton)
@@ -21,6 +22,7 @@ def configure_production(binder):
     binder.bind(PasswordManager, to=PasswordManager, scope=singleton)
     binder.bind(DbConnect, to=DbConnect, scope=singleton)
     binder.bind(DbOperations, to=DbOperations, scope=singleton)
+    binder.bind(Pagination, to=Pagination, scope=singleton)
 
 def configure_test(binder):
     binder.bind(PostsRepo, to=InMemoryPostsRepo, scope=singleton)
@@ -30,3 +32,4 @@ def configure_test(binder):
     binder.bind(PasswordManager, to=PasswordManager, scope=request)
     binder.bind(DbConnect, to=Mock(DbConnect), scope=singleton)
     binder.bind(DbOperations, to=Mock(DbOperations), scope=singleton)
+    binder.bind(Pagination, to=Mock(Pagination), scope=singleton)

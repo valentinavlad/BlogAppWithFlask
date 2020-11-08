@@ -85,21 +85,25 @@ class DatabasePostRepo(PostsRepo):
         return post_id
 
     def view_all(self):
-        posts = []
         try:
-            cur = self.db_connect.get_cursor()
-            cur.execute('SELECT post_id, title, owner, name, contents, posts.created_at,\
-                        posts.modified_at FROM posts INNER JOIN users \
-                        ON owner = user_id ORDER BY created_at desc')
-            row = cur.fetchone()
-            while row is not None:
-                post = Post.get_post(row)
-                posts.append(post)
-                row = cur.fetchone()
-            cur.close()
+            posts = self.get_all_by_offset()
         except (ConnectionError, psycopg2.DatabaseError) as error:
             print(error)
         finally:
             if self.db_connect.conn is not None:
                 self.db_connect.conn.close()
+        return posts
+
+    def get_all_by_offset(self, records_per_page='all', offset=0):
+        posts = []
+        cur = self.db_connect.get_cursor()
+        sql2 = """SELECT post_id, title, owner, name, contents, posts.created_at,\
+                         posts.modified_at FROM posts INNER JOIN users \
+                         ON owner = user_id ORDER BY created_at desc LIMIT {} OFFSET {}"""
+        cur.execute(sql2.format(records_per_page, offset))
+        rows = cur.fetchall()
+        for row in rows:
+            post = Post.get_post(row)
+            posts.append(post)
+        cur.close()
         return posts

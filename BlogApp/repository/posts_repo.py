@@ -35,3 +35,6 @@ class PostsRepo(abc.ABC):
     @abc.abstractclassmethod
     def add(cls, post):
         pass
+    @abc.abstractclassmethod
+    def get_all_by_offset(cls, records_per_page, offset):
+        pass

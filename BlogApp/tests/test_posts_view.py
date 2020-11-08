@@ -11,7 +11,9 @@ def test_index(client_is_config):
     response = client_is_config.get('/posts/', follow_redirects=True)
     assert response.status_code == 200
     assert '<h1>Angular</h1>' in response.get_data(as_text=True)
-    assert '<h1>Php</h1>' in response.get_data(as_text=True)
+    assert b'<p>By maia on March 13, 2020 <small>Post Id is 5</small></p>' in response.data
+    assert '<h1>C++</h1>' in response.get_data(as_text=True)
+    assert b'<p>By tia on March 13, 2020 <small>Post Id is 6</small></p>' in response.data
     assert b'Check our latest posts in web technologies!' in response.data
 
 def test_view_post(client_is_config):
@@ -160,7 +162,6 @@ def test_delete_post_by_owner(client_is_config):
     logout(client_is_config)
 #python
 def test_delete_post_by_admin(client_is_config):
-    #at id 4 is Javascript
     log = login(client_is_config, 'admin', '123')
     with client_is_config.session_transaction() as sess:
         sess['user_id'] = '3'
@@ -170,9 +171,11 @@ def test_delete_post_by_admin(client_is_config):
     assert b'Delete your post' in res.data
 
     response = client_is_config.post('/posts/1/delete', follow_redirects=True)
+    assert b'Angular' in response.data
     assert response.status_code == 200
-    assert b'Python' not  in response.data
-    assert '<h1>Vue Js</h1>' in response.get_data(as_text=True)
+    response_two = client_is_config.get('/posts/?page=2')
+    assert b'Python' not in response_two.data
+    assert '<h1>Vue Js</h1>' in response_two.get_data(as_text=True)
     logout(client_is_config)
     sess.clear()
 
@@ -222,3 +225,13 @@ def test_post_update_redirect_setup(client_is_not_config):
     assert b'Database name' in response.data
     assert b'User' in response.data
     assert b'Password' in response.data
+##TEST PAGINATION
+def test_see_posts_first_page(client_is_config):
+    response = client_is_config.get('/posts/?page=1')
+    assert b'<h1>Angular</h1>' in response.data
+    assert b'<p>By maia on March 13, 2020 <small>Post Id is 5</small></p>' in response.data
+
+def test_see_posts_second_page(client_is_config):
+    response = client_is_config.get('/posts/?page=2')
+    assert b'<h1>Vue Js</h1>' in response.data
+    assert b'<h1>Laravel</h1>' in response.data
