@@ -182,6 +182,7 @@
     <Content Include="templates\login.html" />
     <Content Include="templates\navigation.html" />
     <Content Include="templates\add_post.html" />
+    <Content Include="templates\list_posts_paginated.html" />
     <Content Include="templates\register.html" />
     <Content Include="templates\setup.html" />
     <Content Include="templates\set_credentials.html" />

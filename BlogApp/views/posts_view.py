@@ -5,6 +5,7 @@ from utils.setup_decorators import is_config_file
 from utils.authorization import login_required
 from repository.posts_repo import PostsRepo
 from models.post import Post
+from functionality.pagination import Pagination
 
 index_blueprint = Blueprint('index', __name__, template_folder='templates',
                             static_folder='static')
@@ -13,14 +14,21 @@ index_blueprint = Blueprint('index', __name__, template_folder='templates',
 @index_blueprint.route('/', methods=['GET', 'POST'])
 @is_config_file
 def posts(repo: PostsRepo):
-    return render_template('list_posts.html', content=repo.view_all())
+    page = request.args.get('page', 1, type=int)
+
+    pagination = Pagination(page)
+    posts = pagination.get_posts_paginated()
+    next_url = url_for('index.posts', page=str(pagination.next_page)) \
+               if pagination.has_next() else None
+    prev_url = url_for('index.posts', page=str(pagination.prev_page)) \
+               if pagination.has_prev() else None
+    return render_template('list_posts.html', content=posts, next_url=next_url, prev_url=prev_url)
 
 #@inject
-#@index_blueprint.route('/', defaults={'page': 1})
-#@index_blueprint.route('/<page>')
+#@index_blueprint.route('/', methods=['GET', 'POST'])
 #@is_config_file
-#def list_of_posts(repo: PostsRepo, page):
-#    pass
+#def posts(repo: PostsRepo):
+#    return render_template('list_posts_paginated.html', content=repo.view_all())
 
 @inject
 @index_blueprint.route('/new', methods=['GET', 'POST'])
