@@ -9,7 +9,7 @@ header.masthead{
     color: black;
 }
 
-.overlay {
+.overla1y {
     position: absolute;
     top: 0;
     left: 0;
@@ -22,8 +22,11 @@ header.masthead{
 
 .site-heading {
     text-align: center;
+    color: #d7cccc;
+    /*
     color: black;
     text-shadow: 2px -1px 4px rgba(163, 150, 150, 1);
+    */
 }
 
 .site-heading h1{
@@ -52,7 +55,16 @@ header.masthead .page-heading, header.masthead .post-heading, header.masthead .s
         padding: 100px 0;
     }
 }
-
+@media (min-width: 576px) {
+    .form-inline .custom-select, .form-inline .input-group {
+        width: 30vw!important;
+    }
+}
+@media (min-width: 576px) {
+     .jumbotron {
+         padding: 0!important; 
+    }
+}
 /*************END HEADER*****************************/
 
 
@@ -71,7 +83,9 @@ header.masthead .page-heading, header.masthead .post-heading, header.masthead .s
     }
 }
 /*************END NAVIGATION*************************/
-
+.jumbotron{
+    padding: 0!important;
+}
 .posts h1 {
     color: black;
 }
@@ -112,4 +126,12 @@ header.masthead .page-heading, header.masthead .post-heading, header.masthead .s
     -ms-transform: scale(1.02); /* IE 9 */
     -webkit-transform: scale(1.02); /* Safari 3-8 */
     transform: scale(1.02);
+}
+
+#filter h2 {
+    font-size: 1.4rem;
+}
+
+.overlay {
+    background-color: #00000087;
 }
