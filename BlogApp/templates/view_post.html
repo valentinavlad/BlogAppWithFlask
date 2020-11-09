@@ -10,8 +10,7 @@
         <p>By {{post.name}} </p>
         <p>Created at {{ post.created_at }} <small>Post Id is {{post.post_id}}</small></p>
         <p><pre id="view_content">{{ post.contents }}</pre></p>
-        <p>Post owner id {{post.owner}}</p>
-        <p>User id {{session['user_id']}}</p>
+
         {% if session['logged_in'] is sameas true  %}
         {% if post.is_owner() or session['name'] == 'admin' %}
         <a href="{{url_for('index.edit', pid=post.post_id)}}" class="btn btn-primary">Edit your post</a>

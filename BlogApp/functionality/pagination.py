@@ -20,7 +20,7 @@ class Pagination:
         offset = self.get_offset(self.next_page)
         posts = self.repo.get_all_by_offset(self.records_per_page, offset)
 
-        return True if posts else False
+        return bool(posts)
 
 
     def has_prev(self):

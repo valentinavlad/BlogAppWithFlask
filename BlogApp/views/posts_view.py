@@ -4,6 +4,7 @@ from flask import Blueprint, render_template, url_for, request, redirect, sessio
 from utils.setup_decorators import is_config_file
 from utils.authorization import login_required
 from repository.posts_repo import PostsRepo
+from repository.users_repo import UsersRepo
 from models.post import Post
 from functionality.pagination import Pagination
 
@@ -13,7 +14,7 @@ index_blueprint = Blueprint('index', __name__, template_folder='templates',
 @inject
 @index_blueprint.route('/', methods=['GET', 'POST'])
 @is_config_file
-def posts(repo: PostsRepo):
+def posts(repo: PostsRepo, user_repo: UsersRepo):
     page = request.args.get('page', 1, type=int)
 
     pagination = Pagination(page, repo)
@@ -22,8 +23,15 @@ def posts(repo: PostsRepo):
                if pagination.has_next() else None
     prev_url = url_for('index.posts', page=str(pagination.prev_page)) \
                if pagination.has_prev() else None
+    users = user_repo.view_all()
+    #string
+    select_form_get_user_id = request.form.get('users')
+    if select_form_get_user_id is not None:
+        posts_by_owner =  repo.get_all_by_owner(select_form_get_user_id)
+        return render_template('list_posts.html', content=posts_by_owner,\
+       next_url=next_url, prev_url=prev_url, users=users)
     return render_template('list_posts.html', content=paginated_posts,\
-       next_url=next_url, prev_url=prev_url)
+       next_url=next_url, prev_url=prev_url, users=users)
 
 #@inject
 #@index_blueprint.route('/', methods=['GET', 'POST'])

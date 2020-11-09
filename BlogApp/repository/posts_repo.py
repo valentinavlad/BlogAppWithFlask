@@ -38,3 +38,6 @@ class PostsRepo(abc.ABC):
     @abc.abstractclassmethod
     def get_all_by_offset(cls, records_per_page, offset):
         pass
+    @abc.abstractclassmethod
+    def get_all_by_owner(cls, owner_id):
+        pass
