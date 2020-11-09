@@ -28,6 +28,19 @@ def test_create_user_by_admin(client_is_config):
     assert b'kolo' in response_post.data
     assert b'bobby' in response_post.data
 
+def test_try_create_user_by_existing_name_by_admin(client_is_config):
+    log = login(client_is_config, 'admin', '123')
+    assert b'Hello Admin' in log.data
+    response = client_is_config.get('/users/new')
+    assert response.status_code == 200
+    assert b'Name' in response.data
+    assert b'Email' in response.data
+
+    data = {'name': 'maia', 'email':'maia@gmail.com', 'password': '123'}
+    response_post = client_is_config.post('/users/new', data=data)
+    assert response_post.status_code == 200
+    assert b'This user already exists! Use another name' in response_post.data
+
 def test_create_user_by_non_logged_user(client_is_config):
     response = client_is_config.get('/users/new', follow_redirects=True)
     assert response.status_code == 200
@@ -51,12 +64,22 @@ def test_update_user_by_admin(client_is_config):
     assert response.status_code == 200
     assert 'Name' in response.get_data(as_text=True)
 
-    data = {'name': 'maia_update'}
+    data = {'name': 'maia_update', 'email': 'maia@gmail.com'}
     response_post = client_is_config.post('/users/2/edit', data=data, follow_redirects=True)
     assert response_post.status_code == 200
     assert b'User data' in response_post.data
     assert b'maia_update' in response_post.data
     assert 'Update' in response_post.get_data(as_text=True)
+
+    response_two = client_is_config.get('/posts/5')
+
+    assert b'By maia_update' in response_two.data
+    assert b'Angular' in response_two.data
+
+    response_three = client_is_config.get('/posts/?page=1')
+    assert b'Angular' in response_three.data
+    assert b'<p>By maia_update on March 13, 2020 <small>Post Id is 5</small></p>'\
+       in response_three.data
 
 def test_update_user_by_owner(client_is_config):
     log = login(client_is_config, 'kolo', '123')
@@ -88,6 +111,9 @@ def test_delete_user_by_admin(client_is_config):
     response = client_is_config.post('/users/1/delete', follow_redirects=True)
     assert response.status_code == 200
     assert b'Tia' not in response.data
+    #test to see if posts by Tia are deleted
+    assert b'<h1>C++</h1>' not in response.data
+    assert b'<h1>Javascript</h1>' not in response.data
 
 def test_delete_user_by_other_should_not_work(client_is_config):
     log = login(client_is_config, 'bobby', '123')

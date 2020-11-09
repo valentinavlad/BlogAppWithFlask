@@ -1,6 +1,3 @@
-import psycopg2
-from models.post import Post
-
 class Pagination:
     records_per_page = 3
     first_page = 1
@@ -21,18 +18,19 @@ class Pagination:
 
     def has_next(self):
         offset = self.get_offset(self.next_page)
-        return True if self.repo.get_all_by_offset(self.records_per_page, offset) is not None else False
+        posts = self.repo.get_all_by_offset(self.records_per_page, offset)
+
+        return True if posts else False
+
 
     def has_prev(self):
         if self.prev_page is not None:
             offset = self.get_offset(self.prev_page)
-            return True if self.repo.get_all_by_offset(self.records_per_page, offset) is not None else False
-        else:
-            return False
+            return bool(self.repo.get_all_by_offset(self.records_per_page, offset) is not None)
+        return False
 
     def get_posts_paginated(self):
         posts = []
         offset = self.get_offset(self.current_page)
         posts = self.repo.get_all_by_offset(self.records_per_page, offset)
         return posts
-

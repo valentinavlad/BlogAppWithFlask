@@ -17,12 +17,13 @@ def posts(repo: PostsRepo):
     page = request.args.get('page', 1, type=int)
 
     pagination = Pagination(page, repo)
-    posts = pagination.get_posts_paginated()
+    paginated_posts = pagination.get_posts_paginated()
     next_url = url_for('index.posts', page=str(pagination.next_page)) \
                if pagination.has_next() else None
     prev_url = url_for('index.posts', page=str(pagination.prev_page)) \
                if pagination.has_prev() else None
-    return render_template('list_posts.html', content=posts, next_url=next_url, prev_url=prev_url)
+    return render_template('list_posts.html', content=paginated_posts,\
+       next_url=next_url, prev_url=prev_url)
 
 #@inject
 #@index_blueprint.route('/', methods=['GET', 'POST'])
