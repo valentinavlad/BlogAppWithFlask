@@ -1,5 +1,5 @@
 class Pagination:
-    records_per_page = 3
+    records_per_page = 5
     first_page = 1
     def __init__(self, current_page, repo):
         self.current_page = current_page

@@ -87,3 +87,29 @@ header.masthead .page-heading, header.masthead .post-heading, header.masthead .s
 #view_content {
     white-space: pre-wrap;
 }
+/*************POST CARDS**************/
+.post-preview {
+    padding: 2rem;
+    transition: transform .2s;
+    -webkit-box-shadow: -1px 0px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: -1px 0px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: -1px 0px 5px 0px rgba(0,0,0,0.75);
+}
+.post-preview h1{
+    font-size: 1.8rem;
+}
+
+#list_posts a {
+    text-decoration: none;
+    color: gray;
+}
+
+#list_posts a:hover {
+    color: black;
+}
+
+.post-preview:hover {
+    -ms-transform: scale(1.02); /* IE 9 */
+    -webkit-transform: scale(1.02); /* Safari 3-8 */
+    transform: scale(1.02);
+}

@@ -15,29 +15,29 @@ index_blueprint = Blueprint('index', __name__, template_folder='templates',
 @index_blueprint.route('/', methods=['GET', 'POST'])
 @is_config_file
 def posts(repo: PostsRepo, user_repo: UsersRepo):
+    session.pop('post_owner_id', None)
+    session.pop('post_owner', None)
     page = request.args.get('page', 1, type=int)
-
     pagination = Pagination(page, repo)
-    paginated_posts = pagination.get_posts_paginated()
     next_url = url_for('index.posts', page=str(pagination.next_page)) \
-               if pagination.has_next() else None
+                   if pagination.has_next() else None
     prev_url = url_for('index.posts', page=str(pagination.prev_page)) \
-               if pagination.has_prev() else None
+                   if pagination.has_prev() else None
     users = user_repo.view_all()
-    #string
-    select_form_get_user_id = request.form.get('users')
-    if select_form_get_user_id is not None:
-        posts_by_owner =  repo.get_all_by_owner(select_form_get_user_id)
+    if request.method == 'GET':
+        paginated_posts = pagination.get_posts_paginated()
+        return render_template('list_posts.html', content=paginated_posts,\
+                next_url=next_url, prev_url=prev_url, users=users)
+    if request.method == 'POST':
+        select_form_get_user_id = request.form.get('users')
+        if select_form_get_user_id is not None:
+            session['post_owner_id'] = select_form_get_user_id
+            session['post_owner'] = user_repo.find_by_id(int(select_form_get_user_id)).name
+            print(dict(session))
+            posts_by_owner =  repo.get_all_by_owner(select_form_get_user_id)
         return render_template('list_posts.html', content=posts_by_owner,\
-       next_url=next_url, prev_url=prev_url, users=users)
-    return render_template('list_posts.html', content=paginated_posts,\
-       next_url=next_url, prev_url=prev_url, users=users)
-
-#@inject
-#@index_blueprint.route('/', methods=['GET', 'POST'])
-#@is_config_file
-#def posts(repo: PostsRepo):
-#    return render_template('list_posts.html', content=repo.view_all())
+                next_url=next_url, prev_url=prev_url, users=users)
+   
 
 @inject
 @index_blueprint.route('/new', methods=['GET', 'POST'])
