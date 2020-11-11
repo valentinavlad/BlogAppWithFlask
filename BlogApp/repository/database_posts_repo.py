@@ -99,8 +99,24 @@ class DatabasePostRepo(PostsRepo):
         cur = self.db_connect.get_cursor()
         sql2 = """SELECT post_id, title, owner, name, contents, posts.created_at,\
                          posts.modified_at FROM posts INNER JOIN users \
-                         ON owner = user_id ORDER BY created_at desc LIMIT {} OFFSET {}"""
+                         ON owner = user_id ORDER BY created_at desc LIMIT {} OFFSET {};"""
         cur.execute(sql2.format(records_per_page, offset))
+        rows = cur.fetchall()
+        for row in rows:
+            post = Post.get_post(row)
+            posts.append(post)
+        cur.close()
+        return posts
+
+    def get_all_by_owner(self, owner_id):
+        posts = []
+        cur = self.db_connect.get_cursor()
+        sql = """SELECT post_id, title, owner, name, contents, posts.created_at,
+                            posts.modified_at FROM posts INNER JOIN users 
+                            ON owner = user_id 
+							WHERE posts.owner = {}
+							ORDER BY created_at desc;"""
+        cur.execute(sql.format(owner_id))
         rows = cur.fetchall()
         for row in rows:
             post = Post.get_post(row)

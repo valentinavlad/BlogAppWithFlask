@@ -175,7 +175,7 @@ def test_delete_post_by_admin(client_is_config):
     assert response.status_code == 200
     response_two = client_is_config.get('/posts/?page=2')
     assert b'Python' not in response_two.data
-    assert '<h1>Vue Js</h1>' in response_two.get_data(as_text=True)
+    assert '<h1>Java</h1>' in response_two.get_data(as_text=True)
     logout(client_is_config)
     sess.clear()
 
@@ -233,5 +233,11 @@ def test_see_posts_first_page(client_is_config):
 
 def test_see_posts_second_page(client_is_config):
     response = client_is_config.get('/posts/?page=2')
-    assert b'<h1>Vue Js</h1>' in response.data
-    assert b'<h1>Laravel</h1>' in response.data
+    assert b'<h1>Java</h1>' in response.data
+
+def test_filtering_by_name(client_is_config):
+    response = client_is_config.get('/posts/?page=1')
+    assert b'<h1>Angular</h1>' in response.data
+    response_two = client_is_config.post('/posts/', data={'user_id': '1', 'name':'tia'}, \
+      follow_redirects=True)
+    assert b'C++' in response_two.data

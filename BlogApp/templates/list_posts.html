@@ -1,35 +1,58 @@
 ﻿{% extends "layout.html" %}
 
 {% block content %}
-    {% for post in content %}
-
-<div class="row posts">
+<div class="row mb-4" id="filter">
     <div class="col-lg-6 col-md-10 mx-auto">
-        <div class="post-preview">
-            <a href="{{url_for('index.view_post', pid=post.post_id)}}">
+        <h2>Filter posts by name:</h2>
+        <form class="form-inline" method="post" action="{{ url_for('index.posts') }}">
+            <select class="browser-default custom-select" name="users">
+                {% if session['post_owner_id']|length  %}
+                <option selected value="{{ session['post_owner_id'] }}">{{session['post_owner']}}</option>
+                {% else %}
+                <option selected value="">Select a name</option>
+                {%endif%}
+
+                {% for user in users %}
+                <option value="{{user.user_id}}">{{user.name}}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-outline-info ml-2 mr-2">Go</button>
+            <a class="btn btn-dark" href="{{url_for('index.posts')}}">Reset</a>
+ 
+        </form>
+    </div>
+
+</div>
+{% for post in content %}
+
+<div class="row posts mb-4">
+    <div class="col-lg-6 col-md-10 mx-auto" id="list_posts">
+        <a href="{{url_for('index.view_post', pid=post.post_id)}}">
+            <div class="post-preview">
+
                 <h1>{{ post.title }}</h1>
-            </a>
 
-            <p>By {{ post.name }} on {{ post.created_at}} <small>Post Id is {{post.post_id}}</small></p>
-            <p>{{ post.contents[:150] }} ...</p>
-        </div>
 
+                <p>By {{ post.name }} on {{ post.created_at }} <small>Post Id is {{post.post_id}}</small></p>
+                <p>{{ post.contents[:150] }} ...</p>
+            </div>
+        </a>      
 
     </div>
 </div>
-    {% endfor %}
+{% endfor %}
 <div class="row">
     <div class="col-lg-6 col-md-10 mx-auto">
 
         {% if prev_url %}
-        <a class="btn btn-primary" href="{{ prev_url }}">Newer posts</a>
+        <a class="btn btn-outline-info" href="{{ prev_url }}">Newer posts</a>
         {% endif %}
-    
+
         {% if next_url %}
-        <a class="btn btn-primary" href="{{ next_url }}">Older posts</a>
+        <a class="btn btn-outline-info" href="{{ next_url }}">Older posts</a>
         {% endif %}
     </div>
 
-       
-    </div>
+
+</div>
     {% endblock content %}

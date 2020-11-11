@@ -34,3 +34,6 @@ class InMemoryPostsRepo(PostsRepo):
     def get_all_by_offset(self, records_per_page=3, offset=0):
         posts = list(islice(dummy_posts, offset, records_per_page + offset))
         return posts
+
+    def get_all_by_owner(self, owner_id):
+        pass

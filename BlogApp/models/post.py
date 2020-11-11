@@ -21,7 +21,7 @@ class Post():
         cls.created_at = row[5]
         cls.modified_at = row[6]
         obj = cls(cls.title, cls.owner, cls.contents)
-        obj.created_at = cls.created_at
+        obj.created_at = cls.created_at.strftime("%b %d %Y %H:%M:%S")
         obj.modified_at = cls.modified_at
         obj.post_id = cls.post_id
         obj.name = cls.name

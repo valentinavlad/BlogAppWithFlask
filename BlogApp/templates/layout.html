@@ -6,15 +6,17 @@
 <body>
     {% include 'navigation.html' %}
     <div class="jumbotron">
+        <div class="overlay">
+            <div class="site-heading">
+                <h1 class="display-4">Web Tech's Blog</h1>
+                <span class="subheading">Check our latest posts in web technologies!</span>
 
-        <div class="site-heading">
-            <h1 class="display-4">Web Tech's Blog</h1>
-            <span class="subheading">Check our latest posts in web technologies!</span>
-
-            {% if session['user_id'] %}
-            <p class="nav-item mt-2 lead"><span>Hello {{ session['name']| capitalize  }} !</span></p>
-            {%endif%}
+                {% if session['user_id'] %}
+                <p class="nav-item mt-2 lead"><span>Hello {{ session['name']| capitalize  }} !</span></p>
+                {%endif%}
+            </div>
         </div>
+        
     </div>
     <div class="container mt-5">
         {% block content %}{% endblock %}

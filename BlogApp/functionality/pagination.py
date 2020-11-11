@@ -1,5 +1,5 @@
 class Pagination:
-    records_per_page = 3
+    records_per_page = 5
     first_page = 1
     def __init__(self, current_page, repo):
         self.current_page = current_page
@@ -20,7 +20,7 @@ class Pagination:
         offset = self.get_offset(self.next_page)
         posts = self.repo.get_all_by_offset(self.records_per_page, offset)
 
-        return True if posts else False
+        return bool(posts)
 
 
     def has_prev(self):
