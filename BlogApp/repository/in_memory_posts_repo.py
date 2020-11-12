@@ -17,8 +17,9 @@ class InMemoryPostsRepo(PostsRepo):
         found_post.name = self.user_repo.find_by_id(int(found_post.owner)).name
         return found_post
 
-    def view_all(self):
-        return dummy_posts
+    def get_all(self, owner_id=0, records_per_page=3, offset=0):
+        posts = list(islice(dummy_posts, offset, records_per_page + offset))
+        return posts
 
     def edit(self, post):
         index = dummy_posts.index(post)
@@ -30,10 +31,3 @@ class InMemoryPostsRepo(PostsRepo):
 
     def add(self, post):
         dummy_posts.insert(0, post)
-
-    def get_all_by_offset(self, records_per_page=3, offset=0):
-        posts = list(islice(dummy_posts, offset, records_per_page + offset))
-        return posts
-
-    def get_all_by_owner(self, owner_id):
-        pass

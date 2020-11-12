@@ -1,13 +1,23 @@
+import math
 class Pagination:
     records_per_page = 5
     first_page = 1
-    def __init__(self, current_page, repo):
+
+    def __init__(self, current_page, count):
         self.current_page = current_page
-        self.repo = repo
+        self.count = count
+
+    @property
+    def pages(self):
+        return int(math.ceil(self.count / float(self.records_per_page)))
 
     @property
     def next_page(self):
         return self.current_page + 1
+
+    @property
+    def offset(self):
+        return (self.current_page - 1) * self.records_per_page
 
     @property
     def prev_page(self):
@@ -17,20 +27,7 @@ class Pagination:
         return (current_page - 1) * self.records_per_page
 
     def has_next(self):
-        offset = self.get_offset(self.next_page)
-        posts = self.repo.get_all_by_offset(self.records_per_page, offset)
-
-        return bool(posts)
-
+        return self.current_page < self.pages
 
     def has_prev(self):
-        if self.prev_page is not None:
-            offset = self.get_offset(self.prev_page)
-            return bool(self.repo.get_all_by_offset(self.records_per_page, offset) is not None)
-        return False
-
-    def get_posts_paginated(self):
-        posts = []
-        offset = self.get_offset(self.current_page)
-        posts = self.repo.get_all_by_offset(self.records_per_page, offset)
-        return posts
+        return self.prev_page is not None
