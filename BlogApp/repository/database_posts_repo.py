@@ -117,4 +117,5 @@ class DatabasePostRepo(PostsRepo):
         cur.execute(sql)
         row = cur.fetchone()
         cur.close()
+
         return row[0]
