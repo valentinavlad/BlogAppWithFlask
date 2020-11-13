@@ -86,8 +86,8 @@ class DatabasePostRepo(PostsRepo):
 
     def get_all(self, owner_id=0, records_per_page='all', offset=0):
         posts = []
-        owner = "WHERE posts.owner = {}" if owner_id != 0 else " "
-        check_owner = owner.format(owner_id)
+        where_clause = "WHERE posts.owner = {}" if owner_id != 0 else " "
+        check_owner = where_clause.format(owner_id)
         sql = """SELECT post_id, title, owner, name, contents, posts.created_at,
                             posts.modified_at FROM posts INNER JOIN users 
                             ON owner = user_id 
@@ -111,10 +111,12 @@ class DatabasePostRepo(PostsRepo):
 
         return posts
 
-    def get_count(self):
-        sql = "SELECT count(*) from posts;"
+    def get_count(self, owner_id=0):
+        where_clause = ' where posts.owner = {}' if owner_id != 0 else " "
+        check_owner = where_clause.format(owner_id)
+        sql = "SELECT count(*) from posts {};"
         cur = self.db_connect.get_cursor()
-        cur.execute(sql)
+        cur.execute(sql.format(check_owner))
         row = cur.fetchone()
         cur.close()
 
