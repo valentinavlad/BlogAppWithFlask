@@ -11,13 +11,16 @@ from functionality.pagination import Pagination
 index_blueprint = Blueprint('index', __name__, template_folder='templates',
                             static_folder='static')
 
-def session_pop():
-    session.pop('post_owner_id', None)
-    session.pop('post_owner', None)
-
 def session_add(select_form_get_user_id, user_repo):
     session['post_owner_id'] = select_form_get_user_id
     session['post_owner'] = user_repo.find_by_id(int(select_form_get_user_id)).name
+
+@index_blueprint.route('/reset', methods=['GET', 'POST'])
+@is_config_file
+def reset():
+    session.pop('post_owner_id', None)
+    session.pop('post_owner', None)
+    return redirect(url_for('index.posts'))
 
 @inject
 @index_blueprint.route('/', methods=['GET', 'POST'])
@@ -25,7 +28,7 @@ def session_add(select_form_get_user_id, user_repo):
 def posts(repo: PostsRepo, user_repo: UsersRepo):
     page = request.args.get('page', 1, type=int)
     current_owner = '' if session.get("post_owner") is None else session['post_owner']
-    owner_id = '0' if session.get("post_owner_id") is None else session['post_owner_id']
+    owner_id = 0 if session.get("post_owner_id") is None else session['post_owner_id']
     pagination = Pagination(page, repo.get_count())
 
     users = user_repo.view_all()

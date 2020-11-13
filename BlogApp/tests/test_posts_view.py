@@ -230,14 +230,19 @@ def test_see_posts_first_page(client_is_config):
     response = client_is_config.get('/posts/?page=1')
     assert b'<h1>Angular</h1>' in response.data
     assert b'<p>By maia on March 13, 2020 <small>Post Id is 5</small></p>' in response.data
+    assert b'Newer posts' not in response.data
+    assert b'Older posts' in response.data
 
 def test_see_posts_second_page(client_is_config):
+    #have 2 pages
     response = client_is_config.get('/posts/?page=2')
     assert b'<h1>Java</h1>' in response.data
+    assert b'Newer posts' in response.data
+    assert b'Older posts' not in response.data
 
 def test_filtering_by_name(client_is_config):
-    response = client_is_config.get('/posts/?page=1')
+    response = client_is_config.get('/posts/?page=1&user="tia"')
     assert b'<h1>Angular</h1>' in response.data
-    response_two = client_is_config.post('/posts/', data={'user_id': '1', 'name':'tia'}, \
+    response_two = client_is_config.post('/posts/', data={'user_id': '1'}, \
       follow_redirects=True)
     assert b'C++' in response_two.data
