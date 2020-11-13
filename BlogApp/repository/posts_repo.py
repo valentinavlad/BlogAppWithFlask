@@ -35,3 +35,6 @@ class PostsRepo(abc.ABC):
     @abc.abstractclassmethod
     def get_all(cls, owner_id, records_per_page, offset):
         pass
+    @abc.abstractclassmethod
+    def get_count(cls):
+        pass

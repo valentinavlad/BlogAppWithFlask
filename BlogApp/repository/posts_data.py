@@ -71,6 +71,25 @@ post_eight = Post(title='Laravel', owner='2',
 post_eight.created_at = 'January 6, 2018'
 post_eight.modified_at = 'January 8, 2018'
 post_eight.name = 'maia'
+
+post_nine = Post(title='Ajax', owner='5',
+                 contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+                    Aenean commodo ligula eget dolor.Lorem ipsum dolor sit amet, 
+                    consectetuer adipiscing elit.Lorem ipsum dolor sit amet,
+                    consectetuer adipiscing elit.""")
+post_nine.created_at = 'January 6, 2020'
+post_nine.modified_at = 'January 8, 2020'
+post_nine.name = 'kolo'
+
+post_ten = Post(title='Sql', owner='5',
+                contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+                    Aenean commodo ligula eget dolor.Lorem ipsum dolor sit amet, 
+                    consectetuer adipiscing elit.Lorem ipsum dolor sit amet,
+                    consectetuer adipiscing elit.""")
+post_ten.created_at = 'January 6, 2015'
+post_ten.modified_at = 'January 8, 2020'
+post_ten.name = 'kolo'
+
 dummy_posts = [post_one, post_two, post_three, post_four, post_five,\
-   post_six, post_seven, post_eight]
+   post_six, post_seven, post_eight, post_nine, post_ten]
 dummy_posts.sort(key=lambda x: x.created_at, reverse=True)

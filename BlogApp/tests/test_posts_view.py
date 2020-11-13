@@ -61,7 +61,7 @@ def test_cannot_create_post_if_not_logged(client_is_config):
 def test_update_post_by_owner(client_is_config):
     log = login(client_is_config, 'tia', '123')
     with client_is_config.session_transaction() as sess:
-        sess['user_id'] = '1'
+        sess['user_id'] = 1
     assert b'Hello Tia' in log.data
     response = client_is_config.get('/posts/6')
     assert response.status_code == 200
@@ -148,7 +148,7 @@ def test_delete_post_by_owner(client_is_config):
     #at id 4 is Javascript
     log = login(client_is_config, 'tia', '123')
     with client_is_config.session_transaction() as session:
-        session['user_id'] = '1'
+        session['user_id'] = 1
     assert b'Hello Tia' in log.data
     res = client_is_config.get('/posts/4')
     assert res.status_code == 200

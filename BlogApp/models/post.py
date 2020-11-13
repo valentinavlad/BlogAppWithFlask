@@ -28,7 +28,7 @@ class Post():
         return obj
 
     def is_owner(self):
-        return self.owner == session['user_id']
+        return int(self.owner) == session['user_id']
 
     def is_admin(self):
         return self.is_owner() and session['name'] == 'admin'

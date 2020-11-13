@@ -1,7 +1,7 @@
 import datetime
 from injector import inject
 from flask import Blueprint, render_template, url_for, \
-    request, redirect, flash
+    request, redirect, flash, session
 from repository.users_repo import UsersRepo
 from utils.setup_decorators import is_config_file
 from utils.authorization import admin_required, admin_or_owner_required,\
@@ -63,6 +63,7 @@ def edit(repo: UsersRepo, pid):
             user.password = request.form.get("password")
             user.created_at = found_user.created_at
             user.modified_at = date_now.strftime("%B %d, %Y")
+            session['name'] = user.name if session['name'] != 'admin' else 'admin'
             repo.edit(user)
         return redirect(url_for('users.view_user', pid=user.user_id))
     return render_template('edit_user.html', user=found_user)

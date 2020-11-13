@@ -29,13 +29,12 @@ def posts(repo: PostsRepo, user_repo: UsersRepo):
     pagination = Pagination(page, repo.get_count())
 
     users = user_repo.view_all()
-   
     if request.method == 'POST':
         select_form_get_user_id = request.form.get('users')
         if select_form_get_user_id is not None:
             session_add(select_form_get_user_id, user_repo)
             current_owner = request.args.get('user', session['post_owner'], type=str)
-   
+
     #get_count ar trebui sa dea countul pt fiecare select specializat???
     # to do - reset
     # sa nu se vada butoanele la filtrare
@@ -45,7 +44,7 @@ def posts(repo: PostsRepo, user_repo: UsersRepo):
                    if pagination.has_next() or current_owner != '' else None
     prev_url = url_for('index.posts', page=str(pagination.prev_page)) \
                    if pagination.has_prev() or current_owner != ''  else None
-    print(current_owner)
+
     return render_template('list_posts.html', content=all_posts,\
             next_url=next_url, prev_url=prev_url, users=users)
 
