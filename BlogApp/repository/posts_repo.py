@@ -13,7 +13,7 @@ class PostsRepo(abc.ABC):
             if any("__edit__" in Q.__dict__
                    for Q in C.__mro__):
                 return True
-            if any("__view_all__" in Q.__dict__
+            if any("__get_all__" in Q.__dict__
                    for Q in C.__mro__):
                 return True
             if any("__find_by_id__" in Q.__dict__
@@ -22,9 +22,6 @@ class PostsRepo(abc.ABC):
         return False
     @abc.abstractclassmethod
     def find_by_id(cls, pid):
-        pass
-    @abc.abstractclassmethod
-    def view_all(cls):
         pass
     @abc.abstractclassmethod
     def edit(cls, post):
@@ -36,8 +33,8 @@ class PostsRepo(abc.ABC):
     def add(cls, post):
         pass
     @abc.abstractclassmethod
-    def get_all_by_offset(cls, records_per_page, offset):
+    def get_all(cls, owner_id, records_per_page, offset):
         pass
     @abc.abstractclassmethod
-    def get_all_by_owner(cls, owner_id):
+    def get_count(cls):
         pass

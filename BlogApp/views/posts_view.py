@@ -11,37 +11,43 @@ from functionality.pagination import Pagination
 index_blueprint = Blueprint('index', __name__, template_folder='templates',
                             static_folder='static')
 
-def session_pop():
-    session.pop('post_owner_id', None)
-    session.pop('post_owner', None)
-
 def session_add(select_form_get_user_id, user_repo):
     session['post_owner_id'] = select_form_get_user_id
     session['post_owner'] = user_repo.find_by_id(int(select_form_get_user_id)).name
+
+@index_blueprint.route('/reset', methods=['GET', 'POST'])
+@is_config_file
+def reset():
+    session.pop('post_owner_id', None)
+    session.pop('post_owner', None)
+    return redirect(url_for('index.posts'))
 
 @inject
 @index_blueprint.route('/', methods=['GET', 'POST'])
 @is_config_file
 def posts(repo: PostsRepo, user_repo: UsersRepo):
-    session_pop()
-    page = request.args.get('page', 1, type=int)
-    pagination = Pagination(page, repo)
-    next_url = url_for('index.posts', page=str(pagination.next_page)) \
-                   if pagination.has_next() else None
-    prev_url = url_for('index.posts', page=str(pagination.prev_page)) \
-                   if pagination.has_prev() else None
-    users = user_repo.view_all()
-
-    paginated_posts = pagination.get_posts_paginated()
-
+    owner_id = 0 if session.get("post_owner_id") is None else int(session['post_owner_id'])
+    current_owner = '' if session.get("post_owner") is None else session['post_owner']
     if request.method == 'POST':
         select_form_get_user_id = request.form.get('users')
         if select_form_get_user_id is not None:
             session_add(select_form_get_user_id, user_repo)
-            posts_by_owner = repo.get_all_by_owner(select_form_get_user_id)
-            return render_template('list_posts.html', content=posts_by_owner,\
-                     next_url=next_url, prev_url=prev_url, users=users)
-    return render_template('list_posts.html', content=paginated_posts,\
+            current_owner = request.args.get('user', session['post_owner'], type=str)
+            owner_id = int(session['post_owner_id'])
+    page = request.args.get('page', 1, type=int)
+
+    pagination = Pagination(page, repo.get_count(owner_id))
+
+    users = user_repo.view_all()
+   
+    all_posts = repo.get_all(owner_id, \
+                pagination.records_per_page, pagination.offset)
+    next_url = url_for('index.posts', page=str(pagination.next_page), user=current_owner) \
+                   if pagination.has_next() else None
+    prev_url = url_for('index.posts', page=str(pagination.prev_page)) \
+                   if pagination.has_prev() else None
+
+    return render_template('list_posts.html', content=all_posts,\
             next_url=next_url, prev_url=prev_url, users=users)
 
 @inject

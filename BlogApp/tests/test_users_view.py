@@ -59,6 +59,8 @@ def test_create_user_by_logged_user_not_work(client_is_config):
 
 def test_update_user_by_admin(client_is_config):
     log = login(client_is_config, 'admin', '123')
+    with client_is_config.session_transaction() as sess:
+        sess['name'] = 'admin'
     assert b'Hello Admin' in log.data
     response = client_is_config.get('/users/2')
     assert response.status_code == 200

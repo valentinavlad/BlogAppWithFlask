@@ -1,4 +1,5 @@
 from repository.users_data import dummy_users
+from repository.posts_data import dummy_posts
 from repository.database_users_repo import UsersRepo
 
 class InMemoryUsersRepo(UsersRepo):
@@ -20,6 +21,10 @@ class InMemoryUsersRepo(UsersRepo):
 
     def delete(self, pid):
         user = self.find_by_id(pid)
+        for post in dummy_posts:
+            if int(post.owner) == pid:
+                dummy_posts.remove(post)
+
         dummy_users.remove(user)
 
     def add(self, user):

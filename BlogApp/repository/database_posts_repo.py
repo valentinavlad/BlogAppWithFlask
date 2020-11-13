@@ -84,42 +84,40 @@ class DatabasePostRepo(PostsRepo):
                 self.db_connect.conn.close()
         return post_id
 
-    def view_all(self):
+    def get_all(self, owner_id=0, records_per_page='all', offset=0):
+        posts = []
+        where_clause = "WHERE posts.owner = {}" if owner_id != 0 else " "
+        check_owner = where_clause.format(owner_id)
+        sql = """SELECT post_id, title, owner, name, contents, posts.created_at,
+                            posts.modified_at FROM posts INNER JOIN users 
+                            ON owner = user_id 
+							{}
+							ORDER BY created_at desc
+							LIMIT {} OFFSET {};"""
         try:
-            posts = self.get_all_by_offset()
+            cur = self.db_connect.get_cursor()
+
+            cur.execute(sql.format(check_owner, records_per_page, offset))
+            rows = cur.fetchall()
+            for row in rows:
+                post = Post.get_post(row)
+                posts.append(post)
+            cur.close()
         except (ConnectionError, psycopg2.DatabaseError) as error:
             print(error)
         finally:
             if self.db_connect.conn is not None:
                 self.db_connect.conn.close()
+
         return posts
 
-    def get_all_by_offset(self, records_per_page='all', offset=0):
-        posts = []
+    def get_count(self, owner_id=0):
+        where_clause = ' where posts.owner = {}' if owner_id != 0 else " "
+        check_owner = where_clause.format(owner_id)
+        sql = "SELECT count(*) from posts {};"
         cur = self.db_connect.get_cursor()
-        sql2 = """SELECT post_id, title, owner, name, contents, posts.created_at,\
-                         posts.modified_at FROM posts INNER JOIN users \
-                         ON owner = user_id ORDER BY created_at desc LIMIT {} OFFSET {};"""
-        cur.execute(sql2.format(records_per_page, offset))
-        rows = cur.fetchall()
-        for row in rows:
-            post = Post.get_post(row)
-            posts.append(post)
+        cur.execute(sql.format(check_owner))
+        row = cur.fetchone()
         cur.close()
-        return posts
 
-    def get_all_by_owner(self, owner_id):
-        posts = []
-        cur = self.db_connect.get_cursor()
-        sql = """SELECT post_id, title, owner, name, contents, posts.created_at,
-                            posts.modified_at FROM posts INNER JOIN users 
-                            ON owner = user_id 
-							WHERE posts.owner = {}
-							ORDER BY created_at desc;"""
-        cur.execute(sql.format(owner_id))
-        rows = cur.fetchall()
-        for row in rows:
-            post = Post.get_post(row)
-            posts.append(post)
-        cur.close()
-        return posts
+        return row[0]
