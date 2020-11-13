@@ -234,15 +234,29 @@ def test_see_posts_first_page(client_is_config):
     assert b'Older posts' in response.data
 
 def test_see_posts_second_page(client_is_config):
-    #have 2 pages
+    #have 3 pages
     response = client_is_config.get('/posts/?page=2')
     assert b'<h1>Java</h1>' in response.data
+    assert b'<a class="btn btn-outline-info" href="/posts/?page=1">Newer posts</a>' in response.data 
+    assert b'<a class="btn btn-outline-info" href="/posts/?page=3&amp;user=">Older posts</a>' in response.data
+
+def test_see_posts_third_page(client_is_config):
+    #have 3 pages
+    response = client_is_config.get('/posts/?page=3')
+    assert b'<h1>Php</h1>' in response.data
     assert b'Newer posts' in response.data
     assert b'Older posts' not in response.data
 
 def test_filtering_by_name(client_is_config):
-    response = client_is_config.get('/posts/?page=1&user="tia"')
+    response = client_is_config.get('/posts/?page=1')
     assert b'<h1>Angular</h1>' in response.data
-    response_two = client_is_config.post('/posts/', data={'user_id': '1'}, \
-      follow_redirects=True)
+    with client_is_config.session_transaction() as sess:
+        sess['post_owner'] = 'tia'
+        sess['post_owner_id'] = '1'
+    response_two = client_is_config.get('/posts/?page=1&user="tia"')
+    assert b'<h1>Angular</h1>' not in response_two.data
+    assert b'<p>By maia on March 13, 2020 <small>Post Id is 5</small></p>' not in response_two.data
     assert b'C++' in response_two.data
+    assert b'<p>By tia on March 13, 2020 <small>Post Id is 6</small></p>' in response_two.data
+    assert b'<h1>Vue Js</h1>' in response_two.data
+    assert b'By tia' in response_two.data

@@ -90,6 +90,15 @@ post_ten.created_at = 'January 6, 2015'
 post_ten.modified_at = 'January 8, 2020'
 post_ten.name = 'kolo'
 
+post_eleven = Post(title='MySql', owner='6',
+                   contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+                    Aenean commodo ligula eget dolor.Lorem ipsum dolor sit amet, 
+                    consectetuer adipiscing elit.Lorem ipsum dolor sit amet,
+                    consectetuer adipiscing elit.""")
+post_eleven.created_at = 'January 6, 2012'
+post_eleven.modified_at = 'January 8, 2015'
+post_eleven.name = 'ben'
+
 dummy_posts = [post_one, post_two, post_three, post_four, post_five,\
-   post_six, post_seven, post_eight, post_nine, post_ten]
+   post_six, post_seven, post_eight, post_nine, post_ten, post_eleven]
 dummy_posts.sort(key=lambda x: x.created_at, reverse=True)

@@ -24,6 +24,13 @@ class InMemoryPostsRepo(PostsRepo):
             for user in dummy_users:
                 if int(post.owner) == user.user_id:
                     post.name = user.name
+        posts_by_owner = []
+        if owner_id > 0:
+            for post in dummy_posts:
+                if int(post.owner) == owner_id:
+                    posts_by_owner.append(post)
+            return list(islice(posts_by_owner, offset, records_per_page + offset))
+        
         return posts
 
     def edit(self, post):
@@ -37,5 +44,11 @@ class InMemoryPostsRepo(PostsRepo):
     def add(self, post):
         dummy_posts.insert(0, post)
 
-    def get_count(self):
+    def get_count(self, owner_id):
+        if owner_id > 0:
+            count = 0
+            for post in dummy_posts:
+                if int(post.owner) == owner_id:
+                    count = count + 1
+            return count
         return len(dummy_posts)
