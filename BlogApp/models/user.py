@@ -1,32 +1,24 @@
-import datetime
+from app import db
+class User(db.Model):
+    user_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    modified_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
-class User:
-    count = 1
-    date_now = datetime.datetime.now()
+    posts = db.relationship('Post', backref='users', lazy=True)
+
     def __init__(self, name, email, password):
-        self.user_id = User.count
         self.name = name
         self.email = email
         self.password = password
-        self.created_at = datetime.datetime.now()
-        self.modified_at = datetime.datetime.now()
-        User.count += 1
 
-    @classmethod
-    def get_user(cls, row):
-        cls.user_id = row[0]
-        cls.name = row[1]
-        cls.email = row[2]
-        cls.password = row[3]
-        cls.created_at = row[4]
-        cls.modified_at = row[5]
-        obj = cls(cls.name, cls.email, cls.password)
-        obj.created_at = cls.created_at
-        obj.modified_at = cls.modified_at
-        obj.user_id = cls.user_id
-        return obj
 
-    def __str__(self):
-        return self.name + " " + self.email
+    def __repr__(self):
+        return '<Post %r>' % self.title
 
-    __repr__ = __str__
+    def __repr__(self):
+        return '<User %r>' % self.username
+
+

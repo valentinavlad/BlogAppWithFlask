@@ -42,10 +42,19 @@
     <Compile Include="models\db_credentials.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="models\post.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="models\user.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="models\user2.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="repository\database_users_repo.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="repository\db_posts_repo_sqlalchemy.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="repository\in_memory_users_repo.py">
@@ -93,7 +102,7 @@
     <Compile Include="setup\config.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="models\post.py">
+    <Compile Include="models\post2.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="models\__init__.py">

@@ -1,29 +1,16 @@
 import psycopg2
+from sqlalchemy import create_engine
 from setup.database_config import DatabaseConfig
 
 class DbConnect:
+    config = DatabaseConfig()
+
     def __init__(self):
         self.conn = None
 
-    config = DatabaseConfig()
-
-    def connect(self):
+    def engine(self):
         db_credentials = self.config.load_configuration()
         params = db_credentials.to_dictionary()
-        return psycopg2.connect(host=params['host'], port=params['port'],
-                                user=params['user'], password=params['password'],
-                                database=params['database'])
+        connection = 'postgres+psycopg2://{}:{}@{}:{}/{}'
+        return create_engine(connection.format(params['user'], params['passwoed'], params['host'], params['port'], params['database']), echo=True)
 
-    def get_cursor(self):
-        self.conn = self.connect()
-        return self.conn.cursor()
-
-    def connect_to_db(self):
-        params = self.config.load()
-        try:
-            self.conn = psycopg2.connect(host=params['host'], port=params['port'],
-                                         user=params['user'], password=params['password'])
-            print("Connected to database")
-        except (ConnectionError, psycopg2.DatabaseError) as error:
-            print(error)
-            self.conn = None

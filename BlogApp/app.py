@@ -1,4 +1,5 @@
 from flask import Flask, redirect
+from flask_sqlalchemy import SQLAlchemy
 from injector import inject
 from flask_injector import FlaskInjector
 from utils.setup_decorators import is_config_file
@@ -11,6 +12,10 @@ from views.users_view import users_blueprint
 
 app = Flask(__name__)
 app.secret_key = 'any random string'
+
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:postgres@localhost/finaldb"
+db = SQLAlchemy(app)
+
 
 app.register_blueprint(index_blueprint, url_prefix="/posts")
 app.register_blueprint(setup_blueprint, url_prefix="/setup")
