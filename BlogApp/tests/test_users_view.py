@@ -114,8 +114,9 @@ def test_delete_user_by_admin(client_is_config):
     assert response.status_code == 200
     assert b'Tia' not in response.data
     #test to see if posts by Tia are deleted
-    assert b'<h1>C++</h1>' not in response.data
-    assert b'<h1>Javascript</h1>' not in response.data
+    response_two = client_is_config.get('/posts/')
+    assert b'<h1>C++</h1>' not in response_two.data
+    assert b'<h1>Javascript</h1>' not in response_two.data
 
 def test_delete_user_by_other_should_not_work(client_is_config):
     log = login(client_is_config, 'bobby', '123')

@@ -39,7 +39,6 @@ def posts(repo: PostsRepo, user_repo: UsersRepo):
     pagination = Pagination(page, repo.get_count(owner_id))
 
     users = user_repo.view_all()
-   
     all_posts = repo.get_all(owner_id, \
                 pagination.records_per_page, pagination.offset)
     next_url = url_for('index.posts', page=str(pagination.next_page), user=current_owner) \
