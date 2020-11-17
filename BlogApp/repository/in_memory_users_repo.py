@@ -21,7 +21,7 @@ class InMemoryUsersRepo(UsersRepo):
 
     def delete(self, pid):
         user = self.find_by_id(pid)
-        for post in dummy_posts:
+        for post in list(dummy_posts):
             if int(post.owner) == pid:
                 dummy_posts.remove(post)
 
@@ -36,6 +36,7 @@ class InMemoryUsersRepo(UsersRepo):
             if user.email == email:
                 found_user = user
         return found_user
+
     def check_user_exists_by_name(self, name):
         found_user = None
         for user in dummy_users:

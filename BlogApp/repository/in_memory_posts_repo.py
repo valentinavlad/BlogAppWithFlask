@@ -30,7 +30,6 @@ class InMemoryPostsRepo(PostsRepo):
                 if int(post.owner) == owner_id:
                     posts_by_owner.append(post)
             return list(islice(posts_by_owner, offset, records_per_page + offset))
-        
         return posts
 
     def edit(self, post):

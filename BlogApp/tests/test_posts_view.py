@@ -237,8 +237,9 @@ def test_see_posts_second_page(client_is_config):
     #have 3 pages
     response = client_is_config.get('/posts/?page=2')
     assert b'<h1>Java</h1>' in response.data
-    assert b'<a class="btn btn-outline-info" href="/posts/?page=1">Newer posts</a>' in response.data 
-    assert b'<a class="btn btn-outline-info" href="/posts/?page=3&amp;user=">Older posts</a>' in response.data
+    assert b'<a class="btn btn-outline-info" href="/posts/?page=1">Newer posts</a>' in response.data
+    assert b'<a class="btn btn-outline-info" href="/posts/?page=3&amp;user=">Older posts</a>'\
+       in response.data
 
 def test_see_posts_third_page(client_is_config):
     #have 3 pages
