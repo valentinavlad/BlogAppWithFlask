@@ -1,24 +1,25 @@
-
-from models.post import Post
+from injector import inject
+from sqlalchemy import text
+from sqlalchemy.orm import sessionmaker
 from repository.posts_repo import PostsRepo
+from setup.db_connect import DbConnect
 
 class DbPostsRepoSqlalchemy(PostsRepo):
-    
+    @inject
+    def __init__(self, db_connect: DbConnect):
+        self.db_connect = db_connect
+
     def find_by_id(self, pid):
-        try:
-            cur = self.db_connect.get_cursor()
-            sql = 'SELECT post_id, title, owner, name, contents, posts.created_at,\
-                   posts.modified_at FROM posts INNER JOIN users\
-                   ON owner = user_id WHERE post_id=%s'
-            cur.execute(sql, (pid,))
-            row = cur.fetchone()
-            post = Post.get_post(row)
-            cur.close()
-        except (ConnectionError, psycopg2.DatabaseError) as error:
-            print(error)
-        finally:
-            if self.db_connect.conn is not None:
-                self.db_connect.conn.close()
+        sql = text('SELECT post_id, title, owner, name, contents, posts.created_at,\
+                posts.modified_at FROM posts INNER JOIN users\
+                ON owner = user_id WHERE post_id=:x')
+
+        
+        result = self.db_connect.conn.execute(sql, x = '{}'.format(pid))
+
+        row = result.fetchone()
+        post = Post.get_post(row)
+
         return post
 
     def edit(self, post):
@@ -30,63 +31,18 @@ class DbPostsRepoSqlalchemy(PostsRepo):
                     WHERE post_id=%s"""
         record_to_update = (post.title, session['user_id'], post.contents,
                             post.created_at, post.modified_at, post.post_id)
-        try:
-            cur = self.db_connect.get_cursor()
-            cur.execute(sql, record_to_update)
-            conn = self.db_connect.conn
-            conn.commit()
-            cur.close()
-        except (ConnectionError, psycopg2.DatabaseError) as error:
-            print(error)
-        finally:
-            if self.db_connect.conn is not None:
-                self.db_connect.conn.close()
-
+        self.db_connect.conn.execute(sql, record_to_update)
+      
     def delete(self, pid):
-        db.session.delete(pid)
-        db.session.commit()
+        sql = "DELETE FROM posts WHERE post_id=%s"
+        self.db_connect.conn.execute(sql, (pid, ))
 
     def add(self, post):
-        db.session.add(post)
-        db.session.commit()
+        pass
+
 
     def get_all(self, owner_id=0, records_per_page='all', offset=0):
-        posts = []
-        where_clause = "WHERE posts.owner = {}" if owner_id != 0 else " "
-        check_owner = where_clause.format(owner_id)
-        sql = """SELECT post_id, title, owner, name, contents, posts.created_at,
-                            posts.modified_at FROM posts INNER JOIN users 
-                            ON owner = user_id 
-							{}
-							ORDER BY created_at desc
-							LIMIT {} OFFSET {};"""
-        try:
-            cur = self.db_connect.get_cursor()
-
-            cur.execute(sql.format(check_owner, records_per_page, offset))
-            rows = cur.fetchall()
-            for row in rows:
-                post = Post.get_post(row)
-                posts.append(post)
-            cur.close()
-        except (ConnectionError, psycopg2.DatabaseError) as error:
-            print(error)
-        finally:
-            if self.db_connect.conn is not None:
-                self.db_connect.conn.close()
-
-        return posts
+        pass
 
     def get_count(self, owner_id=0):
-        where_clause = ' where posts.owner = {}' if owner_id != 0 else " "
-        check_owner = where_clause.format(owner_id)
-        sql = "SELECT count(*) from posts {};"
-        cur = self.db_connect.get_cursor()
-        cur.execute(sql.format(check_owner))
-        row = cur.fetchone()
-        cur.close()
-
-        return row[0]
-
-
-
+        pass

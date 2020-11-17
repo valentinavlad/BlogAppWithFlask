@@ -21,3 +21,7 @@ class DatabaseConfig(Config):
 
     def update_version(self, current_version):
         super().update_value('version', str(current_version))
+
+    @property
+    def params(self):
+        return self.load_configuration().to_dictionary()
