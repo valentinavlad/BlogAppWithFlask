@@ -1,4 +1,4 @@
-from app import db
+
 from models.post import Post
 from repository.posts_repo import PostsRepo
 

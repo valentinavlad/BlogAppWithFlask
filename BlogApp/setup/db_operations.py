@@ -16,7 +16,7 @@ class DbOperations:
 
     def execute_scripts_from_file(self):
         try:
-            self.db_connect.conn = self.db_connect.connect()
+            self.db_connect.conn = self.db_connect.connect().connect()
         except (ConnectionError, psycopg2.DatabaseError) as error:
             print(error)
         if self.db_connect.conn is not None:
@@ -47,8 +47,8 @@ class DbOperations:
 
     def create_database(self):
         if self.db_connect.config.is_configured:
-            self.db_connect.connect_to_db()
-            if self.db_connect.conn is not None:
+            engine = self.db_connect.connect()
+            if engine.connect() is not None:
                 params = self.db_connect.config.load()
                 database_name = params['database']
                 if not self.is_database_created(database_name):
