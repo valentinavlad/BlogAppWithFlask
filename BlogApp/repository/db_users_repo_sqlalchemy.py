@@ -62,6 +62,7 @@ class DbUsersRepoSqlalchemy(UsersRepo):
             if self.db_connect.conn is not None:
                 self.db_connect.conn.close()
         return user
+
     def edit(self, user):
         sql = """UPDATE users
                     SET name=%s, email=%s,
@@ -84,40 +85,20 @@ class DbUsersRepoSqlalchemy(UsersRepo):
                 self.db_connect.conn.close()
 
     def delete(self, pid):
-        try:
-            cur = self.db_connect.get_cursor()
-            sql = "DELETE FROM users WHERE user_id=%s"
-            cur.execute(sql, (pid, ))
-            conn = self.db_connect.conn
-            conn.commit()
-            cur.close()
-        except (ConnectionError, psycopg2.DatabaseError) as error:
-            print(error)
-        finally:
-            if self.db_connect.conn is not None:
-                self.db_connect.conn.close()
+        user = self.session.query(User).filter(User.user_id == pid).first()
+        self.session.delete(user)
+        self.session.commit()
+
     @inject
     def add(self, user):
-        sql = """INSERT INTO users(name, email, password,
-                        created_at,modified_at)
-                 VALUES(%s,%s,%s,%s,%s) RETURNING user_id;"""
-        record_to_insert = (user.name, user.email,
-                            self.secure_pass.generate_secured_pass(user.password),
-                            user.created_at, user.modified_at)
-        user_id = None
-        try:
-            cur = self.db_connect.get_cursor()
-            cur.execute(sql, record_to_insert)
-            user_id = cur.fetchone()[0]
-            conn = self.db_connect.conn
-            conn.commit()
-            cur.close()
-        except (ConnectionError, psycopg2.DatabaseError) as error:
-            print(error)
-        finally:
-            if self.db_connect.conn is not None:
-                self.db_connect.conn.close()
-        return user_id
+        user_to_add = User(
+            name=user.name,
+            email=user.email,
+            password=self.secure_pass.generate_secured_pass(user.password),
+            created_at=user.created_at,
+            modified_at=user.modified_at)
+        self.session.add(user_to_add)
+        self.session.commit()
 
     def view_all(self):
         users = []
