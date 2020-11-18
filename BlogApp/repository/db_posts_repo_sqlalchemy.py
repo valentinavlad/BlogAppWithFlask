@@ -1,4 +1,5 @@
 from injector import inject
+from flask import session
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 from setup.db_connect import DbConnect
@@ -27,10 +28,12 @@ class DbPostsRepoSqlalchemy(PostsRepo):
         post = Post.get_post(row)
 
         return post
-
     def edit(self, post):
+        post_update = {Post.title: post.title, Post.owner: session['user_id'],
+                       Post.contents: post.contents, Post.created_at: post.created_at,
+                       Post.modified_at: post.modified_at}
         get_post = self.session.query(Post).filter(Post.post_id == post.post_id)
-        get_post.update(post)
+        get_post.update(post_update)
         self.session.commit()
 
     def delete(self, pid):
