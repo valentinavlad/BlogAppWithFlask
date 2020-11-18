@@ -2,6 +2,7 @@ import psycopg2
 from injector import inject
 from flask import session
 from sqlalchemy.orm import Session
+from sqlalchemy import or_, desc
 from setup.db_connect import DbConnect
 from repository.models.post import Post
 from repository.models.user import User
@@ -47,6 +48,27 @@ class DbPostsRepoSqlalchemy(PostsRepo):
         self.session.commit()
 
     def get_all(self, owner_id=0, records_per_page='all', offset=0):
+        query = self.session.query(Post.post_id, Post.title, Post.owner, User.name, \
+            Post.contents, Post.created_at, Post.modified_at).join(User)
+        conditions = []
+        if owner_id > 0:
+            conditions.append(Post.owner == owner_id)
+        query = query.filter(or_(*conditions)).order_by(desc(Post.created_at)).limit(records_per_page).offset(offset).all()
+
+        posts = []
+        for row in query:
+            post = ModelPost.get_post(row)
+            posts.append(post)
+        return posts
+
+    def gedt_all(self, owner_id=0, records_per_page='all', offset=0):
+        query = self.session.query(Post.post_id, Post.title, Post.owner, User.name, \
+            Post.contents, Post.created_at, Post.modified_at).join(User)
+        conditions = []
+        if owner_id > 0:
+            conditions.append(Post.owner == owner_id)
+        query = query.filter(or_(*conditions)).order_by(desc(Post.created_at)).limit(records_per_page).offset(offset).all()
+
         posts = []
         where_clause = "WHERE posts.owner = {}" if owner_id != 0 else " "
         check_owner = where_clause.format(owner_id)
@@ -72,14 +94,11 @@ class DbPostsRepoSqlalchemy(PostsRepo):
                 self.db_connect.conn.close()
 
         return posts
-
     def get_count(self, owner_id=0):
-        where_clause = ' where posts.owner = {}' if owner_id != 0 else " "
-        check_owner = where_clause.format(owner_id)
-        sql = "SELECT count(*) from posts {};"
-        cur = self.db_connect.get_cursor()
-        cur.execute(sql.format(check_owner))
-        row = cur.fetchone()
-        cur.close()
-
-        return row[0]
+        query = self.session.query(Post.owner)
+        conditions = []
+        if owner_id > 0:
+            conditions.append(Post.owner == owner_id)
+        query = query.filter(or_(*conditions))
+        count = query.count()
+        return count
