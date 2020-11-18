@@ -61,39 +61,6 @@ class DbPostsRepoSqlalchemy(PostsRepo):
             posts.append(post)
         return posts
 
-    def gedt_all(self, owner_id=0, records_per_page='all', offset=0):
-        query = self.session.query(Post.post_id, Post.title, Post.owner, User.name, \
-            Post.contents, Post.created_at, Post.modified_at).join(User)
-        conditions = []
-        if owner_id > 0:
-            conditions.append(Post.owner == owner_id)
-        query = query.filter(or_(*conditions)).order_by(desc(Post.created_at)).limit(records_per_page).offset(offset).all()
-
-        posts = []
-        where_clause = "WHERE posts.owner = {}" if owner_id != 0 else " "
-        check_owner = where_clause.format(owner_id)
-        sql = """SELECT post_id, title, owner, name, contents, posts.created_at,
-                            posts.modified_at FROM posts INNER JOIN users 
-                            ON owner = user_id 
-							{}
-							ORDER BY created_at desc
-							LIMIT {} OFFSET {};"""
-        try:
-            cur = self.db_connect.get_cursor()
-
-            cur.execute(sql.format(check_owner, records_per_page, offset))
-            rows = cur.fetchall()
-            for row in rows:
-                post = ModelPost.get_post(row)
-                posts.append(post)
-            cur.close()
-        except (ConnectionError, psycopg2.DatabaseError) as error:
-            print(error)
-        finally:
-            if self.db_connect.conn is not None:
-                self.db_connect.conn.close()
-
-        return posts
     def get_count(self, owner_id=0):
         query = self.session.query(Post.owner)
         conditions = []

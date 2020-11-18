@@ -25,6 +25,24 @@ class User:
         obj.modified_at = cls.modified_at
         obj.user_id = cls.user_id
         return obj
+    
+    
+    @classmethod
+    def unmapp_user(cls, user_repo):
+        cls.user_id = user_repo.user_id
+        cls.name = user_repo.name
+        cls.email = user_repo.email
+        cls.password = user_repo.password
+        cls.created_at = user_repo.created_at
+        cls.modified_at =  user_repo.modified_at
+        return cls
+
+    @staticmethod
+    def get_list_from_result(result):
+        list_dict = []
+        for i in result:
+            list_dict.append(i)
+        return list_dict
 
     def __str__(self):
         return self.name + " " + self.email
