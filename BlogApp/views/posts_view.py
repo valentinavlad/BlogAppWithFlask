@@ -83,6 +83,7 @@ def edit(repo: PostsRepo, pid):
             date_now = datetime.datetime.now()
             post = found_post
             post.title = request.form.get("title")
+            post.owner = session['user_id']
             post.contents = request.form.get("contents")
             post.created_at = found_post.created_at
             post.modified_at = date_now.strftime("%B %d, %Y")
