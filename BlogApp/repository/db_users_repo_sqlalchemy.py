@@ -64,25 +64,12 @@ class DbUsersRepoSqlalchemy(UsersRepo):
         return user
 
     def edit(self, user):
-        sql = """UPDATE users
-                    SET name=%s, email=%s,
-                    password=%s,
-                    created_at=%s,
-                    modified_at=%s
-                    WHERE user_id=%s"""
-        record_to_update = (user.name, user.email, user.password,
-                            user.created_at, user.modified_at, user.user_id)
-        try:
-            cur = self.db_connect.get_cursor()
-            cur.execute(sql, record_to_update)
-            conn = self.db_connect.conn
-            conn.commit()
-            cur.close()
-        except (ConnectionError, psycopg2.DatabaseError) as error:
-            print(error)
-        finally:
-            if self.db_connect.conn is not None:
-                self.db_connect.conn.close()
+        user_update = {User.name: user.name, User.email: user.email,
+                       User.password: user.password, User.created_at: user.created_at,
+                       User.modified_at: User.modified_at}
+        get_user = self.session.query(User).filter(User.user_id == user.user_id)
+        get_user.update(user_update)
+        self.session.commit()
 
     def delete(self, pid):
         user = self.session.query(User).filter(User.user_id == pid).first()
