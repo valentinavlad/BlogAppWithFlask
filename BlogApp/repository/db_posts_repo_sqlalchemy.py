@@ -37,7 +37,13 @@ class DbPostsRepoSqlalchemy(PostsRepo):
         self.session.commit()
 
     def add(self, post):
-        self.session.add(post)
+        post_to_add = Post(
+            title=post.title,
+            owner=post.owner,
+            contents=post.contents,
+            created_at=post.created_at,
+            modified_at=post.modified_at)
+        self.session.add(post_to_add)
         self.session.commit()
 
     def get_all(self, owner_id=0, records_per_page='all', offset=0):
