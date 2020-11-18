@@ -42,10 +42,10 @@
     <Compile Include="models\db_credentials.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="repository\post.py">
+    <Compile Include="repository\models\post.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="repository\user.py">
+    <Compile Include="repository\models\user.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="models\user.py">
@@ -58,6 +58,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="repository\in_memory_users_repo.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="repository\models\__init__.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="repository\users_data.py">
@@ -85,6 +88,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="setup\db_connect.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="setup\engine_alchemy.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="tests\test_login_view.py">
@@ -160,6 +166,7 @@
   <ItemGroup>
     <Folder Include="functionality\" />
     <Folder Include="models\" />
+    <Folder Include="repository\models\" />
     <Folder Include="scripts\" />
     <Folder Include="services\" />
     <Folder Include="utils\" />
