@@ -16,9 +16,12 @@ class DbPostsRepoSqlalchemy(PostsRepo):
         self.session = Session(bind=self.db_connect.get_engine())
 
     def find_by_id(self, pid):
-        post = self.session.query(Post.post_id, Post.title, User.name, \
-            Post.contents, Post.created_at).join(User).filter(Post.post_id == '{}'.format(pid))
-        return post
+        result = self.session.query(Post.post_id, Post.title, Post.owner, User.name, \
+            Post.contents, Post.created_at, Post.modified_at)\
+            .join(User).filter(Post.post_id == '{}'.format(pid)).first()
+
+        result_to_list = ModelPost.get_list_from_result(result)
+        return ModelPost.get_post(result_to_list)
 
     def edit(self, post):
         post_update = {Post.title: post.title, Post.owner: session['user_id'],

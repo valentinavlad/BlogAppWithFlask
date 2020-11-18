@@ -27,6 +27,13 @@ class Post():
         obj.name = cls.name
         return obj
 
+    @staticmethod
+    def get_list_from_result(result):
+        list_dict = []
+        for i in result:
+            list_dict.append(i)
+        return list_dict
+
     def is_owner(self):
         return int(self.owner) == session['user_id']
 
@@ -34,6 +41,6 @@ class Post():
         return self.is_owner() and session['name'] == 'admin'
 
     def __str__(self):
-        return self.title + " " + self.owner
+        return self.title + " " + self.name
 
     __repr__ = __str__
