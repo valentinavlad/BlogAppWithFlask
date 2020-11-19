@@ -1,15 +1,10 @@
 from injector import inject
-import psycopg2
 from sqlalchemy.orm import Session
-from sqlalchemy import or_, desc
-from models.user import User
+from models.user import User as ModelUser
 from repository.users_repo import UsersRepo
+from repository.models.user import User
 from services.password_manager import PasswordManager
 from setup.db_connect import DbConnect
-from repository.models.post import Post
-from repository.models.user import User
-from repository.posts_repo import PostsRepo
-from models.user import User as ModelUser
 
 
 class DbUsersRepoSqlalchemy(UsersRepo):
@@ -55,7 +50,6 @@ class DbUsersRepoSqlalchemy(UsersRepo):
     def view_all(self):
         users = []
         query = self.session.query(User)
-       
         for row in query:
             user = ModelUser.unmapp_user(row)
             users.append(user)

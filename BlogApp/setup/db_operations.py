@@ -1,6 +1,5 @@
 from injector import inject
 from setup.db_connect import DbConnect
-#from sqlalchemy.orm import Session
 
 FILENAME = 'queries.sql'
 VERSION = 1

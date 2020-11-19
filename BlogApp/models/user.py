@@ -25,8 +25,7 @@ class User:
         obj.modified_at = cls.modified_at
         obj.user_id = cls.user_id
         return obj
-    
-    
+
     @classmethod
     def unmapp_user(cls, user_repo):
         cls.user_id = user_repo.user_id
@@ -34,7 +33,7 @@ class User:
         cls.email = user_repo.email
         cls.password = user_repo.password
         cls.created_at = user_repo.created_at
-        cls.modified_at =  user_repo.modified_at
+        cls.modified_at = user_repo.modified_at
         obj = cls(cls.name, cls.email, cls.password)
         obj.user_id = cls.user_id
         return obj

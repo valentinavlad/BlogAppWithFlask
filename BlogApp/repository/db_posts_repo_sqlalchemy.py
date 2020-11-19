@@ -1,4 +1,3 @@
-import psycopg2
 from injector import inject
 from flask import session
 from sqlalchemy.orm import Session
@@ -53,7 +52,9 @@ class DbPostsRepoSqlalchemy(PostsRepo):
         conditions = []
         if owner_id > 0:
             conditions.append(Post.owner == owner_id)
-        query = query.filter(or_(*conditions)).order_by(desc(Post.created_at)).limit(records_per_page).offset(offset).all()
+        query = query.filter(or_(*conditions))\
+            .order_by(desc(Post.created_at))\
+            .limit(records_per_page).offset(offset).all()
 
         posts = []
         for row in query:
