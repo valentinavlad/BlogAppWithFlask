@@ -26,8 +26,7 @@ class DbUsersRepoSqlalchemy(UsersRepo):
         return user
 
     def check_user_exists_by_name(self, name):
-        query = self.session.query(User).filter(User.name == name).first()
-        return query is None
+        return self.session.query(User).filter(User.name == name).first()
 
     def edit(self, user):
         user_update = {User.name: user.name, User.email: user.email,

@@ -77,6 +77,9 @@ def delete(repo: UsersRepo, pid):
     user_delete = repo.find_by_id(pid)
     if user_delete is not None:
         repo.delete(pid)
+        if session.get("post_owner_id") is not None: 
+            session.pop('post_owner_id', None)
+            session.pop('post_owner', None)
         return redirect(url_for('users.users'))
     return render_template('view_user.html')
 
