@@ -35,14 +35,9 @@ class User:
         cls.password = user_repo.password
         cls.created_at = user_repo.created_at
         cls.modified_at =  user_repo.modified_at
-        return cls
-
-    @staticmethod
-    def get_list_from_result(result):
-        list_dict = []
-        for i in result:
-            list_dict.append(i)
-        return list_dict
+        obj = cls(cls.name, cls.email, cls.password)
+        obj.user_id = cls.user_id
+        return obj
 
     def __str__(self):
         return self.name + " " + self.email

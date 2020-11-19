@@ -39,7 +39,7 @@ def new(repo: UsersRepo):
         date_now = datetime.datetime.now()
         user = User(name=request.form.get("name"), email=request.form.get("email"),
                     password=request.form.get("password"))
-        if repo.check_user_exists_by_name(user.name) is None:
+        if repo.check_user_exists_by_name(user.name) is True:
             repo.add(user)
             user.created_at = date_now.strftime("%B %d, %Y")
             return redirect(url_for('users.users'))
