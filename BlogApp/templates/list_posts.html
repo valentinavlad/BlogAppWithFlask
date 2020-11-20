@@ -1,6 +1,7 @@
 ﻿{% extends "layout.html" %}
 
 {% block content %}
+
 <div class="row mb-4" id="filter">
     <div class="col-lg-6 col-md-10 mx-auto">
         <h2>Filter posts by name:</h2>
@@ -26,8 +27,10 @@
 {% for post in content %}
 
 <div class="row posts mb-4">
+
     <div class="col-lg-6 col-md-10 mx-auto" id="list_posts">
         <a href="{{url_for('index.view_post', pid=post.post_id)}}">
+            <img class="card-img-top" src="{{ url_for('index.upload', filename=post.img) }}" alt="Card image cap">
             <div class="post-preview">
 
                 <h1>{{ post.title }}</h1>

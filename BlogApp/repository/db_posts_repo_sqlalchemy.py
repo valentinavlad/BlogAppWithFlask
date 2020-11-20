@@ -26,7 +26,7 @@ class DbPostsRepoSqlalchemy(PostsRepo):
     def edit(self, post):
         post_update = {Post.title: post.title, Post.owner: session['user_id'],
                        Post.contents: post.contents, Post.created_at: post.created_at,
-                       Post.modified_at: post.modified_at}
+                       Post.modified_at: post.modified_at, Post.image: post.img}
         get_post = self.session.query(Post).filter(Post.post_id == post.post_id)
         get_post.update(post_update)
         self.session.commit()
