@@ -19,6 +19,7 @@ app.register_blueprint(login_blueprint, url_prefix="/auth")
 app.register_blueprint(users_blueprint, url_prefix="/users")
 
 @app.route('/')
+@is_config_file
 def index():
     return redirect('/posts/')
 
