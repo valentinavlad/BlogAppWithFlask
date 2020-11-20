@@ -17,7 +17,7 @@ class DbPostsRepoSqlalchemy(PostsRepo):
 
     def find_by_id(self, pid):
         result = self.session.query(Post.post_id, Post.title, Post.owner, User.name, \
-            Post.contents, Post.created_at, Post.modified_at)\
+            Post.contents, Post.created_at, Post.modified_at, Post.image)\
             .join(User).filter(Post.post_id == '{}'.format(pid)).first()
 
         result_to_list = ModelPost.get_list_from_result(result)
@@ -42,13 +42,14 @@ class DbPostsRepoSqlalchemy(PostsRepo):
             owner=post.owner,
             contents=post.contents,
             created_at=post.created_at,
-            modified_at=post.modified_at)
+            modified_at=post.modified_at,
+            image=post.img)
         self.session.add(post_to_add)
         self.session.commit()
 
     def get_all(self, owner_id=0, records_per_page='all', offset=0):
         query = self.session.query(Post.post_id, Post.title, Post.owner, User.name, \
-            Post.contents, Post.created_at, Post.modified_at).join(User)
+            Post.contents, Post.created_at, Post.modified_at, Post.image).join(User)
         conditions = []
         if owner_id > 0:
             conditions.append(Post.owner == owner_id)

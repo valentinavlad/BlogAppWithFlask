@@ -135,3 +135,11 @@ header.masthead .page-heading, header.masthead .post-heading, header.masthead .s
 .overlay {
     background-color: #00000087;
 }
+
+#post-image {
+    width: 100%;
+    height: auto;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
