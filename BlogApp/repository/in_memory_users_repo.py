@@ -30,13 +30,6 @@ class InMemoryUsersRepo(UsersRepo):
     def add(self, user):
         dummy_users.insert(0, user)
 
-    def check_user_exists(self, email):
-        found_user = None
-        for user in dummy_users:
-            if user.email == email:
-                found_user = user
-        return found_user
-
     def check_user_exists_by_name(self, name):
         found_user = None
         for user in dummy_users:

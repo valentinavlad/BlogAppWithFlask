@@ -10,6 +10,7 @@ from views.login_view import login_blueprint
 from views.users_view import users_blueprint
 
 app = Flask(__name__)
+
 app.secret_key = 'any random string'
 
 app.register_blueprint(index_blueprint, url_prefix="/posts")
@@ -18,6 +19,7 @@ app.register_blueprint(login_blueprint, url_prefix="/auth")
 app.register_blueprint(users_blueprint, url_prefix="/users")
 
 @app.route('/')
+@is_config_file
 def index():
     return redirect('/posts/')
 

@@ -3,8 +3,9 @@ from injector import singleton
 from flask_injector import request
 from repository.posts_repo import PostsRepo
 from repository.users_repo import UsersRepo
-from repository.database_posts_repo import DatabasePostRepo
-from repository.database_users_repo import DatabaseUsersRepo
+from repository.db_posts_repo_sqlalchemy import DbPostsRepoSqlalchemy
+from repository.db_users_repo_sqlalchemy import DbUsersRepoSqlalchemy
+#from repository.database_users_repo import DatabaseUsersRepo
 from repository.in_memory_posts_repo import InMemoryPostsRepo
 from repository.in_memory_users_repo import InMemoryUsersRepo
 from setup.database_config import DatabaseConfig
@@ -15,8 +16,8 @@ from services.password_manager import PasswordManager
 from functionality.pagination import Pagination
 
 def configure_production(binder):
-    binder.bind(PostsRepo, to=DatabasePostRepo, scope=singleton)
-    binder.bind(UsersRepo, to=DatabaseUsersRepo, scope=singleton)
+    binder.bind(PostsRepo, to=DbPostsRepoSqlalchemy, scope=singleton)
+    binder.bind(UsersRepo, to=DbUsersRepoSqlalchemy, scope=singleton)
     binder.bind(DatabaseConfig, to=DatabaseConfig, scope=singleton)
     binder.bind(Authentication, to=Authentication, scope=singleton)
     binder.bind(PasswordManager, to=PasswordManager, scope=singleton)
