@@ -33,6 +33,9 @@
     <Compile Include="app.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="encoding_file.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="functionality\pagination.py">
       <SubType>Code</SubType>
     </Compile>

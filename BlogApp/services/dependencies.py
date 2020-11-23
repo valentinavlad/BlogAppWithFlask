@@ -16,8 +16,10 @@ from services.password_manager import PasswordManager
 from functionality.pagination import Pagination
 
 def configure_production(binder):
-    binder.bind(PostsRepo, to=DbPostsRepoSqlalchemy, scope=singleton)
-    binder.bind(UsersRepo, to=DbUsersRepoSqlalchemy, scope=singleton)
+    binder.bind(PostsRepo, to=InMemoryPostsRepo, scope=singleton)
+    binder.bind(UsersRepo, to=InMemoryUsersRepo, scope=singleton)
+    #binder.bind(PostsRepo, to=DbPostsRepoSqlalchemy, scope=singleton)
+    #binder.bind(UsersRepo, to=DbUsersRepoSqlalchemy, scope=singleton)
     binder.bind(DatabaseConfig, to=DatabaseConfig, scope=singleton)
     binder.bind(Authentication, to=Authentication, scope=singleton)
     binder.bind(PasswordManager, to=PasswordManager, scope=singleton)

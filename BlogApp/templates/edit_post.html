@@ -17,7 +17,7 @@
         <textarea class="form-control" id="contents" rows="10" name="contents">{{post.contents}}</textarea>
     </div>
 
-    <p><input type="file" name="file"></p>
+    <p><input type="file" name="file" value="{{post.img}}"></p>
 
     <button type="submit" class="btn btn-primary">Update</button>
     <a href="{{url_for('index.view_post', pid=post.post_id)}}" class="btn btn-warning">Cancel</a>

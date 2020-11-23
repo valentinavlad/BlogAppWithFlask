@@ -1,5 +1,6 @@
 import datetime
 import os
+from encoding_file import encode_file, decode_file
 from injector import inject
 from flask import Blueprint, render_template, url_for, request,\
    redirect, session, send_from_directory
@@ -54,7 +55,7 @@ def posts(repo: PostsRepo, user_repo: UsersRepo):
 def upload_file():
     uploaded_file = request.files['file']
     if uploaded_file.filename != '':
-        uploaded_file.save(os.path.join('static/img/',uploaded_file.filename))
+        uploaded_file.save(os.path.join('static/img/', uploaded_file.filename))
     return uploaded_file
 
 @inject
@@ -65,7 +66,9 @@ def new(repo: PostsRepo):
     if request.method == 'POST':
         date_now = datetime.datetime.now()
         uploaded_file = upload_file()
-
+        x = encode_file(uploaded_file.filename)
+        print(x)
+        y = decode_file(x, uploaded_file.filename)
         post = Post(title=request.form.get("title"), owner=int(session['user_id']),
                     contents=request.form.get("contents"), img=uploaded_file.filename)
         repo.add(post)
