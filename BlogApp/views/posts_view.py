@@ -67,10 +67,9 @@ def new(repo: PostsRepo):
         date_now = datetime.datetime.now()
         uploaded_file = upload_file()
         x = encode_file(uploaded_file.filename)
-        print(x)
-        y = decode_file(x, uploaded_file.filename)
+       
         post = Post(title=request.form.get("title"), owner=int(session['user_id']),
-                    contents=request.form.get("contents"), img=uploaded_file.filename)
+                    contents=request.form.get("contents"), img=x)
         repo.add(post)
         post.created_at = date_now.strftime("%B %d, %Y")
         return redirect(url_for('index.posts'))

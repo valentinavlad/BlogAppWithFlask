@@ -7,6 +7,7 @@ from repository.models.post import Post
 from repository.models.user import User
 from repository.posts_repo import PostsRepo
 from models.post import Post as ModelPost
+from encoding_file import encode_file, decode_file
 
 class DbPostsRepoSqlalchemy(PostsRepo):
 
@@ -58,6 +59,7 @@ class DbPostsRepoSqlalchemy(PostsRepo):
             .limit(records_per_page).offset(offset).all()
 
         posts = []
+
         for row in query:
             post = ModelPost.get_post(row)
             posts.append(post)
