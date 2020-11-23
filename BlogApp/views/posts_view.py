@@ -65,14 +65,10 @@ def upload_file():
 def new(repo: PostsRepo):
     if request.method == 'POST':
         date_now = datetime.datetime.now()
-        uploaded_file = upload_file()
-        #pentru testare
-        file_encode = encode_file(uploaded_file.filename)
-        print(file_encode)
-        file_decode = decode_file(file_encode, uploaded_file.filename)
-        print(file_decode)
+        uploaded_file = request.files['file']
+
         post = Post(title=request.form.get("title"), owner=int(session['user_id']),
-                    contents=request.form.get("contents"), img=uploaded_file.filename)
+                    contents=request.form.get("contents"), img=uploaded_file)
         repo.add(post)
         post.created_at = date_now.strftime("%B %d, %Y")
         return redirect(url_for('index.posts'))
@@ -101,7 +97,7 @@ def edit(repo: PostsRepo, pid):
             post.contents = request.form.get("contents")
             post.created_at = found_post.created_at
             post.modified_at = date_now.strftime("%B %d, %Y")
-            post.img = upload_file().filename
+            post.img = request.files['file']
             repo.edit(post)
         return redirect(url_for('index.view_post', pid=post.post_id))
     return render_template('edit_post.html', post=found_post)

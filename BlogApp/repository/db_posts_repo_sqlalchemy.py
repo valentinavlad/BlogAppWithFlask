@@ -6,14 +6,16 @@ from setup.db_connect import DbConnect
 from repository.models.post import Post
 from repository.models.user import User
 from repository.posts_repo import PostsRepo
+from repository.database_image_repo import DatabaseImageRepo
 from models.post import Post as ModelPost
 #from encoding_file import encode_file, decode_file
 
 class DbPostsRepoSqlalchemy(PostsRepo):
 
     @inject
-    def __init__(self, db_connect: DbConnect):
+    def __init__(self, db_connect: DbConnect, db_image: DatabaseImageRepo):
         self.db_connect = db_connect
+        self.db_image = db_image
         self.session = Session(bind=self.db_connect.get_engine())
 
     def find_by_id(self, pid):
@@ -34,17 +36,23 @@ class DbPostsRepoSqlalchemy(PostsRepo):
 
     def delete(self, pid):
         post = self.session.query(Post).filter(Post.post_id == pid).first()
+        filename = post.image
+      
         self.session.delete(post)
         self.session.commit()
+        self.db_image.delete(filename)
 
     def add(self, post):
+        file_storage = post.img
+        filename = self.db_image.add(file_storage)
         post_to_add = Post(
             title=post.title,
             owner=post.owner,
             contents=post.contents,
             created_at=post.created_at,
             modified_at=post.modified_at,
-            image=post.img)
+            image=filename)
+
         self.session.add(post_to_add)
         self.session.commit()
 

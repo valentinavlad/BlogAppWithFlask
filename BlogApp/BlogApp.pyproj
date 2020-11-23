@@ -45,7 +45,13 @@
     <Compile Include="models\db_credentials.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="repository\database_image_repo.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="repository\db_users_repo_sqlalchemy.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="repository\image_repo.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="repository\models\post.py">

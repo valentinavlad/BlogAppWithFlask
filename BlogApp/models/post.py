@@ -2,7 +2,7 @@ import datetime
 from flask import session
 class Post():
     count = 1
-    def __init__(self, title, owner, contents, img=''):
+    def __init__(self, title, owner, contents, img=None):
         self.post_id = Post.count
         self.title = title
         self.owner = owner
