@@ -7,7 +7,7 @@ from repository.models.post import Post
 from repository.models.user import User
 from repository.posts_repo import PostsRepo
 from models.post import Post as ModelPost
-from encoding_file import encode_file, decode_file
+#from encoding_file import encode_file, decode_file
 
 class DbPostsRepoSqlalchemy(PostsRepo):
 

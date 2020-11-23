@@ -1,6 +1,5 @@
 import datetime
 import os
-from encoding_file import encode_file, decode_file
 from injector import inject
 from flask import Blueprint, render_template, url_for, request,\
    redirect, session, send_from_directory
@@ -10,6 +9,7 @@ from repository.posts_repo import PostsRepo
 from repository.users_repo import UsersRepo
 from models.post import Post
 from functionality.pagination import Pagination
+from encoding_file import encode_file, decode_file
 
 index_blueprint = Blueprint('index', __name__, template_folder='templates',
                             static_folder='static')
@@ -66,10 +66,13 @@ def new(repo: PostsRepo):
     if request.method == 'POST':
         date_now = datetime.datetime.now()
         uploaded_file = upload_file()
-        x = encode_file(uploaded_file.filename)
-       
+        #pentru testare
+        file_encode = encode_file(uploaded_file.filename)
+        print(file_encode)
+        file_decode = decode_file(file_encode, uploaded_file.filename)
+        print(file_decode)
         post = Post(title=request.form.get("title"), owner=int(session['user_id']),
-                    contents=request.form.get("contents"), img=x)
+                    contents=request.form.get("contents"), img=uploaded_file.filename)
         repo.add(post)
         post.created_at = date_now.strftime("%B %d, %Y")
         return redirect(url_for('index.posts'))

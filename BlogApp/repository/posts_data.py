@@ -1,6 +1,5 @@
-import os
 from models.post import Post
-from encoding_file import encode_file
+#from encoding_file import encode_file
 
 post_one = Post(title='Python', owner='2',
                 contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
@@ -11,9 +10,7 @@ post_one.created_at = 'January 6, 2018'
 post_one.modified_at = 'January 8, 2018'
 
 #file = os.path('static/img/1.jpg')
-#post_one.img = encode_file(file) 
-
-
+#post_one.img = encode_file(file)
 post_two = Post(title='Php', owner='1',
                 contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
                     Aenean commodo ligula eget dolor.Lorem ipsum dolor sit amet,
