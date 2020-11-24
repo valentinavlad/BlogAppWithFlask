@@ -9,11 +9,11 @@ from repository.posts_repo import PostsRepo
 from repository.users_repo import UsersRepo
 from models.post import Post
 from functionality.pagination import Pagination
-from encoding_file import encode_file, decode_file
+
 
 index_blueprint = Blueprint('index', __name__, template_folder='templates',
                             static_folder='static')
-IMG_FOLDER = 'static/img/'
+
 def session_add(select_form_get_user_id, user_repo):
     session['post_owner_id'] = select_form_get_user_id
     session['post_owner'] = user_repo.find_by_id(int(select_form_get_user_id)).name
@@ -115,6 +115,6 @@ def delete(repo: PostsRepo, pid):
         return redirect(url_for('index.posts'))
     return render_template('view_post.html')
 
-@index_blueprint.route('/uploads/<filename>')
-def upload(filename):
-    return send_from_directory(IMG_FOLDER, filename)
+#@index_blueprint.route('/uploads/<filename>')
+#def upload(filename):
+#    return send_from_directory(IMG_FOLDER, filename)

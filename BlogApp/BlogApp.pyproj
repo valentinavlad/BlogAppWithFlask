@@ -54,6 +54,9 @@
     <Compile Include="repository\image_repo.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="repository\in_memory_image_repo.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="repository\models\post.py">
       <SubType>Code</SubType>
     </Compile>

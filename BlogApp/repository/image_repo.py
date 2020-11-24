@@ -19,14 +19,14 @@ class ImageRepo(abc.ABC):
         return False
 
     @abc.abstractclassmethod
-    def edit(cls, post):
+    def edit(cls, old_filename, new_file):
         pass
     @abc.abstractclassmethod
     def delete(cls, filename):
         pass
     @abc.abstractclassmethod
-    def add(cls, post):
+    def add(cls, filename):
         pass
     @abc.abstractclassmethod
-    def get(cls, owner_id, records_per_page, offset):
+    def get(cls, filename):
         pass

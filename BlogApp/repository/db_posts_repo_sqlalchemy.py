@@ -27,17 +27,20 @@ class DbPostsRepoSqlalchemy(PostsRepo):
         return ModelPost.get_post(result_to_list)
 
     def edit(self, post):
-        post_update = {Post.title: post.title, Post.owner: session['user_id'],
-                       Post.contents: post.contents, Post.created_at: post.created_at,
-                       Post.modified_at: post.modified_at, Post.image: post.img}
         get_post = self.session.query(Post).filter(Post.post_id == post.post_id)
+     
+        unmap_post = ModelPost.unmapp_post(get_post.first())
+        filename = self.db_image.edit(unmap_post.img, post.img)
+
+        post_update = {Post.title: post.title, Post.owner: session['user_id'],
+                Post.contents: post.contents, Post.created_at: post.created_at,
+                Post.modified_at: post.modified_at, Post.image: filename}
         get_post.update(post_update)
         self.session.commit()
 
     def delete(self, pid):
         post = self.session.query(Post).filter(Post.post_id == pid).first()
         filename = post.image
-      
         self.session.delete(post)
         self.session.commit()
         self.db_image.delete(filename)
@@ -70,6 +73,7 @@ class DbPostsRepoSqlalchemy(PostsRepo):
 
         for row in query:
             post = ModelPost.get_post(row)
+            post.img = self.db_image.get(post.img)
             posts.append(post)
         return posts
 
