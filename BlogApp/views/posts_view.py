@@ -1,8 +1,9 @@
 import datetime
 import os
 from injector import inject
+from werkzeug.utils import secure_filename
 from flask import Blueprint, render_template, url_for, request,\
-   redirect, session, send_from_directory
+   redirect, session
 from utils.setup_decorators import is_config_file
 from utils.authorization import login_required
 from repository.posts_repo import PostsRepo
@@ -13,6 +14,7 @@ from functionality.pagination import Pagination
 
 index_blueprint = Blueprint('index', __name__, template_folder='templates',
                             static_folder='static')
+FILE_EXTENSIONS = ['.jpg', '.png', '.gif']
 
 def session_add(select_form_get_user_id, user_repo):
     session['post_owner_id'] = select_form_get_user_id
@@ -52,12 +54,6 @@ def posts(repo: PostsRepo, user_repo: UsersRepo):
     return render_template('list_posts.html', content=all_posts,\
             next_url=next_url, prev_url=prev_url, users=users)
 
-def upload_file():
-    uploaded_file = request.files['file']
-    if uploaded_file.filename != '':
-        uploaded_file.save(os.path.join('static/img/', uploaded_file.filename))
-    return uploaded_file
-
 @inject
 @index_blueprint.route('/new', methods=['GET', 'POST'])
 @is_config_file
@@ -66,7 +62,11 @@ def new(repo: PostsRepo):
     if request.method == 'POST':
         date_now = datetime.datetime.now()
         uploaded_file = request.files['file']
-
+  
+        file_ext = os.path.splitext(uploaded_file.filename)[1]
+        if file_ext not in FILE_EXTENSIONS:
+            return render_template('400.html'), 400
+        uploaded_file.filename = secure_filename(uploaded_file.filename)
         post = Post(title=request.form.get("title"), owner=int(session['user_id']),
                     contents=request.form.get("contents"), img=uploaded_file)
         repo.add(post)

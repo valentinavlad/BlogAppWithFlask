@@ -198,6 +198,7 @@
     <Content Include="static\style.css">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="templates\400.html" />
     <Content Include="templates\403error.html" />
     <Content Include="templates\add_user.html" />
     <Content Include="templates\edit_post.html" />

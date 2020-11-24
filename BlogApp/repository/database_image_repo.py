@@ -4,9 +4,9 @@ from flask import send_from_directory
 from repository.image_repo import ImageRepo
 
 IMG_FOLDER_PATH = 'static/img/'
-IMG_FOLDER = 'static/img/'
-class DatabaseImageRepo(ImageRepo):
 
+class DatabaseImageRepo(ImageRepo):
+    
     def add(cls, file_storage):
         if file_storage.filename != '':
             id = uuid.uuid1().hex

@@ -23,7 +23,7 @@ class InMemoryPostsRepo(PostsRepo):
     def get_all(self, owner_id=0, records_per_page=3, offset=0):
         posts = list(islice(dummy_posts, offset, records_per_page + offset))
         for post in posts:
-            post.img = self.db_image.get(post.img)
+           # post.img = self.db_image.get(post.img)
             for user in dummy_users:
                 if int(post.owner) == user.user_id:
                     post.name = user.name
@@ -41,7 +41,9 @@ class InMemoryPostsRepo(PostsRepo):
 
     def delete(self, pid):
         post = self.find_by_id(pid)
+        filename = post.image
         dummy_posts.remove(post)
+        self.db_image.delete(filename)
 
     def add(self, post):
         file_storage = post.img

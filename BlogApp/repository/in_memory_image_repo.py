@@ -3,10 +3,14 @@ import os
 from repository.image_repo import ImageRepo
 from encoding_file import encode_file, decode_file
 
+
+IMG_FOLDER_PATH = 'static/img/'
+
 class InMemoryImageRepo(ImageRepo):
     def add(cls, file_storage):
-        image_string = base64.b64encode(file_storage.read())
-        return image_string
+        file_storage.save(os.path.join(IMG_FOLDER_PATH, file_storage.filename))
+        f = encode_file(file_storage.filename)
+        return encode_file(file_storage.filename)
     
     def edit(cls, old_filename, new_file):
         cls.delete(old_filename)
