@@ -8,7 +8,6 @@ from repository.models.user import User
 from repository.posts_repo import PostsRepo
 from repository.database_image_repo import DatabaseImageRepo
 from models.post import Post as ModelPost
-#from encoding_file import encode_file, decode_file
 
 class DbPostsRepoSqlalchemy(PostsRepo):
 
@@ -28,13 +27,12 @@ class DbPostsRepoSqlalchemy(PostsRepo):
 
     def edit(self, post):
         get_post = self.session.query(Post).filter(Post.post_id == post.post_id)
-     
         unmap_post = ModelPost.unmapp_post(get_post.first())
         filename = self.db_image.edit(unmap_post.img, post.img)
 
         post_update = {Post.title: post.title, Post.owner: session['user_id'],
-                Post.contents: post.contents, Post.created_at: post.created_at,
-                Post.modified_at: post.modified_at, Post.image: filename}
+                       Post.contents: post.contents, Post.created_at: post.created_at,
+                       Post.modified_at: post.modified_at, Post.image: filename}
         get_post.update(post_update)
         self.session.commit()
 

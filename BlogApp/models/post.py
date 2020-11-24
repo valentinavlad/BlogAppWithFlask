@@ -28,7 +28,7 @@ class Post():
         obj.post_id = cls.post_id
         obj.name = cls.name
         return obj
-    
+
     @classmethod
     def unmapp_post(cls, post_repo):
         cls.post_id = post_repo.post_id

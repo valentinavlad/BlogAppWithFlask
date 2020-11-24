@@ -41,7 +41,7 @@ class InMemoryPostsRepo(PostsRepo):
 
     def delete(self, pid):
         post = self.find_by_id(pid)
-        filename = post.image
+        filename = post.img
         dummy_posts.remove(post)
         self.db_image.delete(filename)
 

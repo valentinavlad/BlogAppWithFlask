@@ -62,7 +62,6 @@ def new(repo: PostsRepo):
     if request.method == 'POST':
         date_now = datetime.datetime.now()
         uploaded_file = request.files['file']
-  
         file_ext = os.path.splitext(uploaded_file.filename)[1]
         if file_ext not in FILE_EXTENSIONS:
             return render_template('400.html'), 400

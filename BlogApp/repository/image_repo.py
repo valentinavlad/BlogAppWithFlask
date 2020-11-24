@@ -25,7 +25,7 @@ class ImageRepo(abc.ABC):
     def delete(cls, filename):
         pass
     @abc.abstractclassmethod
-    def add(cls, filename):
+    def add(cls, file_storage):
         pass
     @abc.abstractclassmethod
     def get(cls, filename):

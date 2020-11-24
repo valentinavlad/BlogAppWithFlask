@@ -1,30 +1,30 @@
 import os
-import uuid 
-from flask import send_from_directory
+import uuid
 from repository.image_repo import ImageRepo
 
 IMG_FOLDER_PATH = 'static/img/'
 
 class DatabaseImageRepo(ImageRepo):
-    
-    def add(cls, file_storage):
+
+    def add(self, file_storage):
         if file_storage.filename != '':
-            id = uuid.uuid1().hex
+            img_id = uuid.uuid1().hex
             filename = file_storage.filename
             file_storage.save(os.path.join(IMG_FOLDER_PATH, filename))
-            renamed_file = id + "_" + filename
-            os.rename(IMG_FOLDER_PATH + '{}'.format(filename), IMG_FOLDER_PATH + '{}'.format(renamed_file))
+            renamed_file = img_id + "_" + filename
+            os.rename(IMG_FOLDER_PATH + '{}'.format(filename),\
+               IMG_FOLDER_PATH + '{}'.format(renamed_file))
         return renamed_file
-    
-    def edit(cls, old_filename, new_file):
-        cls.delete(old_filename)
-        return cls.add(new_file)
-        
-    def delete(cls, filename):
+
+    def edit(self, old_filename, new_file):
+        self.delete(old_filename)
+        return self.add(new_file)
+
+    def delete(self, filename):
         if os.path.isfile(IMG_FOLDER_PATH + '{}'.format(filename)):
             os.remove(IMG_FOLDER_PATH + '{}'.format(filename))
         else:
             print("Error: %s file not found" % filename)
 
-    def get(cls, filename):
+    def get(self, filename):
         return os.path.join('img/', filename)
