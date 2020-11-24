@@ -62,12 +62,14 @@ def new(repo: PostsRepo):
     if request.method == 'POST':
         date_now = datetime.datetime.now()
         uploaded_file = request.files['file']
+     
         file_ext = os.path.splitext(uploaded_file.filename)[1]
         if file_ext not in FILE_EXTENSIONS:
             return render_template('400.html'), 400
         uploaded_file.filename = secure_filename(uploaded_file.filename)
         post = Post(title=request.form.get("title"), owner=int(session['user_id']),
-                    contents=request.form.get("contents"), img=uploaded_file)
+                    contents=request.form.get("contents"))
+        post.img = uploaded_file
         repo.add(post)
         post.created_at = date_now.strftime("%B %d, %Y")
         return redirect(url_for('index.posts'))

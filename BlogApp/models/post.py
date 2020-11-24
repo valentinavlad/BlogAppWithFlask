@@ -2,14 +2,14 @@ import datetime
 from flask import session
 class Post():
     count = 1
-    def __init__(self, title, owner, contents, img=None):
+    def __init__(self, title, owner, contents):
         self.post_id = Post.count
         self.title = title
         self.owner = owner
         self.contents = contents
         self.created_at = datetime.datetime.now()
         self.modified_at = datetime.datetime.now()
-        self.img = img
+        self.img = None
         Post.count += 1
 
     @classmethod
@@ -22,11 +22,12 @@ class Post():
         cls.created_at = row[5]
         cls.modified_at = row[6]
         cls.img = row[7]
-        obj = cls(cls.title, cls.owner, cls.contents, cls.img)
+        obj = cls(cls.title, cls.owner, cls.contents)
         obj.created_at = cls.created_at.strftime("%b %d %Y %H:%M:%S")
         obj.modified_at = cls.modified_at
         obj.post_id = cls.post_id
         obj.name = cls.name
+        obj.img = cls.img
         return obj
 
     @classmethod
@@ -38,7 +39,7 @@ class Post():
         cls.created_at = post_repo.created_at
         cls.modified_at = post_repo.modified_at
         cls.img = post_repo.image
-        obj = cls(cls.title, cls.owner, cls.contents, cls.img)
+        obj = cls(cls.title, cls.owner, cls.contents)
         obj.post_id = cls.post_id
         return obj
 

@@ -23,7 +23,9 @@ class DbPostsRepoSqlalchemy(PostsRepo):
             .join(User).filter(Post.post_id == '{}'.format(pid)).first()
 
         result_to_list = ModelPost.get_list_from_result(result)
-        return ModelPost.get_post(result_to_list)
+        post = ModelPost.get_post(result_to_list)
+        post.img = self.db_image.get(post.img)
+        return post
 
     def edit(self, post):
         get_post = self.session.query(Post).filter(Post.post_id == post.post_id)
