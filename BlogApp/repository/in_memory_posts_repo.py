@@ -37,7 +37,7 @@ class InMemoryPostsRepo(PostsRepo):
                     posts_by_owner.append(post)
             return list(islice(posts_by_owner, offset, records_per_page + offset))
         return posts
-    #trebuie sa aleg o img obligatoriu
+
     def edit(self, post):
         index = dummy_posts.index(post)
         filename = self.db_image.edit(post.img)
