@@ -25,7 +25,7 @@ class InMemoryPostsRepo(PostsRepo):
         posts = list(islice(dummy_posts, offset, records_per_page + offset))
 
         for post in posts:
-            post.img = self.db_image.get(post.img)
+            post.img = self.db_image.get(post.img_id)
             for user in dummy_users:
                 if int(post.owner) == user.user_id:
                     post.name = user.name
@@ -40,19 +40,20 @@ class InMemoryPostsRepo(PostsRepo):
 
     def edit(self, post):
         index = dummy_posts.index(post)
-        filename = self.db_image.edit(post.img)
-        post.img = filename
+        img_list = self.db_image.edit(post.img)
+        post.img = img_list[1]
+        post.img_id = img_list[0]
         dummy_posts[index] = post
 
     def delete(self, pid):
         post = self.find_by_id(pid)
-        filename = post.img
+        img_id = post.img_id
         dummy_posts.remove(post)
-        self.db_image.delete(filename)
+        self.db_image.delete(img_id)
 
     def add(self, post):
-        file = self.db_image.add(post.img)
-        post.img = file
+        img_id = self.db_image.add(post.img)
+        post.img_id = img_id
         dummy_posts.insert(0, post)
 
     def get_count(self, owner_id):
