@@ -27,4 +27,4 @@ class DatabaseImageRepo(ImageRepo):
             print("Error: %s file not found" % filename)
 
     def get(self, filename):
-        return os.path.join('img/', filename)
+        return os.path.join('/'+IMG_FOLDER_PATH, filename)

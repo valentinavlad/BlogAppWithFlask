@@ -51,6 +51,9 @@
     <Compile Include="repository\db_users_repo_sqlalchemy.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="repository\image_data.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="repository\image_repo.py">
       <SubType>Code</SubType>
     </Compile>

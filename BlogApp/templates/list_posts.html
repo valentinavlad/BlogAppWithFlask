@@ -32,7 +32,7 @@
         <a href="{{url_for('index.view_post', pid=post.post_id)}}">
             
             <div class="post-preview">
-                <img class="card-img-top" src="{{ url_for('static',filename=post.img)}}" alt="Card image cap">
+                <img class="card-img-top" src="{{post.img}}" alt="Card image cap">
                 <h1>{{ post.title }}</h1>
 
          

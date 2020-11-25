@@ -62,7 +62,7 @@ def new(repo: PostsRepo):
     if request.method == 'POST':
         date_now = datetime.datetime.now()
         uploaded_file = request.files['file']
-     
+        #TO DO MOVE LOGIC IN REPO, FLASH ERROR EXTENSION
         file_ext = os.path.splitext(uploaded_file.filename)[1]
         if file_ext not in FILE_EXTENSIONS:
             return render_template('400.html'), 400
@@ -93,12 +93,14 @@ def edit(repo: PostsRepo, pid):
     if request.method == 'POST':
         if found_post is not None:
             date_now = datetime.datetime.now()
+            #TO DO VALIDATE EXTENSION FILE
             post = found_post
             post.title = request.form.get("title")
             post.contents = request.form.get("contents")
             post.created_at = found_post.created_at
             post.modified_at = date_now.strftime("%B %d, %Y")
-            post.img = request.files['file']
+            if request.files:
+                post.img = request.files['file']
             repo.edit(post)
         return redirect(url_for('index.view_post', pid=post.post_id))
     return render_template('edit_post.html', post=found_post)
@@ -115,7 +117,3 @@ def delete(repo: PostsRepo, pid):
         repo.delete(pid)
         return redirect(url_for('index.posts'))
     return render_template('view_post.html')
-
-#@index_blueprint.route('/uploads/<filename>')
-#def upload(filename):
-#    return send_from_directory(IMG_FOLDER, filename)

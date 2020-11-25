@@ -41,6 +41,7 @@ class Post():
         cls.img = post_repo.image
         obj = cls(cls.title, cls.owner, cls.contents)
         obj.post_id = cls.post_id
+        obj.img = cls.img
         return obj
 
     @staticmethod

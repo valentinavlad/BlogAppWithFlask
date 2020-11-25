@@ -21,9 +21,11 @@ class InMemoryPostsRepo(PostsRepo):
         return found_post
 
     def get_all(self, owner_id=0, records_per_page=3, offset=0):
+
         posts = list(islice(dummy_posts, offset, records_per_page + offset))
+
         for post in posts:
-           # post.img = self.db_image.get(post.img)
+            post.img = self.db_image.get(post.img)
             for user in dummy_users:
                 if int(post.owner) == user.user_id:
                     post.name = user.name
@@ -31,12 +33,15 @@ class InMemoryPostsRepo(PostsRepo):
         if owner_id > 0:
             for post in dummy_posts:
                 if int(post.owner) == owner_id:
+                    post.img = self.db_image.get(post.img)
                     posts_by_owner.append(post)
             return list(islice(posts_by_owner, offset, records_per_page + offset))
         return posts
-
+    #trebuie sa aleg o img obligatoriu
     def edit(self, post):
         index = dummy_posts.index(post)
+        filename = self.db_image.edit(post.img)
+        post.img = filename
         dummy_posts[index] = post
 
     def delete(self, pid):
@@ -46,8 +51,7 @@ class InMemoryPostsRepo(PostsRepo):
         self.db_image.delete(filename)
 
     def add(self, post):
-        file_storage = post.img
-        file = self.db_image.add(file_storage)
+        file = self.db_image.add(post.img)
         post.img = file
         dummy_posts.insert(0, post)
 
