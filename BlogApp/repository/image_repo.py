@@ -31,5 +31,5 @@ class ImageRepo(abc.ABC):
     def get(cls, filename):
         pass
     @abc.abstractclassmethod
-    def check_img_extension(self, filename):
-       pass
+    def check_img_extension(cls, filename):
+        pass

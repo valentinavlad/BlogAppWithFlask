@@ -1,5 +1,4 @@
 import datetime
-import os
 from injector import inject
 
 from flask import Blueprint, render_template, url_for, request,\
@@ -65,15 +64,14 @@ def new(repo: PostsRepo, img_repo: ImageRepo):
         date_now = datetime.datetime.now()
         title = request.form.get("title")
         contents = request.form.get("contents")
-        owner=int(session['user_id'])
+        owner = int(session['user_id'])
         uploaded_file = request.files['file']
-        if img_repo.check_img_extension(uploaded_file.filename) == False:
+        #move validation in separate file
+        if not img_repo.check_img_extension(uploaded_file.filename):
             error = "This format file is not supported!"
         if title == '' or contents == '':
             error = "Field cannot be empty!"
-  
         if error is None:
-            #uploaded_file.filename = secure_filename(uploaded_file.filename)
             post = Post(title, owner, contents)
             post.img = uploaded_file
             repo.add(post)
@@ -107,12 +105,13 @@ def edit(repo: PostsRepo, img_repo: ImageRepo, pid):
             post.created_at = found_post.created_at
             post.modified_at = date_now.strftime("%B %d, %Y")
             post.img = request.files['file']
-            if img_repo.check_img_extension(post.img.filename) == False:
+            
+            if not img_repo.check_img_extension(post.img.filename):
                 error = "This format file is not supported!"
+            #move validation in separate file
             if post.title == '' or post.contents == '':
                 error = "Field cannot be empty!"
             if error is None:
-                #post.img.filename = secure_filename(post.img.filename)
                 repo.edit(post)
                 return redirect(url_for('index.view_post', pid=post.post_id))
             flash(error)

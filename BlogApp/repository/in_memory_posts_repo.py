@@ -21,9 +21,7 @@ class InMemoryPostsRepo(PostsRepo):
         return found_post
 
     def get_all(self, owner_id=0, records_per_page=3, offset=0):
-
         posts = list(islice(dummy_posts, offset, records_per_page + offset))
-
         for post in posts:
             post.img = self.db_image.get(post.img_id)
             for user in dummy_users:

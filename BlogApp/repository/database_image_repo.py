@@ -1,12 +1,11 @@
 import os
 import uuid
-
 from repository.image_repo import ImageRepo
 
 IMG_FOLDER_PATH = 'static/img/'
 FILE_EXTENSIONS = ['.jpg', '.png', '.gif']
-class DatabaseImageRepo(ImageRepo):
 
+class DatabaseImageRepo(ImageRepo):
     def add(self, file_storage):
         if file_storage.filename != '':
             img_id = uuid.uuid1().hex

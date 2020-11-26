@@ -1,7 +1,5 @@
-import os
 from models.post import Post
 from repository.image_data import dummy_image
-from encoding_file import encode_file
 
 post_one = Post(title='Python', owner='2',
                 contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
@@ -11,7 +9,7 @@ post_one = Post(title='Python', owner='2',
 post_one.created_at = 'January 6, 2018'
 post_one.modified_at = 'January 8, 2018'
 post_one.img_id = dummy_image[0][0]
-#post_one.img = dummy_image[0][0]
+
 post_two = Post(title='Php', owner='1',
                 contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
                     Aenean commodo ligula eget dolor.Lorem ipsum dolor sit amet,

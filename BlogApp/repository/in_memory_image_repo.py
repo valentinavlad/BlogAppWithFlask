@@ -2,12 +2,12 @@ import uuid
 import base64
 from repository.image_repo import ImageRepo
 from repository.image_data import dummy_image
-from encoding_file import encode_file, decode_file
+from encoding_file import encode_file
 
 class InMemoryImageRepo(ImageRepo):
     def add(self, file_storage):
         img_id = uuid.uuid1().hex
-        if self.isBase64(file_storage.filename):
+        if self.is_base64(file_storage.filename):
             file = file_storage.filename
         else:
             file = encode_file(file_storage.filename)
@@ -19,13 +19,12 @@ class InMemoryImageRepo(ImageRepo):
         img_id = self.add(new_file)
         img_content = self.get(img_id)
         return [img_id, img_content]
-         
 
     def delete(self, filename):
         for img_list in dummy_image:
-           if img_list[0] == filename:
+            if img_list[0] == filename:
                 dummy_image.remove(img_list)
-                break;
+                break
 
     def get(self, filename):
         if filename.startswith('data:'):
@@ -38,18 +37,16 @@ class InMemoryImageRepo(ImageRepo):
         for img_list in dummy_image:
             if img_list[0] == filename:
                 return img_list[1]
+            return None
 
-    def isBase64(self, sb):
-        try:
-                if isinstance(sb, str):
-                        sb_bytes = bytes(sb, 'ascii')
-                elif isinstance(sb, bytes):
-                        sb_bytes = sb
-                else:
-                        raise ValueError("Argument must be string or bytes")
-                return base64.b64encode(base64.b64decode(sb_bytes)) == sb_bytes
-        except Exception:
-                return False
-    
+    def is_base64(self, sb):
+        if isinstance(sb, str):
+            sb_bytes = bytes(sb, 'ascii')
+        elif isinstance(sb, bytes):
+            sb_bytes = sb
+        else:
+            raise ValueError("Argument must be string or bytes")
+        return base64.b64encode(base64.b64decode(sb_bytes)) == sb_bytes
+
     def check_img_extension(self, filename):
         return True
