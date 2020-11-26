@@ -1,5 +1,6 @@
 from injector import inject
 from flask import session
+from werkzeug.utils import secure_filename
 from sqlalchemy.orm import Session
 from sqlalchemy import or_, desc
 from setup.db_connect import DbConnect
@@ -31,7 +32,7 @@ class DbPostsRepoSqlalchemy(PostsRepo):
         get_post = self.session.query(Post).filter(Post.post_id == post.post_id)
         unmap_post = ModelPost.unmapp_post(get_post.first())
         filename = self.db_image.edit(unmap_post.img, post.img)
-
+        filename = secure_filename(filename)
         post_update = {Post.title: post.title, Post.owner: session['user_id'],
                        Post.contents: post.contents, Post.created_at: post.created_at,
                        Post.modified_at: post.modified_at, Post.image: filename}
@@ -48,6 +49,7 @@ class DbPostsRepoSqlalchemy(PostsRepo):
     def add(self, post):
         file_storage = post.img
         filename = self.db_image.add(file_storage)
+        filename = secure_filename(filename)
         post_to_add = Post(
             title=post.title,
             owner=post.owner,

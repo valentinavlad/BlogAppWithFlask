@@ -1,7 +1,7 @@
 import datetime
 import os
 from injector import inject
-from werkzeug.utils import secure_filename
+
 from flask import Blueprint, render_template, url_for, request,\
    redirect, session, flash
 from utils.setup_decorators import is_config_file
@@ -73,7 +73,7 @@ def new(repo: PostsRepo, img_repo: ImageRepo):
             error = "Field cannot be empty!"
   
         if error is None:
-            uploaded_file.filename = secure_filename(uploaded_file.filename)
+            #uploaded_file.filename = secure_filename(uploaded_file.filename)
             post = Post(title, owner, contents)
             post.img = uploaded_file
             repo.add(post)
@@ -101,20 +101,18 @@ def edit(repo: PostsRepo, img_repo: ImageRepo, pid):
         if found_post is not None:
             error = None
             date_now = datetime.datetime.now()
-
             post = found_post
             post.title = request.form.get("title")
             post.contents = request.form.get("contents")
             post.created_at = found_post.created_at
             post.modified_at = date_now.strftime("%B %d, %Y")
-            #if request.files:
             post.img = request.files['file']
             if img_repo.check_img_extension(post.img.filename) == False:
                 error = "This format file is not supported!"
             if post.title == '' or post.contents == '':
                 error = "Field cannot be empty!"
             if error is None:
-                post.img.filename = secure_filename(post.img.filename)
+                #post.img.filename = secure_filename(post.img.filename)
                 repo.edit(post)
                 return redirect(url_for('index.view_post', pid=post.post_id))
             flash(error)

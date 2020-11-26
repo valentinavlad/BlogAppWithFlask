@@ -1,5 +1,6 @@
 import os
 import uuid
+
 from repository.image_repo import ImageRepo
 
 IMG_FOLDER_PATH = 'static/img/'
