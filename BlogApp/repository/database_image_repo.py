@@ -3,7 +3,7 @@ import uuid
 from repository.image_repo import ImageRepo
 
 IMG_FOLDER_PATH = 'static/img/'
-
+FILE_EXTENSIONS = ['.jpg', '.png', '.gif']
 class DatabaseImageRepo(ImageRepo):
 
     def add(self, file_storage):
@@ -28,3 +28,9 @@ class DatabaseImageRepo(ImageRepo):
 
     def get(self, filename):
         return os.path.join('/'+IMG_FOLDER_PATH, filename)
+
+    def check_img_extension(self, filename):
+        file_ext = os.path.splitext(filename)[1]
+        if file_ext not in FILE_EXTENSIONS:
+            return False
+        return True

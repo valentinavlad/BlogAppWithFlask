@@ -4,22 +4,30 @@
 <div class="text-center">
     <h2>Hi! Edit your post</h2>
 </div>
+<div class="card-body">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <p>{{message}}</p>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <form method="POST" action="" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{post.title}}">
 
-<form method="POST" action="" enctype="multipart/form-data">
-    <div class="form-group">
-        <label for="title">Title</label>
-        <input type="text" class="form-control" id="title" name="title" value="{{post.title}}">
+        </div>
 
+        <div class="form-group">
+            <label for="contents">Content</label>
+            <textarea class="form-control" id="contents" rows="10" name="contents">{{post.contents}}</textarea>
+        </div>
+
+        <p><input type="file" name="file" value="{{post.img}}"></p>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a href="{{url_for('index.view_post', pid=post.post_id)}}" class="btn btn-warning">Cancel</a>
+    </form>
     </div>
-
-    <div class="form-group">
-        <label for="contents">Content</label>
-        <textarea class="form-control" id="contents" rows="10" name="contents">{{post.contents}}</textarea>
-    </div>
-
-    <p><input type="file" name="file" value="{{post.img}}"></p>
-
-    <button type="submit" class="btn btn-primary">Update</button>
-    <a href="{{url_for('index.view_post', pid=post.post_id)}}" class="btn btn-warning">Cancel</a>
-</form>
-{% endblock content %}
+    {% endblock content %}

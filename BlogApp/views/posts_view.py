@@ -3,18 +3,19 @@ import os
 from injector import inject
 from werkzeug.utils import secure_filename
 from flask import Blueprint, render_template, url_for, request,\
-   redirect, session
+   redirect, session, flash
 from utils.setup_decorators import is_config_file
 from utils.authorization import login_required
 from repository.posts_repo import PostsRepo
 from repository.users_repo import UsersRepo
+from repository.image_repo import ImageRepo
 from models.post import Post
 from functionality.pagination import Pagination
 
 
 index_blueprint = Blueprint('index', __name__, template_folder='templates',
                             static_folder='static')
-FILE_EXTENSIONS = ['.jpg', '.png', '.gif']
+
 
 def session_add(select_form_get_user_id, user_repo):
     session['post_owner_id'] = select_form_get_user_id
@@ -58,21 +59,27 @@ def posts(repo: PostsRepo, user_repo: UsersRepo):
 @index_blueprint.route('/new', methods=['GET', 'POST'])
 @is_config_file
 @login_required
-def new(repo: PostsRepo):
+def new(repo: PostsRepo, img_repo: ImageRepo):
     if request.method == 'POST':
+        error = None
         date_now = datetime.datetime.now()
+        title = request.form.get("title")
+        contents = request.form.get("contents")
+        owner=int(session['user_id'])
         uploaded_file = request.files['file']
-        #TO DO MOVE LOGIC IN REPO, FLASH ERROR EXTENSION
-        file_ext = os.path.splitext(uploaded_file.filename)[1]
-        if file_ext not in FILE_EXTENSIONS:
-            return render_template('400.html'), 400
-        uploaded_file.filename = secure_filename(uploaded_file.filename)
-        post = Post(title=request.form.get("title"), owner=int(session['user_id']),
-                    contents=request.form.get("contents"))
-        post.img = uploaded_file
-        repo.add(post)
-        post.created_at = date_now.strftime("%B %d, %Y")
-        return redirect(url_for('index.posts'))
+        if img_repo.check_img_extension(uploaded_file.filename) == False:
+            error = "This format file is not supported!"
+        if title == '' or contents == '':
+            error = "Field cannot be empty!"
+  
+        if error is None:
+            uploaded_file.filename = secure_filename(uploaded_file.filename)
+            post = Post(title, owner, contents)
+            post.img = uploaded_file
+            repo.add(post)
+            post.created_at = date_now.strftime("%B %d, %Y")
+            return redirect(url_for('index.posts'))
+        flash(error)
     return render_template('add_post.html')
 
 @inject
@@ -86,23 +93,31 @@ def view_post(repo: PostsRepo, pid):
 @index_blueprint.route('/<int:pid>/edit', methods=['GET', 'POST'])
 @is_config_file
 @login_required
-def edit(repo: PostsRepo, pid):
+def edit(repo: PostsRepo, img_repo: ImageRepo, pid):
     found_post = repo.find_by_id(pid)
     if session['name'] != 'admin' and not found_post.is_owner():
         return render_template('403error.html'), 403
     if request.method == 'POST':
         if found_post is not None:
+            error = None
             date_now = datetime.datetime.now()
-            #TO DO VALIDATE EXTENSION FILE
+
             post = found_post
             post.title = request.form.get("title")
             post.contents = request.form.get("contents")
             post.created_at = found_post.created_at
             post.modified_at = date_now.strftime("%B %d, %Y")
-            if request.files:
-                post.img = request.files['file']
-            repo.edit(post)
-        return redirect(url_for('index.view_post', pid=post.post_id))
+            #if request.files:
+            post.img = request.files['file']
+            if img_repo.check_img_extension(post.img.filename) == False:
+                error = "This format file is not supported!"
+            if post.title == '' or post.contents == '':
+                error = "Field cannot be empty!"
+            if error is None:
+                post.img.filename = secure_filename(post.img.filename)
+                repo.edit(post)
+                return redirect(url_for('index.view_post', pid=post.post_id))
+            flash(error)
     return render_template('edit_post.html', post=found_post)
 
 @inject
