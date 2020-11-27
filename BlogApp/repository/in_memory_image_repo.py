@@ -34,10 +34,11 @@ class InMemoryImageRepo(ImageRepo):
         return media_type + ';base64,' + img_content
 
     def find_by_name(self, filename):
+        img_content = None
         for img_list in dummy_image:
             if img_list[0] == filename:
-                return img_list[1]
-            return None
+                 img_content = img_list[1]
+        return img_content
 
     def is_base64(self, sb):
         if isinstance(sb, str):
