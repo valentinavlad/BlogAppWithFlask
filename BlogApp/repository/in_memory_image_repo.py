@@ -37,8 +37,9 @@ class InMemoryImageRepo(ImageRepo):
         img_content = None
         for img_list in dummy_image:
             if img_list[0] == filename:
-                 img_content = img_list[1]
+                img_content = img_list[1]
         return img_content
+
     @staticmethod
     def is_base64(expression):
         if isinstance(expression, str):
