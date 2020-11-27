@@ -32,19 +32,19 @@ class InMemoryImageRepo(ImageRepo):
         img_content = self.find_by_name(filename)
         media_type = 'data:image/jpg'
         return media_type + ';base64,' + img_content
-
-    def find_by_name(self, filename):
+    @staticmethod
+    def find_by_name(filename):
         img_content = None
         for img_list in dummy_image:
             if img_list[0] == filename:
                  img_content = img_list[1]
         return img_content
-
-    def is_base64(self, sb):
-        if isinstance(sb, str):
-            sb_bytes = bytes(sb, 'ascii')
-        elif isinstance(sb, bytes):
-            sb_bytes = sb
+    @staticmethod
+    def is_base64(expression):
+        if isinstance(expression, str):
+            sb_bytes = bytes(expression, 'ascii')
+        elif isinstance(expression, bytes):
+            sb_bytes = expression
         else:
             raise ValueError("Argument must be string or bytes")
         return base64.b64encode(base64.b64decode(sb_bytes)) == sb_bytes

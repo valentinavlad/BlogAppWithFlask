@@ -105,7 +105,7 @@ def edit(repo: PostsRepo, img_repo: ImageRepo, pid):
             post.created_at = found_post.created_at
             post.modified_at = date_now.strftime("%B %d, %Y")
             post.img = request.files['file']
-            
+
             if not img_repo.check_img_extension(post.img.filename):
                 error = "This format file is not supported!"
             #move validation in separate file

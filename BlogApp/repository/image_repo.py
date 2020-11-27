@@ -19,7 +19,7 @@ class ImageRepo(abc.ABC):
         return False
 
     @abc.abstractclassmethod
-    def edit(cls, old_filename, new_file):
+    def edit(cls):
         pass
     @abc.abstractclassmethod
     def delete(cls, filename):
