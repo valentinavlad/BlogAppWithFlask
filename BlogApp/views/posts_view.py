@@ -66,7 +66,7 @@ def new(repo: PostsRepo, img_repo: ImageRepo):
         contents = request.form.get("contents")
         owner = int(session['user_id'])
         uploaded_file = request.files['file']
-        #move validation in separate file
+
         if not img_repo.check_img_extension(uploaded_file.filename):
             error = "This format file is not supported!"
         if title == '' or contents == '':
@@ -108,7 +108,7 @@ def edit(repo: PostsRepo, img_repo: ImageRepo, pid):
 
             if not img_repo.check_img_extension(post.img.filename):
                 error = "This format file is not supported!"
-            #move validation in separate file
+
             if post.title == '' or post.contents == '':
                 error = "Field cannot be empty!"
             if error is None:

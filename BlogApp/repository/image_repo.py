@@ -1,4 +1,7 @@
 import abc
+import os
+
+FILE_EXTENSIONS = ['.jpg', '.png', '.gif', '.jpeg', '.eps', '.bmp', '.tif', '.tiff']
 
 class ImageRepo(abc.ABC):
     @classmethod
@@ -19,7 +22,7 @@ class ImageRepo(abc.ABC):
         return False
 
     @abc.abstractclassmethod
-    def edit(cls):
+    def edit(cls, filename, file_storage):
         pass
     @abc.abstractclassmethod
     def delete(cls, filename):
@@ -30,6 +33,9 @@ class ImageRepo(abc.ABC):
     @abc.abstractclassmethod
     def get(cls, filename):
         pass
-    @abc.abstractclassmethod
-    def check_img_extension(cls, filename):
-        pass
+    @staticmethod
+    def check_img_extension(filename):
+        file_ext = os.path.splitext(filename)[1]
+        if file_ext.lower() not in FILE_EXTENSIONS:
+            return False
+        return True

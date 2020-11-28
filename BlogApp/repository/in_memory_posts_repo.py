@@ -38,7 +38,7 @@ class InMemoryPostsRepo(PostsRepo):
 
     def edit(self, post):
         index = dummy_posts.index(post)
-        img_list = self.db_image.edit(post.img)
+        img_list = self.db_image.edit(post.img_id, post.img)
         post.img = img_list[1]
         post.img_id = img_list[0]
         dummy_posts[index] = post
@@ -50,8 +50,9 @@ class InMemoryPostsRepo(PostsRepo):
         self.db_image.delete(img_id)
 
     def add(self, post):
-        img_id = self.db_image.add(post.img)
-        post.img_id = img_id
+        img_list = self.db_image.add(post.img)
+        post.img_id = img_list[0]
+        post.img = img_list[1]
         dummy_posts.insert(0, post)
 
     def get_count(self, owner_id):
