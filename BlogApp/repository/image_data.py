@@ -18,29 +18,15 @@ IMG_THREE_CONTENT = "data:image/jpg;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAIAA
 IMG_THREE = [IMG_THREE_ID, IMG_THREE_CONTENT]
 
 IMG_FOUR_ID = "id4"
-IMG_FOUR_CONTENT = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAYCAIAAACeHvEiAAAAAXNSR0IA"\
-                   "rs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdv"\
-                   "qGQAAAEuSURBVDhPY2TAAd7KqEBZYCD85A6UhQ0wQWlCAM1QNIDdFPx"\
-                   "6MAGxbsEPBpMpWOIIT6DgiikquYXU6EADENdRagoE0CWOZuekQFl4"\
-                   "AQFTeHh4oCzcABg0WMLFXUIgKCjo+fPnHBwcTExMb968+fr167Nnz5i"\
-                   "ZmdfcfgxVBAOQ0MXilp0vPjx58kRaWvrevXt///7duXPnu3fvsBoB"\
-                   "B6BUhzWaEo20jIyMdu3aZWBgwMjI2LRxJ1QCCcATITTtYjXImodFSUl"\
-                   "px44dr6WUoEJIADkdQ32ELAQHvr6+wKDh5OSE8pEAmnpEuGAapKur"\
-                   "6+7unp2dDeXDAKZKfDEtIyMDjB1gAEP5uAEiT6MFTYqp7pzTlyHsW"\
-                   "j+35k27IGwIQHMOTlPwA5zhQgmghikMDAALrGHFdcPoegAAAABJRU5ErkJggg=="
+IMG_FOUR_CONTENT = "data:image/jpg;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAIAAAAmkwkpAAAAAXNS"\
+                   "R0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAWSURBVBhXY1"\
+                   "Ta6MMAA0xQGgxwcRgYADjoASejfn0aAAAAAElFTkSuQmCC"
 IMG_FOUR = [IMG_FOUR_ID, IMG_FOUR_CONTENT]
 
 IMG_FIVE_ID = "id5"
-IMG_FIVE_CONTENT = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAYCAIA"\
-                   "AACeHvEiAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdv"\
-                   "qGQAAAEuSURBVDhPY2TAAd7KqEBZYCD85A6UhQ0wQWlCAM1QNIDdFPx6MAGxbsEPBpMpWOII"\
-                   "T6DgiikquYXU6EADENdRagoE0CWOZuekQFl4"\
-                   "AQFTeHh4oCzcABg0WMLFXUIgKCjo+fPnHBwcTExMb968+fr167Nnz5iZmdfcfgxVBAOQ0M"\
-                   "Xilp0vPjx58kRaWvrevXt///7duXPnu3fvsBoB"\
-                   "B6BUhzWaEo20jIyMdu3aZWBgwMjI2LRxJ1QCCcATITTtYjXImodFSUlpx44dr6WUoEJIADk"\
-                   "dQ32ELAQHvr6+wKDh5OSE8pEAmnpEuGAapKur"\
-                   "6+7unp2dDeXDAKZKfDEtIyMDjB1gAEP5uAEiT6MFTYqp7pzTlyHsWj+35k27IGwIQHMOTlPwA"\
-                   "5zhQgmghikMDAALrGHFdcPoegAAAABJRU5ErkJggg=="
+IMG_FIVE_CONTENT = "data:image/jpg;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAIAAAAmkwkpAAAAAXNS"\
+                   "R0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAWSURBVBhXY1"\
+                   "Ta6MMAA0xQGgxwcRgYADjoASejfn0aAAAAAElFTkSuQmCC"
 IMG_FIVE = [IMG_FIVE_ID, IMG_FIVE_CONTENT]
 
 IMG_SIX_ID = "id6"

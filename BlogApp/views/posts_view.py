@@ -59,8 +59,8 @@ def posts(repo: PostsRepo, user_repo: UsersRepo):
 @is_config_file
 @login_required
 def new(repo: PostsRepo, img_repo: ImageRepo):
+    error = None
     if request.method == 'POST':
-        error = None
         date_now = datetime.datetime.now()
         title = request.form.get("title")
         contents = request.form.get("contents")
@@ -78,7 +78,7 @@ def new(repo: PostsRepo, img_repo: ImageRepo):
             post.created_at = date_now.strftime("%B %d, %Y")
             return redirect(url_for('index.posts'))
         flash(error)
-    return render_template('add_post.html')
+    return render_template('add_post.html', error=error)
 
 @inject
 @index_blueprint.route('/<int:pid>', methods=['GET'])
@@ -95,27 +95,28 @@ def edit(repo: PostsRepo, img_repo: ImageRepo, pid):
     found_post = repo.find_by_id(pid)
     if session['name'] != 'admin' and not found_post.is_owner():
         return render_template('403error.html'), 403
+    error = None
     if request.method == 'POST':
-        if found_post is not None:
-            error = None
+        if found_post is not None:         
             date_now = datetime.datetime.now()
             post = found_post
             post.title = request.form.get("title")
             post.contents = request.form.get("contents")
             post.created_at = found_post.created_at
             post.modified_at = date_now.strftime("%B %d, %Y")
-            post.img = request.files['file']
+            uploaded_file = request.files['file']
 
-            if not img_repo.check_img_extension(post.img.filename):
-                error = "This format file is not supported!"
-
+            if uploaded_file.filename != '':          
+                if not img_repo.check_img_extension(uploaded_file.filename):
+                    error = "This format file is not supported!"
+                post.img = uploaded_file
             if post.title == '' or post.contents == '':
                 error = "Field cannot be empty!"
             if error is None:
                 repo.edit(post)
                 return redirect(url_for('index.view_post', pid=post.post_id))
             flash(error)
-    return render_template('edit_post.html', post=found_post)
+    return render_template('edit_post.html', post=found_post, error=error)
 
 @inject
 @index_blueprint.route('/<int:pid>/delete', methods=['GET', 'POST'])

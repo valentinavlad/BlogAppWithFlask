@@ -15,7 +15,6 @@ class InMemoryImageRepo(ImageRepo):
     def edit(self, filename, file_storage):
         self.delete(filename)
         img_list = self.add(file_storage)
-    
         return img_list
 
     def delete(self, filename):

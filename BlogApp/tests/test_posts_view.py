@@ -268,11 +268,12 @@ def test_post_update_redirect_setup(client_is_not_config):
     assert b'User' in response.data
     assert b'Password' in response.data
 ##TEST PAGINATION
+
 def test_see_posts_first_page(client_is_config):
     response = client_is_config.get('/posts/?page=1')
     assert b'<h1>Angular</h1>' in response.data
     assert b'<p>By maia on March 13, 2020 <small>Post Id is 5</small></p>' in response.data
-    assert b'<img class="card-img-top" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAYCAIAAACeHvEiAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAEuSURBVDhPY2TAAd7KqEBZYCD85A6UhQ0wQWlCAM1QNIDdFPx6MAGxbsEPBpMpWOIIT6DgiikquYXU6EADENdRagoE0CWOZuekQFl4AQFTeHh4oCzcABg0WMLFXUIgKCjo+fPnHBwcTExMb968+fr167Nnz5iZmdfcfgxVBAOQ0MXilp0vPjx58kRaWvrevXt///7duXPnu3fvsBoBB6BUhzWaEo20jIyMdu3aZWBgwMjI2LRxJ1QCCcATITTtYjXImodFSUlpx44dr6WUoEJIADkdQ32ELAQHvr6+wKDh5OSE8pEAmnpEuGAapKur6+7unp2dDeXDAKZKfDEtIyMDjB1gAEP5uAEiT6MFTYqp7pzTlyHsWj+35k27IGwIQHMOTlPwA5zhQgmghikMDAALrGHFdcPoegAAAABJRU5ErkJggg==" alt="Card image cap">' in response.data
+    assert b'data:image/jpg;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAIAAAAmkwkpAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAWSURBVBhXY1Ta6MMAA0xQGgxwcRgYADjoASejfn0aAAAAAElFTkSuQmCC' in response.data
 
     assert b'<h1>C++</h1>' in response.data
     assert b'<h1>Ajax</h1>' in response.data

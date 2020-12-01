@@ -1,4 +1,5 @@
 from injector import inject
+from werkzeug.datastructures import FileStorage
 from flask import session
 from werkzeug.utils import secure_filename
 from sqlalchemy.orm import Session
@@ -31,8 +32,12 @@ class DbPostsRepoSqlalchemy(PostsRepo):
     def edit(self, post):
         get_post = self.session.query(Post).filter(Post.post_id == post.post_id)
         unmap_post = ModelPost.unmapp_post(get_post.first())
-        filename = self.db_image.edit(unmap_post.img, post.img)
-        filename = secure_filename(filename)
+        print(type(post.img))
+        if type(post.img) == FileStorage:
+            filename = self.db_image.edit(unmap_post.img, post.img)
+            filename = secure_filename(filename)
+        else:
+            filename = unmap_post.img
         post_update = {Post.title: post.title, Post.owner: session['user_id'],
                        Post.contents: post.contents, Post.created_at: post.created_at,
                        Post.modified_at: post.modified_at, Post.image: filename}
