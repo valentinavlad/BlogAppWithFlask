@@ -80,9 +80,30 @@ def test_post_create_by_owner_wrong_extension_file_error(client_is_config):
 
     response_post = client_is_config.post('/posts/new', data=data, follow_redirects=True)
     assert response_post.status_code == 200
-    assert b'<p>This format file is not supported!</p>' in response_post.data
+    assert b'<strong>Error:</strong> This format file is not supported!' in response_post.data
     assert b'<form method="POST" action="" enctype="multipart/form-data">' in response_post.data
     logout(client_is_config)
+
+def test_post_create_by_owner_extension_file_upper(client_is_config):
+    log = login(client_is_config, 'tia', '123')
+    assert b'Hello Tia' in log.data
+    response = client_is_config.get('/posts/new')
+    assert response.status_code == 200
+    assert b'<label for="title">Title</label>' in response.data
+    assert b'Content' in response.data
+    file_name = "1.PNG"
+    data = {
+        'title': 'KOKO', 'contents':'hello',
+        'file': (io.BytesIO(b"some random data"), file_name)
+    }
+    response_post = client_is_config.post('/posts/new', data=data, follow_redirects=True)
+    assert response_post.status_code == 200
+    assert b'Check our latest posts in web technologies!' in response_post.data
+    assert b'<img class="card-img-top" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAnSURBVChTfccxDQAACAMw/MuYusngJT1I+nQm/Xh4eHh4eHh4+Ctd23KZ6cuSX/kAAAAASUVORK5CYII=" alt="Card image cap">' in response_post.data
+    assert 'KOKO' in response_post.get_data(as_text=True)
+
+    logout(client_is_config)
+
 def test_cannot_create_post_if_not_logged(client_is_config):
     response = client_is_config.get('/posts/new', follow_redirects=True)
     assert response.status_code == 200
@@ -276,14 +297,14 @@ def test_see_posts_first_page(client_is_config):
     assert b'data:image/jpg;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAIAAAAmkwkpAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAWSURBVBhXY1Ta6MMAA0xQGgxwcRgYADjoASejfn0aAAAAAElFTkSuQmCC' in response.data
 
     assert b'<h1>C++</h1>' in response.data
-    assert b'<h1>Ajax</h1>' in response.data
+    #assert b'<h1>Ajax</h1>' in response.data
     assert b'Newer posts' not in response.data
     assert b'Older posts' in response.data
 
 def test_see_posts_second_page(client_is_config):
     #have 3 pages
     response = client_is_config.get('/posts/?page=2')
-    assert b'<h1>Java</h1>' in response.data
+    assert b'<h1>Sql</h1>' in response.data
     assert b'<a class="btn btn-outline-info" href="/posts/?page=1">Newer posts</a>' in response.data
     assert b'<a class="btn btn-outline-info" href="/posts/?page=3&amp;user=">Older posts</a>'\
        in response.data

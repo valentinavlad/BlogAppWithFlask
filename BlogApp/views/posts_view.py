@@ -97,7 +97,7 @@ def edit(repo: PostsRepo, img_repo: ImageRepo, pid):
         return render_template('403error.html'), 403
     error = None
     if request.method == 'POST':
-        if found_post is not None:         
+        if found_post is not None:
             date_now = datetime.datetime.now()
             post = found_post
             post.title = request.form.get("title")
@@ -106,7 +106,7 @@ def edit(repo: PostsRepo, img_repo: ImageRepo, pid):
             post.modified_at = date_now.strftime("%B %d, %Y")
             uploaded_file = request.files['file']
 
-            if uploaded_file.filename != '':          
+            if uploaded_file.filename != '':
                 if not img_repo.check_img_extension(uploaded_file.filename):
                     error = "This format file is not supported!"
                 post.img = uploaded_file
