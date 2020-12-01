@@ -1,5 +1,4 @@
 from datetime import datetime
-#from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, Text, String, Date, ForeignKey
 from setup.db_connect import Base
 
@@ -11,7 +10,7 @@ class Post(Base):
     contents = Column(Text, nullable=False)
     created_at = Column(Date, nullable=False, default=datetime.utcnow)
     modified_at = Column(Date, nullable=False, default=datetime.utcnow)
-
+    image = Column(Text)
     def __repr__(self):
         return "<Post(title='{}', owner='{}', created_at={})>"\
                 .format(self.title, self.owner, self.created_at)

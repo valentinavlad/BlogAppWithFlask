@@ -1,14 +1,16 @@
 from injector import inject
+from sqlalchemy.orm import Session
 from setup.db_connect import DbConnect
 
 FILENAME = 'queries.sql'
-VERSION = 1
+VERSION = 2
 class DbOperations:
 
     @inject
     def __init__(self, db_connect: DbConnect):
         self.db_connect = db_connect
         self.filename = FILENAME
+        self.session = Session(bind=self.db_connect.get_engine())
 
     def is_db_updated(self):
         return self.db_connect.config.get_version() == VERSION

@@ -1,3 +1,5 @@
+import io
+
 def login(client_is_config, name, password):
     return client_is_config.post('/auth/login', data=dict(
         name=name,
@@ -26,13 +28,19 @@ def test_post_create_by_owner(client_is_config):
     assert b'Hello Tia' in log.data
     response = client_is_config.get('/posts/new')
     assert response.status_code == 200
-    assert b'Owner' in response.data
+    assert b'<label for="title">Title</label>' in response.data
     assert b'Content' in response.data
-    data = {'title': 'KOKO', 'contents':'hello'}
+
+    file_name = "1.png"
+    data = {
+        'title': 'KOKO', 'contents':'hello',
+        'file': (io.BytesIO(b"some random data"), file_name)
+    }
 
     response_post = client_is_config.post('/posts/new', data=data, follow_redirects=True)
     assert response_post.status_code == 200
     assert b'Check our latest posts in web technologies!' in response_post.data
+    assert b'<img class="card-img-top" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAnSURBVChTfccxDQAACAMw/MuYusngJT1I+nQm/Xh4eHh4eHh4+Ctd23KZ6cuSX/kAAAAASUVORK5CYII=" alt="Card image cap">' in response_post.data
     assert 'KOKO' in response_post.get_data(as_text=True)
     logout(client_is_config)
 
@@ -41,14 +49,59 @@ def test_post_create_by_admin(client_is_config):
     assert b'Hello Admin' in log.data
     response = client_is_config.get('/posts/new')
     assert response.status_code == 200
-    assert b'Owner' in response.data
+    assert b'<label for="title">Title</label>' in response.data
     assert b'Content' in response.data
-    data = {'title': 'KOKO', 'contents':'hello'}
+    file_name = "1.PNG"
+    data = {
+        'title': 'KOKO', 'contents':'hello',
+        'file': (io.BytesIO(b"some random data"), file_name)
+    }
 
     response_post = client_is_config.post('/posts/new', data=data, follow_redirects=True)
     assert response_post.status_code == 200
     assert b'Check our latest posts in web technologies!' in response_post.data
+    assert b'<img class="card-img-top" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAnSURBVChTfccxDQAACAMw/MuYusngJT1I+nQm/Xh4eHh4eHh4+Ctd23KZ6cuSX/kAAAAASUVORK5CYII=" alt="Card image cap">' in response_post.data
     assert 'KOKO' in response_post.get_data(as_text=True)
+
+    logout(client_is_config)
+
+def test_post_create_by_owner_wrong_extension_file_error(client_is_config):
+    log = login(client_is_config, 'tia', '123')
+    assert b'Hello Tia' in log.data
+    response = client_is_config.get('/posts/new')
+    assert response.status_code == 200
+    assert b'<label for="title">Title</label>' in response.data
+    assert b'Content' in response.data
+    file_name = "1.txt"
+    data = {
+        'title': 'KOKO', 'contents':'hello',
+        'file': (io.BytesIO(b"some random data"), file_name)
+    }
+
+    response_post = client_is_config.post('/posts/new', data=data, follow_redirects=True)
+    assert response_post.status_code == 200
+    assert b'<strong>Error:</strong> This format file is not supported!' in response_post.data
+    assert b'<form method="POST" action="" enctype="multipart/form-data">' in response_post.data
+    logout(client_is_config)
+
+def test_post_create_by_owner_extension_file_upper(client_is_config):
+    log = login(client_is_config, 'tia', '123')
+    assert b'Hello Tia' in log.data
+    response = client_is_config.get('/posts/new')
+    assert response.status_code == 200
+    assert b'<label for="title">Title</label>' in response.data
+    assert b'Content' in response.data
+    file_name = "1.PNG"
+    data = {
+        'title': 'KOKO', 'contents':'hello',
+        'file': (io.BytesIO(b"some random data"), file_name)
+    }
+    response_post = client_is_config.post('/posts/new', data=data, follow_redirects=True)
+    assert response_post.status_code == 200
+    assert b'Check our latest posts in web technologies!' in response_post.data
+    assert b'<img class="card-img-top" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAnSURBVChTfccxDQAACAMw/MuYusngJT1I+nQm/Xh4eHh4eHh4+Ctd23KZ6cuSX/kAAAAASUVORK5CYII=" alt="Card image cap">' in response_post.data
+    assert 'KOKO' in response_post.get_data(as_text=True)
+
     logout(client_is_config)
 
 def test_cannot_create_post_if_not_logged(client_is_config):
@@ -66,11 +119,17 @@ def test_update_post_by_owner(client_is_config):
     response = client_is_config.get('/posts/6')
     assert response.status_code == 200
     assert b'View your post' in response.data
+    file_name = "1.png"
 
-    data = {'title': 'updated C++', 'owner': 'update', 'contents': 'updated content'}
+    data = {
+        'title': 'updated C++', 'owner': 'update', 'contents': 'updated content',
+        'file': (io.BytesIO(b"some random data"), file_name)
+    }
+
     response_post = client_is_config.post('/posts/6/edit', data=data, follow_redirects=True)
     assert response_post.status_code == 200
     assert b'View your post' in response_post.data
+    assert b'<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAnSURBVChTfccxDQAACAMw/MuYusngJT1I+nQm/Xh4eHh4eHh4+Ctd23KZ6cuSX/kAAAAASUVORK5CYII=" id="post-image">' in response_post.data
     assert 'updated C++' in response_post.get_data(as_text=True)
     logout(client_is_config)
     sess.clear()
@@ -83,11 +142,15 @@ def test_update_post_by_admin(client_is_config):
     response = client_is_config.get('/posts/2')
     assert response.status_code == 200
     assert b'View your post' in response.data
-
-    data = {'title': 'updated PHP', 'owner': 'update', 'contents': 'úpdated Php content'}
+    file_name = "1.png"
+    data = {
+        'title': 'updated PHP', 'owner': 'update', 'contents': 'úpdated Php content',
+        'file': (io.BytesIO(b"some random data"), file_name)
+    }
     response_post = client_is_config.post('/posts/2/edit', data=data, follow_redirects=True)
     assert response_post.status_code == 200
     assert b'View your post' in response_post.data
+    assert b'<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAnSURBVChTfccxDQAACAMw/MuYusngJT1I+nQm/Xh4eHh4eHh4+Ctd23KZ6cuSX/kAAAAASUVORK5CYII=" id="post-image">' in response_post.data
     assert 'updated PHP' in response_post.get_data(as_text=True)
 
 #Laravel
@@ -226,17 +289,22 @@ def test_post_update_redirect_setup(client_is_not_config):
     assert b'User' in response.data
     assert b'Password' in response.data
 ##TEST PAGINATION
+
 def test_see_posts_first_page(client_is_config):
     response = client_is_config.get('/posts/?page=1')
     assert b'<h1>Angular</h1>' in response.data
     assert b'<p>By maia on March 13, 2020 <small>Post Id is 5</small></p>' in response.data
+    assert b'data:image/jpg;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAIAAAAmkwkpAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAWSURBVBhXY1Ta6MMAA0xQGgxwcRgYADjoASejfn0aAAAAAElFTkSuQmCC' in response.data
+
+    assert b'<h1>C++</h1>' in response.data
+    #assert b'<h1>Ajax</h1>' in response.data
     assert b'Newer posts' not in response.data
     assert b'Older posts' in response.data
 
 def test_see_posts_second_page(client_is_config):
     #have 3 pages
     response = client_is_config.get('/posts/?page=2')
-    assert b'<h1>Java</h1>' in response.data
+    assert b'<h1>Sql</h1>' in response.data
     assert b'<a class="btn btn-outline-info" href="/posts/?page=1">Newer posts</a>' in response.data
     assert b'<a class="btn btn-outline-info" href="/posts/?page=3&amp;user=">Older posts</a>'\
        in response.data

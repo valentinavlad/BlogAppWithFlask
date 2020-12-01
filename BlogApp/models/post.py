@@ -9,6 +9,7 @@ class Post():
         self.contents = contents
         self.created_at = datetime.datetime.now()
         self.modified_at = datetime.datetime.now()
+        self.img = None
         Post.count += 1
 
     @classmethod
@@ -20,11 +21,27 @@ class Post():
         cls.contents = row[4]
         cls.created_at = row[5]
         cls.modified_at = row[6]
+        cls.img = row[7]
         obj = cls(cls.title, cls.owner, cls.contents)
         obj.created_at = cls.created_at.strftime("%b %d %Y %H:%M:%S")
         obj.modified_at = cls.modified_at
         obj.post_id = cls.post_id
         obj.name = cls.name
+        obj.img = cls.img
+        return obj
+
+    @classmethod
+    def unmapp_post(cls, post_repo):
+        cls.post_id = post_repo.post_id
+        cls.title = post_repo.title
+        cls.owner = post_repo.owner
+        cls.contents = post_repo.contents
+        cls.created_at = post_repo.created_at
+        cls.modified_at = post_repo.modified_at
+        cls.img = post_repo.image
+        obj = cls(cls.title, cls.owner, cls.contents)
+        obj.post_id = cls.post_id
+        obj.img = cls.img
         return obj
 
     @staticmethod

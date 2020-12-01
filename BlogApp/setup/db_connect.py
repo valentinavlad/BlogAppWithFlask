@@ -1,4 +1,3 @@
-import psycopg2
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from setup.database_config import DatabaseConfig

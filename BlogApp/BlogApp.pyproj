@@ -33,6 +33,9 @@
     <Compile Include="app.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="encoding_file.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="functionality\pagination.py">
       <SubType>Code</SubType>
     </Compile>
@@ -42,7 +45,19 @@
     <Compile Include="models\db_credentials.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="repository\database_image_repo.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="repository\db_users_repo_sqlalchemy.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="repository\image_data.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="repository\image_repo.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="repository\in_memory_image_repo.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="repository\models\post.py">
@@ -186,6 +201,7 @@
     <Content Include="static\style.css">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="templates\400.html" />
     <Content Include="templates\403error.html" />
     <Content Include="templates\add_user.html" />
     <Content Include="templates\edit_post.html" />

@@ -29,3 +29,10 @@ ALTER TABLE POSTS DROP CONSTRAINT IF EXISTS fk_owner;
 
 ALTER TABLE posts add constraint fk_owner foreign key(owner) 
 REFERENCES users(user_id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+ALTER TABLE posts
+ADD COLUMN IF NOT EXISTS image VARCHAR;
+
+UPDATE posts
+SET image = '1.jpg'
+WHERE post_id > 0 and (image = '') IS NOT FALSE;
