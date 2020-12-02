@@ -33,7 +33,7 @@ class DbPostsRepoSqlalchemy(PostsRepo):
         get_post = self.session.query(Post).filter(Post.post_id == post.post_id)
         unmap_post = ModelPost.unmapp_post(get_post.first())
 
-        if isinstance(post.img) == FileStorage:
+        if isinstance(post.img, FileStorage):
             filename = self.db_image.edit(unmap_post.img, post.img)
             filename = secure_filename(filename)
         else:
@@ -52,9 +52,12 @@ class DbPostsRepoSqlalchemy(PostsRepo):
         self.db_image.delete(filename)
 
     def add(self, post):
-        file_storage = post.img
-        filename = self.db_image.add(file_storage)
-        filename = secure_filename(filename)
+        #file_storage = post.img
+        if post.img.filename == '':
+            filename = '1.jpg'
+        else:
+            filename = self.db_image.add(post.img)
+            filename = secure_filename(filename)
         post_to_add = Post(
             title=post.title,
             owner=post.owner,

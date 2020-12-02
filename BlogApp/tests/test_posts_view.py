@@ -36,14 +36,12 @@ def test_post_create_by_owner(client_is_config):
         'title': 'KOKO', 'contents':'hello',
         'file': (io.BytesIO(b"some random data"), file_name)
     }
-
+    
     response_post = client_is_config.post('/posts/new', data=data, follow_redirects=True)
     assert response_post.status_code == 200
     assert b'Check our latest posts in web technologies!' in response_post.data
-    left = bytearray(b"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HA")
-    right = bytearray(b"wCAAAAC0lEQVR42mNkMAYAADkANVKH3ScAAAAASUVORK5CYII=")
-    img = left + right
-    assert img in response_post.data
+    assert b'<img class="card-img-top" src="data:image/png;base64,c29tZSByYW5kb20gZGF0YQ==" alt="Card image cap">'\
+       in response_post.data
     assert 'KOKO' in response_post.get_data(as_text=True)
     logout(client_is_config)
 
@@ -63,10 +61,7 @@ def test_post_create_by_admin(client_is_config):
     response_post = client_is_config.post('/posts/new', data=data, follow_redirects=True)
     assert response_post.status_code == 200
     assert b'Check our latest posts in web technologies!' in response_post.data
-    left = bytearray(b"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HA")
-    right = bytearray(b"wCAAAAC0lEQVR42mNkMAYAADkANVKH3ScAAAAASUVORK5CYII=")
-    img = left + right
-    assert img in response_post.data
+    assert b'"data:image/png;base64,c29tZSByYW5kb20gZGF0YQ=="' in response_post.data
     assert 'KOKO' in response_post.get_data(as_text=True)
 
     logout(client_is_config)
@@ -105,10 +100,7 @@ def test_post_create_by_owner_extension_file_upper(client_is_config):
     response_post = client_is_config.post('/posts/new', data=data, follow_redirects=True)
     assert response_post.status_code == 200
     assert b'Check our latest posts in web technologies!' in response_post.data
-    left = bytearray(b"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HA")
-    right = bytearray(b"wCAAAAC0lEQVR42mNkMAYAADkANVKH3ScAAAAASUVORK5CYII=")
-    img = left + right
-    assert img in response_post.data
+    assert b'"data:image/png;base64,c29tZSByYW5kb20gZGF0YQ=="' in response_post.data
     assert 'KOKO' in response_post.get_data(as_text=True)
 
     logout(client_is_config)
@@ -138,10 +130,7 @@ def test_update_post_by_owner(client_is_config):
     response_post = client_is_config.post('/posts/6/edit', data=data, follow_redirects=True)
     assert response_post.status_code == 200
     assert b'View your post' in response_post.data
-    left = bytearray(b"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HA")
-    right = bytearray(b"wCAAAAC0lEQVR42mNkMAYAADkANVKH3ScAAAAASUVORK5CYII=")
-    img = left + right
-    assert img in response_post.data
+    assert b'"data:image/png;base64,c29tZSByYW5kb20gZGF0YQ=="' in response_post.data
     assert 'updated C++' in response_post.get_data(as_text=True)
     logout(client_is_config)
     sess.clear()
@@ -162,10 +151,7 @@ def test_update_post_by_admin(client_is_config):
     response_post = client_is_config.post('/posts/2/edit', data=data, follow_redirects=True)
     assert response_post.status_code == 200
     assert b'View your post' in response_post.data
-    left = bytearray(b"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HA")
-    right = bytearray(b"wCAAAAC0lEQVR42mNkMAYAADkANVKH3ScAAAAASUVORK5CYII=")
-    img = left + right
-    assert img in response_post.data
+    assert b'"data:image/png;base64,c29tZSByYW5kb20gZGF0YQ=="' in response_post.data
     assert 'updated PHP' in response_post.get_data(as_text=True)
 
 #Laravel
@@ -307,12 +293,14 @@ def test_post_update_redirect_setup(client_is_not_config):
 
 def test_see_posts_first_page(client_is_config):
     response = client_is_config.get('/posts/?page=1')
-    assert b'<h1>Angular</h1>' in response.data
-    assert b'<p>By maia on March 13, 2020 <small>Post Id is 5</small></p>' in response.data
     left = bytearray(b"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HA")
     right = bytearray(b"wCAAAAC0lEQVR42mNkMAYAADkANVKH3ScAAAAASUVORK5CYII=")
+
     img = left + right
     assert img in response.data
+    #assert b'"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkMAYAADkANVKH3ScAAAAASUVORK5CYII="' in response.data
+    assert b'<h1>Angular</h1>' in response.data
+    assert b'<p>By maia on March 13, 2020 <small>Post Id is 5</small></p>' in response.data
     assert b'<h1>C++</h1>' in response.data
     assert b'Newer posts' not in response.data
     assert b'Older posts' in response.data
