@@ -8,6 +8,7 @@ from views.posts_view import index_blueprint
 from views.setup_view import setup_blueprint
 from views.login_view import login_blueprint
 from views.users_view import users_blueprint
+from views.user_statistic_view import user_statistic_blueprint
 
 app = Flask(__name__)
 
@@ -17,6 +18,7 @@ app.register_blueprint(index_blueprint, url_prefix="/posts")
 app.register_blueprint(setup_blueprint, url_prefix="/setup")
 app.register_blueprint(login_blueprint, url_prefix="/auth")
 app.register_blueprint(users_blueprint, url_prefix="/users")
+app.register_blueprint(user_statistic_blueprint, url_prefix="/statistics")
 
 @app.route('/')
 @is_config_file
