@@ -1,10 +1,10 @@
 import uuid
-import io
 import base64
 from repository.image_repo import ImageRepo
 from repository.image_data import dummy_image
 
 class InMemoryImageRepo(ImageRepo):
+
     def add(self, file_storage):
         img_id = uuid.uuid1().hex
         file = self.encode_file(file_storage)
@@ -31,8 +31,8 @@ class InMemoryImageRepo(ImageRepo):
                 img_content = img_list[1]
         return img_content
 
-
-    def encode_file(self, file_storage):
+    @staticmethod
+    def encode_file(file_storage):
         image_string = base64.b64encode(file_storage.read())
         image_string = image_string.decode('utf-8')
 

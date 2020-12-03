@@ -8,6 +8,8 @@ from repository.posts_repo import PostsRepo
 from repository.in_memory_users_repo import InMemoryUsersRepo
 from repository.in_memory_image_repo import InMemoryImageRepo
 
+DEFAULT_IMG = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HA"\
+                  "wCAAAAC0lEQVR42mNkMAYAADkANVKH3ScAAAAASUVORK5CYII="
 class InMemoryPostsRepo(PostsRepo):
     @inject
     def __init__(self, user_repo: InMemoryUsersRepo, db_image: InMemoryImageRepo):
@@ -54,7 +56,7 @@ class InMemoryPostsRepo(PostsRepo):
 
     def add(self, post):
         if post.img.filename == '':
-            img_list = ['id0', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkMAYAADkANVKH3ScAAAAASUVORK5CYII=']
+            img_list = ['id0', DEFAULT_IMG]
             dummy_image.insert(0, img_list)
             post.img_id = img_list[0]
             post.img = img_list[1]

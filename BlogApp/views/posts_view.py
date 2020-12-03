@@ -2,7 +2,7 @@ import datetime
 from injector import inject
 
 from flask import Blueprint, render_template, url_for, request,\
-   redirect, session, flash
+   redirect, session
 from utils.setup_decorators import is_config_file
 from utils.authorization import login_required
 from repository.posts_repo import PostsRepo
@@ -66,7 +66,8 @@ def new(repo: PostsRepo, img_repo: ImageRepo):
         contents = request.form.get("contents")
         owner = int(session['user_id'])
         uploaded_file = request.files['file']
-        if uploaded_file.filename != '' and not img_repo.check_img_extension(uploaded_file.filename):
+        if uploaded_file.filename != '' and \
+           not img_repo.check_img_extension(uploaded_file.filename):
             error['file'] = "This format file is not supported!"
         if title == '':
             error['title'] = "Title field cannot be empty!"

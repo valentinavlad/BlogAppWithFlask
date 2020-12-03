@@ -36,11 +36,10 @@ def test_post_create_by_owner(client_is_config):
         'title': 'KOKO', 'contents':'hello',
         'file': (io.BytesIO(b"some random data"), file_name)
     }
-    
     response_post = client_is_config.post('/posts/new', data=data, follow_redirects=True)
     assert response_post.status_code == 200
     assert b'Check our latest posts in web technologies!' in response_post.data
-    assert b'<img class="card-img-top" src="data:image/png;base64,c29tZSByYW5kb20gZGF0YQ==" alt="Card image cap">'\
+    assert b'"data:image/png;base64,c29tZSByYW5kb20gZGF0YQ=="'\
        in response_post.data
     assert 'KOKO' in response_post.get_data(as_text=True)
     logout(client_is_config)
@@ -81,7 +80,7 @@ def test_post_create_by_owner_wrong_extension_file_error(client_is_config):
 
     response_post = client_is_config.post('/posts/new', data=data, follow_redirects=True)
     assert response_post.status_code == 200
-    assert b'<strong>Error:</strong> This format file is not supported!' in response_post.data
+    assert b'This format file is not supported!' in response_post.data
     assert b'<form method="POST" action="" enctype="multipart/form-data">' in response_post.data
     logout(client_is_config)
 
@@ -298,7 +297,6 @@ def test_see_posts_first_page(client_is_config):
 
     img = left + right
     assert img in response.data
-    #assert b'"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkMAYAADkANVKH3ScAAAAASUVORK5CYII="' in response.data
     assert b'<h1>Angular</h1>' in response.data
     assert b'<p>By maia on March 13, 2020 <small>Post Id is 5</small></p>' in response.data
     assert b'<h1>C++</h1>' in response.data
