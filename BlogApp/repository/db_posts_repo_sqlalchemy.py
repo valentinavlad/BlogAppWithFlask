@@ -52,7 +52,6 @@ class DbPostsRepoSqlalchemy(PostsRepo):
         self.db_image.delete(filename)
 
     def add(self, post):
-        #file_storage = post.img
         if post.img.filename == '':
             filename = '1.jpg'
         else:

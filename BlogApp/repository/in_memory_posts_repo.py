@@ -3,6 +3,7 @@ from injector import inject
 from werkzeug.datastructures import FileStorage
 from repository.posts_data import dummy_posts
 from repository.users_data import dummy_users
+from repository.image_data import dummy_image
 from repository.posts_repo import PostsRepo
 from repository.in_memory_users_repo import InMemoryUsersRepo
 from repository.in_memory_image_repo import InMemoryImageRepo
@@ -52,9 +53,16 @@ class InMemoryPostsRepo(PostsRepo):
         self.db_image.delete(img_id)
 
     def add(self, post):
-        img_list = self.db_image.add(post.img)
-        post.img_id = img_list[0]
-        post.img = img_list[1]
+        if post.img.filename == '':
+            img_list = ['id0', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkMAYAADkANVKH3ScAAAAASUVORK5CYII=']
+            dummy_image.insert(0, img_list)
+            post.img_id = img_list[0]
+            post.img = img_list[1]
+
+        else:
+            img_list = self.db_image.add(post.img)
+            post.img_id = img_list[0]
+            post.img = img_list[1]
         dummy_posts.insert(0, post)
 
     def get_count(self, owner_id):

@@ -26,7 +26,7 @@ class InMemoryImageRepo(ImageRepo):
 
     def get(self, filename):
         img_content = None
-        for img_list in dummy_image:
+        for img_list in list(dummy_image):
             if img_list[0] == filename:
                 img_content = img_list[1]
         return img_content
