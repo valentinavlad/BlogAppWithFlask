@@ -7,19 +7,19 @@
     <form method="POST" action="" enctype="multipart/form-data">
         <div class="form-group">
             <label for="title">Title</label>
-            <input type="text" class="form-control" id="title" name="title">
+            <input type="text" class="form-control" id="title" name="title" value="{{form['title']}}">
             {% if error %}
             <p class=error style="color: red">
-                <strong>Error:</strong> {{ error }}
+                <strong>{{ error['title'] }}</strong> 
             {% endif %}
         </div>
 
         <div class="form-group">
             <label for="contents">Content</label>
-            <textarea class="form-control" id="contents" rows="10" name="contents"></textarea>
+            <textarea class="form-control" id="contents" rows="10" name="contents">{{form['contents']}}</textarea>
             {% if error %}
             <p class=error style="color: red">
-                <strong>Error:</strong> {{ error }}
+                <strong>{{ error['contents'] }}</strong> 
             {% endif %}
         </div>
 
@@ -27,7 +27,7 @@
             <p><input type="file" name="file"></p>
             {% if error %}
             <p class=error style="color: red">
-                <strong>Error:</strong> {{ error }}
+                <strong>{{ error['file'] }}</strong> 
             {% endif %}
         </div>
 

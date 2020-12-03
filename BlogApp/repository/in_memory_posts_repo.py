@@ -1,5 +1,6 @@
 from itertools import islice
 from injector import inject
+from werkzeug.datastructures import FileStorage
 from repository.posts_data import dummy_posts
 from repository.users_data import dummy_users
 from repository.posts_repo import PostsRepo
@@ -38,9 +39,10 @@ class InMemoryPostsRepo(PostsRepo):
 
     def edit(self, post):
         index = dummy_posts.index(post)
-        img_list = self.db_image.edit(post.img_id, post.img)
-        post.img = img_list[1]
-        post.img_id = img_list[0]
+        if isinstance(post.img, FileStorage):
+            img_list = self.db_image.edit(post.img_id, post.img)
+            post.img = img_list[1]
+            post.img_id = img_list[0]
         dummy_posts[index] = post
 
     def delete(self, pid):
