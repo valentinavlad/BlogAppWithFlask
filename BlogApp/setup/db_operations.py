@@ -1,4 +1,5 @@
 from injector import inject
+from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists
 from setup.db_connect import DbConnect
 
@@ -38,7 +39,8 @@ class DbOperations:
         if self.db_connect.config.is_configured:
             engine = self.db_connect.get_engine()
             if not database_exists(engine.url):
-                engine = self.db_connect.get_engine_create_db()
+                engine = create_engine(self.db_connect.connection_to_server_pg,\
+                   echo=True, isolation_level="AUTOCOMMIT")
                 database_name = self.db_connect.config.params['database']
                 conn = engine.connect()
                 conn.execute("commit")
