@@ -21,7 +21,6 @@ app.register_blueprint(users_blueprint, url_prefix="/users")
 app.register_blueprint(user_statistic_blueprint, url_prefix="/statistics")
 
 @app.route('/')
-@is_config_file
 def index():
     return redirect('/posts/')
 

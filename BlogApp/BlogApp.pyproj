@@ -33,9 +33,6 @@
     <Compile Include="app.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="encoding_file.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="functionality\pagination.py">
       <SubType>Code</SubType>
     </Compile>
@@ -67,9 +64,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="models\user.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="repository\database_users_repo.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="repository\db_posts_repo_sqlalchemy.py">
@@ -139,9 +133,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="repository\posts_data.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="repository\database_posts_repo.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="repository\__init__.py">
