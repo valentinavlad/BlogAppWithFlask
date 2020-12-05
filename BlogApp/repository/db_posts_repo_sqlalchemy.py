@@ -1,8 +1,7 @@
 from injector import inject
-from flask import session
+from flask import session as flask_session
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import FileStorage
-from sqlalchemy.orm import Session
 from sqlalchemy import or_, desc
 from setup.db_connect import DbConnect
 from repository.models.post import Post
@@ -17,10 +16,10 @@ class DbPostsRepoSqlalchemy(PostsRepo):
     def __init__(self, db_connect: DbConnect, db_image: DatabaseImageRepo):
         self.db_connect = db_connect
         self.db_image = db_image
-        self.session = Session(bind=self.db_connect.get_engine())
 
     def find_by_id(self, pid):
-        result = self.session.query(Post.post_id, Post.title, Post.owner, User.name, \
+        session = self.db_connect.session
+        result = session.query(Post.post_id, Post.title, Post.owner, User.name, \
             Post.contents, Post.created_at, Post.modified_at, Post.image)\
             .join(User).filter(Post.post_id == '{}'.format(pid)).first()
 
@@ -29,8 +28,10 @@ class DbPostsRepoSqlalchemy(PostsRepo):
         post.img = self.db_image.get(post.img)
         return post
 
+
     def edit(self, post):
-        get_post = self.session.query(Post).filter(Post.post_id == post.post_id)
+        session = self.db_connect.session
+        get_post = session.query(Post).filter(Post.post_id == post.post_id)
         unmap_post = ModelPost.unmapp_post(get_post.first())
 
         if isinstance(post.img, FileStorage):
@@ -38,20 +39,22 @@ class DbPostsRepoSqlalchemy(PostsRepo):
             filename = secure_filename(filename)
         else:
             filename = unmap_post.img
-        post_update = {Post.title: post.title, Post.owner: session['user_id'],
+        post_update = {Post.title: post.title, Post.owner: flask_session['user_id'],
                        Post.contents: post.contents, Post.created_at: post.created_at,
                        Post.modified_at: post.modified_at, Post.image: filename}
         get_post.update(post_update)
-        self.session.commit()
+        session.commit()
 
     def delete(self, pid):
-        post = self.session.query(Post).filter(Post.post_id == pid).first()
+        session = self.db_connect.session
+        post = session.query(Post).filter(Post.post_id == pid).first()
         filename = post.image
-        self.session.delete(post)
-        self.session.commit()
+        session.delete(post)
+        session.commit()
         self.db_image.delete(filename)
 
     def add(self, post):
+        session = self.db_connect.session
         if post.img.filename == '':
             filename = '1.jpg'
         else:
@@ -65,11 +68,12 @@ class DbPostsRepoSqlalchemy(PostsRepo):
             modified_at=post.modified_at,
             image=filename)
 
-        self.session.add(post_to_add)
-        self.session.commit()
+        session.add(post_to_add)
+        session.commit()
 
     def get_all(self, owner_id=0, records_per_page='all', offset=0):
-        query = self.session.query(Post.post_id, Post.title, Post.owner, User.name, \
+        session = self.db_connect.session
+        query = session.query(Post.post_id, Post.title, Post.owner, User.name, \
             Post.contents, Post.created_at, Post.modified_at, Post.image).join(User)
         conditions = []
         if owner_id > 0:
@@ -87,7 +91,8 @@ class DbPostsRepoSqlalchemy(PostsRepo):
         return posts
 
     def get_count(self, owner_id=0):
-        query = self.session.query(Post.owner)
+        session = self.db_connect.session
+        query = session.query(Post.owner)
         conditions = []
         if owner_id > 0:
             conditions.append(Post.owner == owner_id)

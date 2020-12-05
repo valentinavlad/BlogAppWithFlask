@@ -1,6 +1,6 @@
 from repository.users_data import dummy_users
 from repository.posts_data import dummy_posts
-from repository.database_users_repo import UsersRepo
+from repository.users_repo import UsersRepo
 
 class InMemoryUsersRepo(UsersRepo):
     def __init__(self):
