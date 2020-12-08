@@ -15,13 +15,24 @@ user_statistic_blueprint = Blueprint('user_statistic', __name__,\
 @user_statistic_blueprint.route('/', methods=['GET'])
 @is_config_file
 @login_required
-def get_statistic(repo: PostsRepo, user_stat: UserStatistic):
+def get_statistic(repo: PostsRepo):
     owner_id = 0 if session.get("user_id") is None else int(session['user_id'])
+    page = request.args.get('page', 1, type=int)
 
     count_posts = repo.get_count(owner_id)
-
     all_posts = repo.get_all(owner_id, count_posts, 0)
+   
+    user_stat = UserStatistic(all_posts)
+    user_posts = user_stat.get_user_posts()
+     
+    pagination = Pagination(page, len(user_posts))
 
-    user_posts = user_stat.get_user_posts(all_posts)
-    
-    return render_template('user_statistic.html', data=user_posts)
+    posts = user_stat.get_all(pagination.records_per_page, pagination.offset)
+    next_url = url_for('user_statistic.get_statistic', page=str(pagination.next_page)) \
+                   if pagination.has_next() else None
+    prev_url = url_for('user_statistic.get_statistic', page=str(pagination.prev_page)) \
+                   if pagination.has_prev() else None
+
+    return render_template('user_statistic.html', data=posts,
+            next_url=next_url, prev_url=prev_url)
+

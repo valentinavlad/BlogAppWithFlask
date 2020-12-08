@@ -15,5 +15,20 @@
 
     </div>
 </div>
+
 {% endfor %}
+<div class="row">
+    <div class="col-lg-6 col-md-10 mx-auto">
+
+        {% if prev_url %}
+        <a class="btn btn-outline-info" href="{{ prev_url }}">Newer posts</a>
+        {% endif %}
+
+        {% if next_url %}
+        <a class="btn btn-outline-info" href="{{ next_url }}">Older posts</a>
+        {% endif %}
+    </div>
+
+
+</div>
     {% endblock content %}

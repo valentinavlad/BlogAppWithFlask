@@ -31,7 +31,7 @@ def configure_production(binder):
     binder.bind(Pagination, to=Pagination, scope=singleton)
 
 def configure_test(binder):
-    binder.bind(UserStatistic, to=UserStatistic, scope=singleton)
+    #binder.bind(UserStatistic, to=UserStatistic, scope=singleton)
     binder.bind(PostsRepo, to=InMemoryPostsRepo, scope=singleton)
     binder.bind(UsersRepo, to=InMemoryUsersRepo, scope=singleton)
     binder.bind(ImageRepo, to=InMemoryImageRepo, scope=singleton)
