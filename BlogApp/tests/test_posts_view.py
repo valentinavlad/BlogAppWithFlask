@@ -13,9 +13,9 @@ def test_index(client_is_config):
     response = client_is_config.get('/posts/', follow_redirects=True)
     assert response.status_code == 200
     assert '<h1>Angular</h1>' in response.get_data(as_text=True)
-    assert b'<p>By maia on March 13, 2020 <small>Post Id is 5</small></p>' in response.data
+    assert b'<p>By maia on 13 March 2020 <small>Post Id is 5</small></p>' in response.data
     assert '<h1>C++</h1>' in response.get_data(as_text=True)
-    assert b'<p>By tia on March 13, 2020 <small>Post Id is 6</small></p>' in response.data
+    assert b'<p>By tia on 13 March 2020 <small>Post Id is 6</small></p>' in response.data
     assert b'Check our latest posts in web technologies!' in response.data
 
 def test_view_post(client_is_config):
@@ -298,7 +298,7 @@ def test_see_posts_first_page(client_is_config):
     img = left + right
     assert img in response.data
     assert b'<h1>Angular</h1>' in response.data
-    assert b'<p>By maia on March 13, 2020 <small>Post Id is 5</small></p>' in response.data
+    assert b'<p>By maia on 13 March 2020 <small>Post Id is 5</small></p>' in response.data
     assert b'<h1>C++</h1>' in response.data
     assert b'Newer posts' not in response.data
     assert b'Older posts' in response.data
@@ -306,7 +306,10 @@ def test_see_posts_first_page(client_is_config):
 def test_see_posts_second_page(client_is_config):
     #have 3 pages
     response = client_is_config.get('/posts/?page=2')
-    assert b'<h1>Sql</h1>' in response.data
+    assert b'<h1>Php</h1>' in response.data
+    assert b'<h1>Laravel</h1>' in response.data
+    assert b'<h1>Ajax</h1>' in response.data
+
     assert b'<a class="btn btn-outline-info" href="/posts/?page=1">Newer posts</a>' in response.data
     assert b'<a class="btn btn-outline-info" href="/posts/?page=3&amp;user=">Older posts</a>'\
        in response.data
@@ -314,7 +317,8 @@ def test_see_posts_second_page(client_is_config):
 def test_see_posts_third_page(client_is_config):
     #have 3 pages
     response = client_is_config.get('/posts/?page=3')
-    assert b'<h1>Php</h1>' in response.data
+
+    assert b'<h1>MySql</h1>' in response.data
     assert b'Newer posts' in response.data
     assert b'Older posts' not in response.data
 
@@ -326,8 +330,8 @@ def test_filtering_by_name(client_is_config):
         sess['post_owner_id'] = '1'
     response_two = client_is_config.get('/posts/?page=1&user="tia"')
     assert b'<h1>Angular</h1>' not in response_two.data
-    assert b'<p>By maia on March 13, 2020 <small>Post Id is 5</small></p>' not in response_two.data
+    assert b'<p>By maia on 13 March 2020 <small>Post Id is 5</small></p>' not in response_two.data
     assert b'C++' in response_two.data
-    assert b'<p>By tia on March 13, 2020 <small>Post Id is 6</small></p>' in response_two.data
+    assert b'<p>By tia on 13 March 2020 <small>Post Id is 6</small></p>' in response_two.data
     assert b'<h1>Vue Js</h1>' in response_two.data
     assert b'By tia' in response_two.data

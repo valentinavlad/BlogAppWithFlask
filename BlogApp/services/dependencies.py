@@ -19,10 +19,13 @@ from services.user_statistic import UserStatistic
 from functionality.pagination import Pagination
 
 def configure_production(binder):
-    binder.bind(UserStatistic, to=UserStatistic, scope=singleton)
-    binder.bind(PostsRepo, to=DbPostsRepoSqlalchemy, scope=singleton)
-    binder.bind(UsersRepo, to=DbUsersRepoSqlalchemy, scope=singleton)
-    binder.bind(ImageRepo, to=DatabaseImageRepo, scope=singleton)
+    #binder.bind(UserStatistic, to=UserStatistic, scope=singleton)
+    binder.bind(PostsRepo, to=InMemoryPostsRepo, scope=singleton)
+    binder.bind(UsersRepo, to=InMemoryUsersRepo, scope=singleton)
+    binder.bind(ImageRepo, to=InMemoryImageRepo, scope=singleton)
+    #binder.bind(PostsRepo, to=DbPostsRepoSqlalchemy, scope=singleton)
+    #binder.bind(UsersRepo, to=DbUsersRepoSqlalchemy, scope=singleton)
+    #binder.bind(ImageRepo, to=DatabaseImageRepo, scope=singleton)
     binder.bind(DatabaseConfig, to=DatabaseConfig, scope=singleton)
     binder.bind(Authentication, to=Authentication, scope=singleton)
     binder.bind(PasswordManager, to=PasswordManager, scope=singleton)

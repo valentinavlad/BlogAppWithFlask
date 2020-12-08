@@ -80,7 +80,7 @@ def test_update_user_by_admin(client_is_config):
 
     response_three = client_is_config.get('/posts/?page=1')
     assert b'Angular' in response_three.data
-    assert b'<p>By maia_update on March 13, 2020 <small>Post Id is 5</small></p>'\
+    assert b'<p>By maia_update on 13 March 2020 <small>Post Id is 5</small></p>'\
        in response_three.data
 
 def test_update_user_by_owner(client_is_config):

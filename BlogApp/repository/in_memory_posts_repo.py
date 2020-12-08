@@ -28,6 +28,8 @@ class InMemoryPostsRepo(PostsRepo):
         posts = list(islice(dummy_posts, offset, records_per_page + offset))
         for post in posts:
             post.img = self.db_image.get(post.img_id)
+            if not isinstance(post.created_at, str):
+                post.created_at = post.created_at.strftime("%d %B %Y") 
             for user in dummy_users:
                 if int(post.owner) == user.user_id:
                     post.name = user.name
