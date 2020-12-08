@@ -2,4 +2,18 @@
 
 {% block content %}
 <h1>User statistic</h1>
+
+{% for key, value in data.items() %}
+<div class="row posts mb-4">
+
+    <div class="col-lg-6 col-md-10 mx-auto" id="list_posts">
+
+        <div class="post-preview">
+            <h5>In {{key[1]}} {{key[0]}} you had {{value|length}} posts</h5>
+        </div>
+
+
+    </div>
+</div>
+{% endfor %}
     {% endblock content %}
