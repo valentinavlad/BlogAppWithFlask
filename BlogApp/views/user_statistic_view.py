@@ -1,5 +1,4 @@
 from injector import inject
-from datetime import datetime
 from flask import Blueprint, render_template, session, request, url_for
 from utils.setup_decorators import is_config_file
 from utils.authorization import login_required
@@ -21,18 +20,15 @@ def get_statistic(repo: PostsRepo):
 
     count_posts = repo.get_count(owner_id)
     all_posts = repo.get_all(owner_id, count_posts, 0)
-   
     user_stat = UserStatistic(all_posts)
     user_posts = user_stat.get_user_posts()
-     
-    pagination = Pagination(page, len(user_posts))
 
+    pagination = Pagination(page, len(user_posts))
     posts = user_stat.get_all(pagination.records_per_page, pagination.offset)
     next_url = url_for('user_statistic.get_statistic', page=str(pagination.next_page)) \
                    if pagination.has_next() else None
     prev_url = url_for('user_statistic.get_statistic', page=str(pagination.prev_page)) \
                    if pagination.has_prev() else None
 
-    return render_template('user_statistic.html', data=posts,
-            next_url=next_url, prev_url=prev_url)
-
+    return render_template('user_statistic.html', data=posts, \
+        next_url=next_url, prev_url=prev_url)

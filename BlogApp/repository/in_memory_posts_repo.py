@@ -25,21 +25,25 @@ class InMemoryPostsRepo(PostsRepo):
         return found_post
 
     def get_all(self, owner_id=0, records_per_page=3, offset=0):
+        if owner_id > 0:
+            posts_by_owner = []
+            for post in dummy_posts:
+                if int(post.owner) == owner_id:
+                    if not isinstance(post.created_at, str):
+                        post.created_at = post.created_at.strftime("%d %B %Y")
+                    post.img = self.db_image.get(post.img_id)
+                    posts_by_owner.append(post)
+            return list(islice(posts_by_owner, offset, records_per_page + offset))
+
         posts = list(islice(dummy_posts, offset, records_per_page + offset))
+
         for post in posts:
             post.img = self.db_image.get(post.img_id)
             if not isinstance(post.created_at, str):
-                post.created_at = post.created_at.strftime("%d %B %Y") 
+                post.created_at = post.created_at.strftime("%d %B %Y")
             for user in dummy_users:
                 if int(post.owner) == user.user_id:
                     post.name = user.name
-        posts_by_owner = []
-        if owner_id > 0:
-            for post in dummy_posts:
-                if int(post.owner) == owner_id:
-                    post.img = self.db_image.get(post.img)
-                    posts_by_owner.append(post)
-            return list(islice(posts_by_owner, offset, records_per_page + offset))
         return posts
 
     def edit(self, post):

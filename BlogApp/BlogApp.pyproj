@@ -114,6 +114,9 @@
     <Compile Include="tests\test_users_view.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tests\test_user_statistic_view.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="utils\authorization.py">
       <SubType>Code</SubType>
     </Compile>
