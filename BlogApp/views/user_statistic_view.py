@@ -1,9 +1,8 @@
 from injector import inject
-from flask import Blueprint, render_template, session, request, url_for
+from flask import Blueprint, render_template, request, url_for
 from utils.setup_decorators import is_config_file
 from utils.authorization import login_required
 from services.user_statistic import UserStatistic
-from repository.posts_repo import PostsRepo
 from functionality.pagination import Pagination
 
 
@@ -14,7 +13,7 @@ user_statistic_blueprint = Blueprint('user_statistic', __name__,\
 @user_statistic_blueprint.route('/', methods=['GET'])
 @is_config_file
 @login_required
-def get_statistic(repo: PostsRepo, user_stat: UserStatistic):
+def get_statistic(user_stat: UserStatistic):
     page = request.args.get('page', 1, type=int)
     user_posts = user_stat.get_user_posts()
 

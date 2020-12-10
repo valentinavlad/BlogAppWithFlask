@@ -15,8 +15,8 @@ from setup.db_connect import DbConnect
 from setup.db_operations import DbOperations
 from services.authentication import Authentication
 from services.password_manager import PasswordManager
-from functionality.pagination import Pagination
 from services.user_statistic import UserStatistic
+from functionality.pagination import Pagination
 
 def configure_production(binder):
     binder.bind(UserStatistic, to=UserStatistic, scope=singleton)

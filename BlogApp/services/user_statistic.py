@@ -1,5 +1,5 @@
-from injector import inject
 from itertools import islice
+from injector import inject
 from flask import session
 from repository.posts_repo import PostsRepo
 
