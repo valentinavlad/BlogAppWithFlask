@@ -14,7 +14,7 @@ class Pagination:
     @current_page.setter
     def current_page(self, page):
         if page is not None:
-           self._current_page = page
+            self._current_page = page
 
     @property
     def count(self):
@@ -23,7 +23,7 @@ class Pagination:
     @count.setter
     def count(self, get_count):
         if get_count is not None:
-           self._count = get_count
+            self._count = get_count
 
     @property
     def pages(self):

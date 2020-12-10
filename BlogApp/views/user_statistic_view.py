@@ -15,7 +15,7 @@ user_statistic_blueprint = Blueprint('user_statistic', __name__,\
 def get_statistic(user_stat: UserStatistic, pagination: Pagination):
     page = request.args.get('page', 1, type=int)
     user_posts = user_stat.get_user_posts()
-    
+
     pagination.current_page = page
     pagination.count = len(user_posts)
 

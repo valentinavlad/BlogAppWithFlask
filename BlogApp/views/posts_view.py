@@ -41,7 +41,6 @@ def posts(repo: PostsRepo, user_repo: UsersRepo, pagination: Pagination):
 
     pagination.current_page = page
     pagination.count = repo.get_count(owner_id)
-
     users = user_repo.view_all()
 
     all_posts = repo.get_all(owner_id, \

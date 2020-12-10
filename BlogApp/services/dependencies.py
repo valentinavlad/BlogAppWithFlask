@@ -40,4 +40,4 @@ def configure_test(binder):
     binder.bind(PasswordManager, to=PasswordManager, scope=request)
     binder.bind(DbConnect, to=Mock(DbConnect), scope=singleton)
     binder.bind(DbOperations, to=Mock(DbOperations), scope=singleton)
-    binder.bind(Pagination, to=Mock(Pagination), scope=singleton)
+    binder.bind(Pagination, to=Pagination, scope=singleton)
