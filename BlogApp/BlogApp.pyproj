@@ -36,6 +36,9 @@
     <Compile Include="functionality\pagination.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="functionality\pagination_factory.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="functionality\__init__.py">
       <SubType>Code</SubType>
     </Compile>

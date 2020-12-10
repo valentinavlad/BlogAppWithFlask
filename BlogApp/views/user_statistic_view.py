@@ -14,13 +14,8 @@ user_statistic_blueprint = Blueprint('user_statistic', __name__,\
 @user_statistic_blueprint.route('/', methods=['GET'])
 @is_config_file
 @login_required
-def get_statistic(repo: PostsRepo):
-    owner_id = 0 if session.get("user_id") is None else int(session['user_id'])
+def get_statistic(repo: PostsRepo, user_stat: UserStatistic):
     page = request.args.get('page', 1, type=int)
-
-    count_posts = repo.get_count(owner_id)
-    all_posts = repo.get_all(owner_id, count_posts, 0)
-    user_stat = UserStatistic(all_posts)
     user_posts = user_stat.get_user_posts()
 
     pagination = Pagination(page, len(user_posts))
