@@ -5,7 +5,6 @@ from utils.authorization import login_required
 from services.user_statistic import UserStatistic
 from functionality.pagination import Pagination
 
-
 user_statistic_blueprint = Blueprint('user_statistic', __name__,\
    template_folder='templates', static_folder='static')
 
@@ -13,12 +12,15 @@ user_statistic_blueprint = Blueprint('user_statistic', __name__,\
 @user_statistic_blueprint.route('/', methods=['GET'])
 @is_config_file
 @login_required
-def get_statistic(user_stat: UserStatistic):
+def get_statistic(user_stat: UserStatistic, pagination: Pagination):
     page = request.args.get('page', 1, type=int)
     user_posts = user_stat.get_user_posts()
+    
+    pagination.current_page = page
+    pagination.count = len(user_posts)
 
-    pagination = Pagination(page, len(user_posts))
     posts = user_stat.get_all(pagination.records_per_page, pagination.offset)
+
     next_url = url_for('user_statistic.get_statistic', page=str(pagination.next_page)) \
                    if pagination.has_next() else None
     prev_url = url_for('user_statistic.get_statistic', page=str(pagination.prev_page)) \

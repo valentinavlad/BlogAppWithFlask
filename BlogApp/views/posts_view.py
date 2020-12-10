@@ -10,7 +10,6 @@ from repository.image_repo import ImageRepo
 from models.post import Post
 from functionality.pagination import Pagination
 
-
 index_blueprint = Blueprint('index', __name__, template_folder='templates',
                             static_folder='static')
 
@@ -29,7 +28,7 @@ def reset():
 @inject
 @index_blueprint.route('/', methods=['GET', 'POST'])
 @is_config_file
-def posts(repo: PostsRepo, user_repo: UsersRepo):
+def posts(repo: PostsRepo, user_repo: UsersRepo, pagination: Pagination):
     owner_id = 0 if session.get("post_owner_id") is None else int(session['post_owner_id'])
     current_owner = '' if session.get("post_owner") is None else session['post_owner']
     if request.method == 'POST':
@@ -40,11 +39,15 @@ def posts(repo: PostsRepo, user_repo: UsersRepo):
             owner_id = int(session['post_owner_id'])
     page = request.args.get('page', 1, type=int)
 
-    pagination = Pagination(page, repo.get_count(owner_id))
+    pagination.current_page = page
+    pagination.count = repo.get_count(owner_id)
 
     users = user_repo.view_all()
+
     all_posts = repo.get_all(owner_id, \
                 pagination.records_per_page, pagination.offset)
+
+
     next_url = url_for('index.posts', page=str(pagination.next_page), user=current_owner) \
                    if pagination.has_next() else None
     prev_url = url_for('index.posts', page=str(pagination.prev_page)) \

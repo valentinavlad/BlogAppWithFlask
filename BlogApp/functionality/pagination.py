@@ -3,9 +3,27 @@ class Pagination:
     records_per_page = 5
     first_page = 1
 
-    def __init__(self, current_page, count):
-        self.current_page = current_page
-        self.count = count
+    def __init__(self):
+        self._current_page = None
+        self._count = None
+
+    @property
+    def current_page(self):
+        return self._current_page
+
+    @current_page.setter
+    def current_page(self, page):
+        if page is not None:
+           self._current_page = page
+
+    @property
+    def count(self):
+        return self._count
+
+    @count.setter
+    def count(self, get_count):
+        if get_count is not None:
+           self._count = get_count
 
     @property
     def pages(self):
