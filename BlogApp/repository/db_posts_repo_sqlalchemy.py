@@ -23,8 +23,7 @@ class DbPostsRepoSqlalchemy(PostsRepo):
             Post.contents, Post.created_at, Post.modified_at, Post.image)\
             .join(User).filter(Post.post_id == '{}'.format(pid)).first()
 
-        result_to_list = ModelPost.get_list_from_result(result)
-        post = ModelPost.get_post(result_to_list)
+        post = ModelPost.unmapp_post(result)
         post.img = self.db_image.get(post.img)
         return post
 
@@ -85,7 +84,7 @@ class DbPostsRepoSqlalchemy(PostsRepo):
         posts = []
 
         for row in query:
-            post = ModelPost.get_post(row)
+            post = ModelPost.unmapp_post(row)
             post.img = self.db_image.get(post.img)
             posts.append(post)
         return posts

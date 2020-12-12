@@ -1,6 +1,7 @@
 import datetime
 from flask import session
-class Post():
+
+class Post:
     count = 1
     def __init__(self, title, owner, contents):
         self.post_id = Post.count
@@ -13,24 +14,6 @@ class Post():
         Post.count += 1
 
     @classmethod
-    def get_post(cls, row):
-        cls.post_id = row[0]
-        cls.title = row[1]
-        cls.owner = row[2]
-        cls.name = row[3]
-        cls.contents = row[4]
-        cls.created_at = row[5]
-        cls.modified_at = row[6]
-        cls.img = row[7]
-        obj = cls(cls.title, cls.owner, cls.contents)
-        obj.created_at = cls.created_at.strftime("%b %d %Y %H:%M:%S")
-        obj.modified_at = cls.modified_at
-        obj.post_id = cls.post_id
-        obj.name = cls.name
-        obj.img = cls.img
-        return obj
-
-    @classmethod
     def unmapp_post(cls, post_repo):
         cls.post_id = post_repo.post_id
         cls.title = post_repo.title
@@ -41,15 +24,9 @@ class Post():
         cls.img = post_repo.image
         obj = cls(cls.title, cls.owner, cls.contents)
         obj.post_id = cls.post_id
+        obj.created_at = cls.created_at.strftime("%d %B %Y")
         obj.img = cls.img
         return obj
-
-    @staticmethod
-    def get_list_from_result(result):
-        list_dict = []
-        for i in result:
-            list_dict.append(i)
-        return list_dict
 
     def is_owner(self):
         return int(self.owner) == session['user_id']
