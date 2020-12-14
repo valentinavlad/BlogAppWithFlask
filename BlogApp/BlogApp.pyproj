@@ -105,6 +105,9 @@
     <Compile Include="setup\db_connect.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tests\test_api_posts_view.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="tests\test_login_view.py">
       <SubType>Code</SubType>
     </Compile>
