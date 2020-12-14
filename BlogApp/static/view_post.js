@@ -1,9 +1,10 @@
-fetch('http://localhost:5000/api-posts/' + encodeURIComponent(id))
+fetch('http://localhost:4449/api-posts/' + encodeURIComponent(id))
   .then(res => res.json())
   .then(data => renderPost(data))
   .catch(error => console.log(error))
 
-const url = 'http://localhost:5000/posts/';
+const url22 = 'http://localhost:5000/posts/';
+const url = 'http://localhost:4449/posts/';
 function renderPost(data){
     console.log(typeof(session_logged))
     console.log(data);
@@ -62,6 +63,15 @@ function renderPost(data){
             a.className = 'btn btn-primary';
 
             newDiv2.append(a);
+
+            var a_delete = document.createElement('a');  
+            var link2 = document.createTextNode("Delete your post"); 
+            a_delete.appendChild(link2);  
+            a_delete.title = "This is Link";  
+            a_delete.href = url + data['post_id'] + '/delete';  
+            a_delete.className = 'btn btn-danger';
+
+            newDiv2.append(a_delete);
        }  
     }
 }

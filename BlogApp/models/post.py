@@ -1,8 +1,7 @@
 import datetime
-import json
 from flask import session
 
-class Post(object):
+class Post:
     count = 1
     def __init__(self, title, owner, contents):
         self.post_id = Post.count

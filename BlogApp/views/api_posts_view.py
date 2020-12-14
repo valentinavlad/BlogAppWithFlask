@@ -3,7 +3,7 @@ from flask import Blueprint, jsonify
 from repository.posts_repo import PostsRepo
 
 api_posts_blueprint = Blueprint('api_posts', __name__, template_folder='templates',
-                            static_folder='static')
+                                static_folder='static')
 
 @inject
 @api_posts_blueprint.route('/<int:pid>', methods=['GET'])
