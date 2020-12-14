@@ -36,6 +36,6 @@ def db_version_checking(db_operation: DbOperations):
 FlaskInjector(app=app, modules=[configure_production])
 
 if __name__ == '__main__':
-    app.run(debug=True)
-    #app.run('localhost', 4449)
+    #app.run(debug=True)
+    app.run('localhost', 4449)
     

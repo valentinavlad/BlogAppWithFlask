@@ -1,12 +1,15 @@
-fetch('http://localhost:5000/api-posts/' + encodeURIComponent(id))
+fetch('http://localhost:4449/api-posts/' + encodeURIComponent(id))
     .then(handleErrors)
+    .then(res => res.json())
     .then(data => {
+        console.log("FETCH........")
+        console.log(data);
         renderPost(data);
-        console.log("ok");} )
+        console.log(data);} )
     .catch(error => console.log(error) );
 
-const url = 'http://localhost:5000/posts/';
-const url44 = 'http://localhost:4449/posts/';
+const url55 = 'http://localhost:5000/posts/';
+const url = 'http://localhost:4449/posts/';
 
 function handleErrors(response) {
     if (!response.ok) {
@@ -91,8 +94,4 @@ function renderPost(data){
             newDiv2.append(a_delete);
        }  
     }
-}
-
-function create_anchor(newDiv2, text_link){
-
 }

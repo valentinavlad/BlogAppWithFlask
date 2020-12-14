@@ -3,14 +3,14 @@
 
 <div class="text-center">
     <h2>Hi! View your post</h2>
-    <p>{{post_id}}</p>
 </div>
 
 <script type="text/javascript">
-    var id = {{ post_id }};
-    var session_logged = {{session['logged_in']|tojson}};
-    var session_name = {{session['name']|tojson}};
-    var session_id = {{session['user_id']}};
+    var id = {{ post_id }};    
+
+    let session_logged = {{ session.get('logged_in')|tojson if session else False |tojson }}; 
+    let session_name = {{ session.get('name')|tojson if session else ""|tojson }}; 
+    let session_id = {{ session.get('user_id')|tojson if session else 0 }}; 
 </script>
 <script type="text/javascript" src="{{url_for('static', filename='view_post.js') }}"></script>
 
