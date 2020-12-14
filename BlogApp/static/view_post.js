@@ -90,8 +90,14 @@ function renderPost(data){
             a_delete.title = "This is Link";  
             a_delete.href = url + data['post_id'] + '/delete';  
             a_delete.className = 'btn btn-danger';
-
+            a_delete.id = "delete-btn"
             newDiv2.append(a_delete);
+            document.getElementById("delete-btn").addEventListener("click", confirmDelete);
+            
        }  
     }
+}
+
+function confirmDelete() {
+    if (!confirm('Delete selected post?') ) return false
 }
