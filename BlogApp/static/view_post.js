@@ -53,23 +53,19 @@ function renderPost(data){
     
     if(session_logged == true){
        if (data['owner'] == session_id || session_name == 'admin'){
-                console.log("yuods");
-           var a = document.createElement('a');  
-                  
-            // Create the text node for anchor element. 
+              
+            var a = document.createElement('a');  
             var link = document.createTextNode("Edit your post"); 
-                  
-            // Append the text node to anchor element. 
             a.appendChild(link);  
-                  
-            // Set the title. 
             a.title = "This is Link";  
-                  
-            // Set the href property. 
             a.href = url + data['post_id'] + '/edit';  
             a.className = 'btn btn-primary';
-            // Append the anchor element to the body. 
-            document.body.appendChild(a);  
+
+            newDiv2.append(a);
        }  
     }
+}
+
+function create_anchor(newDiv2, text_link){
+
 }
