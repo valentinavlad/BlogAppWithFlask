@@ -85,9 +85,8 @@ def new(repo: PostsRepo, img_repo: ImageRepo):
 @inject
 @index_blueprint.route('/<int:pid>', methods=['GET'])
 @is_config_file
-def view_post(repo: PostsRepo, pid):
-    post = repo.find_by_id(pid)
-    return render_template('view_post.html', post=post)
+def view_post(pid):
+    return render_template('view_post.html', post_id=pid, session=session)
 
 @inject
 @index_blueprint.route('/<int:pid>/edit', methods=['GET', 'POST'])

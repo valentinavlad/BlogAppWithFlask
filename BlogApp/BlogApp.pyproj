@@ -159,6 +159,9 @@
     <Compile Include="utils\__init__.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="views\api_posts_view.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="views\setup_view.py">
       <SubType>Code</SubType>
     </Compile>
@@ -199,6 +202,9 @@
     <Content Include="static\login_style.css" />
     <Content Include="static\script.js" />
     <Content Include="static\style.css">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="static\view_post.js">
       <SubType>Code</SubType>
     </Content>
     <Content Include="templates\400.html" />

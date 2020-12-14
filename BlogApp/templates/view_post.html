@@ -3,29 +3,15 @@
 
 <div class="text-center">
     <h2>Hi! View your post</h2>
+    <p>{{post_id}}</p>
 </div>
-<div class="row posts">
-    <div class="col-lg-8 col-md-10 mx-auto">
-        <h3>{{post.title}}</h3>
-        <p>By {{post.name}} </p>
-        <p>Created at {{ post.created_at }} <small>Post Id is {{post.post_id}}</small></p>
-        <p><pre id="view_content">{{ post.contents }}</pre></p>
 
-        {% if session['logged_in'] is sameas true  %}
-        {% if post.is_owner() is sameas true or session['name'] == 'admin' %}
-        <a href="{{url_for('index.edit', pid=post.post_id)}}" class="btn btn-primary">Edit your post</a>
-        <a href="{{url_for('index.delete', pid=post.post_id)}}"
-           class="btn btn-warning"
-           onclick="if (!confirm('Delete selected post?') ) return false">
-            Delete your post
-        </a>
-        {% endif %}
-        {%endif%}
+<script type="text/javascript">
+    var id = {{ post_id }};
+    var session_logged = {{session['logged_in']|tojson}};
+    var session_name = {{session['name']|tojson}};
+    var session_id = {{session['user_id']}};
+</script>
+<script type=text/javascript src="{{url_for('static', filename='view_post.js') }}"></script>
 
-
-    </div>
-    <div class="col-lg-4 col-md-2 mx-auto">
-        <img src="{{ post.img}}" id="post-image">
-    </div>
-    </div>
     {% endblock content %}

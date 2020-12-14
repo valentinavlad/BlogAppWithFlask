@@ -1,7 +1,8 @@
 import datetime
+import json
 from flask import session
 
-class Post:
+class Post(object):
     count = 1
     def __init__(self, title, owner, contents):
         self.post_id = Post.count
@@ -21,11 +22,13 @@ class Post:
         cls.contents = post_repo.contents
         cls.created_at = post_repo.created_at
         cls.modified_at = post_repo.modified_at
+        cls.name = post_repo.name
         cls.img = post_repo.image
         obj = cls(cls.title, cls.owner, cls.contents)
         obj.post_id = cls.post_id
         obj.created_at = cls.created_at.strftime("%d %B %Y")
         obj.img = cls.img
+        obj.name = cls.name
         return obj
 
     def is_owner(self):
