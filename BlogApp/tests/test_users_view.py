@@ -75,8 +75,9 @@ def test_update_user_by_admin(client_is_config):
 
     response_two = client_is_config.get('/posts/5')
 
-    assert b'By maia_update' in response_two.data
-    assert b'Angular' in response_two.data
+    assert b'var id = 5;' in response_two.data
+    assert b'let session_logged = true;' in response_two.data
+    assert b'let session_name = "admin";' in response_two.data
 
     response_three = client_is_config.get('/posts/?page=1')
     assert b'Angular' in response_three.data

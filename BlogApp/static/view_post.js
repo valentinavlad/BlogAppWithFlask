@@ -92,12 +92,20 @@ function renderPost(data){
             a_delete.className = 'btn btn-danger';
             a_delete.id = "delete-btn"
             newDiv2.append(a_delete);
-            document.getElementById("delete-btn").addEventListener("click", confirmDelete);
+            document.getElementById("delete-btn").addEventListener("click", confirm_delete);
             
        }  
     }
 }
 
-function confirmDelete() {
-    if (!confirm('Delete selected post?') ) return false
+function confirm_delete(){
+    var txt;
+    var r = confirm("Are you sure you want to delete?");
+    if (r == true) {
+        txt = "You pressed OK!";
+    } else {
+        txt = "You pressed Cancel!";
+        event.preventDefault();
+    }
+    console.log(txt);
 }
