@@ -22,7 +22,8 @@ class DbPostsRepoSqlalchemy(PostsRepo):
         result = session.query(Post.post_id, Post.title, Post.owner, User.name, \
             Post.contents, Post.created_at, Post.modified_at, Post.image)\
             .join(User).filter(Post.post_id == '{}'.format(pid)).first()
-
+        if result is None:
+            return None
         post = ModelPost.unmapp_post(result)
         post.img = self.db_image.get(post.img)
         return post

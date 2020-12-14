@@ -1,10 +1,27 @@
-fetch('http://localhost:4449/api-posts/' + encodeURIComponent(id))
-  .then(res => res.json())
-  .then(data => renderPost(data))
-  .catch(error => console.log(error))
+fetch('http://localhost:5000/api-posts/' + encodeURIComponent(id))
+    .then(handleErrors)
+    .then(data => {
+        renderPost(data);
+        console.log("ok");} )
+    .catch(error => console.log(error) );
 
-const url22 = 'http://localhost:5000/posts/';
-const url = 'http://localhost:4449/posts/';
+const url = 'http://localhost:5000/posts/';
+const url44 = 'http://localhost:4449/posts/';
+
+function handleErrors(response) {
+    if (!response.ok) {
+        handleError(response);
+        throw Error(response.statusText);
+    }
+    return response;
+}
+
+function handleError(response){
+    let h3 = document.createElement('h3');
+    h3.innerHTML = response.status + " " + response.statusText
+    document.getElementById("container-post").appendChild(h3);
+}
+
 function renderPost(data){
     console.log(typeof(session_logged))
     console.log(data);
