@@ -13,8 +13,8 @@ from views.api_posts_view import api_posts_blueprint
 
 app = Flask(__name__)
 
-app.secret_key = 'any random string'
-
+#app.secret_key = 'any random string'
+app.config['SECRET_KEY'] = 'any random string'
 app.register_blueprint(index_blueprint, url_prefix="/posts")
 app.register_blueprint(setup_blueprint, url_prefix="/setup")
 app.register_blueprint(login_blueprint, url_prefix="/auth")

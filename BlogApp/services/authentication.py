@@ -1,4 +1,5 @@
 from injector import inject
+import jwt
 from flask import session, redirect, url_for
 from services.password_manager import PasswordManager
 from repository.users_repo import UsersRepo
@@ -19,7 +20,8 @@ class Authentication():
             return error, user
         if name != user.name or not self.secure_pass.is_correct_password(password, user):
             error = 'Invalid credentials.'
-        return error, user
+        token = jwt.encode({'user_id' : user.user_id}, "cucuisjdsj")
+        return error, token.decode('UTF-8')
 
     @staticmethod
     def logout_user():

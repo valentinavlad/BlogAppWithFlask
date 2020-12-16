@@ -1,12 +1,18 @@
 from injector import inject
-from flask import Blueprint, jsonify, Response, json
+from flask import Blueprint, jsonify, Response, json, make_response, request
 from repository.posts_repo import PostsRepo
+from services.authentication import Authentication
 
 api_posts_blueprint = Blueprint('api_posts', __name__, template_folder='templates',
                                 static_folder='static')
-
-def login():
-    return ''
+@inject
+@api_posts_blueprint.route('/login')
+def login(authentication: Authentication):
+    auth = request.authorization
+    if not auth or not auth.username or not auth.password:
+        return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+    token = authentication.login(auth.username, auth.password)
+    return jsonify({'token' : token})
 
 @inject
 @api_posts_blueprint.route('/<int:pid>', methods=['GET'])

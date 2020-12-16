@@ -5,6 +5,7 @@ from repository.users_repo import UsersRepo
 from services.authentication import Authentication
 from utils.setup_decorators import is_config_file
 from models.user import User
+
 login_blueprint = Blueprint('auth', __name__, template_folder='templates', static_folder='static')
 
 def set_session(user):

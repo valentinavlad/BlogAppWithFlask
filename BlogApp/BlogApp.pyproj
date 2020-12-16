@@ -200,6 +200,9 @@
     <Folder Include="templates\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include=".env">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="scripts\queries.sql" />
     <Content Include="static\img\1.jpg" />
     <Content Include="static\login_style.css" />
