@@ -27,6 +27,7 @@ def test_view_post_user_not_logged_in(client_is_config):
 
 def test_view_post_user_logged_in(client_is_config):
     log = login(client_is_config, 'tia', '123')
+    assert b'Hello Tia' in log.data
     response = client_is_config.get('/posts/5')
     assert 'var id = 5;' in response.get_data(as_text=True)
     assert b'let session_logged = true;' in response.data

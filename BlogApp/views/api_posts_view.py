@@ -10,7 +10,9 @@ api_posts_blueprint = Blueprint('api_posts', __name__, template_folder='template
 def login(authentication: Authentication):
     auth = request.authorization
     if not auth or not auth.username or not auth.password:
-        return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+        return make_response('Could not verify', 401,\
+           {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+
     token = authentication.login(auth.username, auth.password)
     return jsonify({'token' : token})
 
@@ -33,7 +35,7 @@ def delete(repo: PostsRepo, pid):
 
 
 def custom_response(res, status_code):
-  return Response(
-    mimetype="application/json",
-    response=json.dumps(res),
-    status=status_code)
+    return Response(
+        mimetype="application/json",
+        response=json.dumps(res),
+        status=status_code)
