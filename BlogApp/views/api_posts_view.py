@@ -5,6 +5,9 @@ from repository.posts_repo import PostsRepo
 api_posts_blueprint = Blueprint('api_posts', __name__, template_folder='templates',
                                 static_folder='static')
 
+def login():
+    return ''
+
 @inject
 @api_posts_blueprint.route('/<int:pid>', methods=['GET'])
 def view_post(repo: PostsRepo, pid):
@@ -12,6 +15,16 @@ def view_post(repo: PostsRepo, pid):
     if post is None:
         return custom_response({'error': 'post not found'}, 404)
     return jsonify(post.__dict__)
+
+@inject
+@api_posts_blueprint.route('/<int:pid>/', methods=['DELETE'])
+def delete(repo: PostsRepo, pid):
+    post_delete = repo.find_by_id(pid)
+    if post_delete is None:
+        return jsonify({'error' : 'No post found!'})
+    repo.delete(pid)
+    return jsonify({'message' : 'Post deleted!'})
+
 
 def custom_response(res, status_code):
   return Response(

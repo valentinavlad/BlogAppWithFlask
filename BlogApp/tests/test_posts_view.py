@@ -18,9 +18,19 @@ def test_index(client_is_config):
     assert b'<p>By tia on 13 March 2020 <small>Post Id is 6</small></p>' in response.data
     assert b'Check our latest posts in web technologies!' in response.data
 
-def test_view_post(client_is_config):
+def test_view_post_user_not_logged_in(client_is_config):
     response = client_is_config.get('/posts/5')
     assert 'var id = 5;' in response.get_data(as_text=True)
+    assert b'let session_logged = false;' in response.data
+    assert b'let session_name = "";' in response.data
+    assert response.status_code == 200
+
+def test_view_post_user_logged_in(client_is_config):
+    log = login(client_is_config, 'tia', '123')
+    response = client_is_config.get('/posts/5')
+    assert 'var id = 5;' in response.get_data(as_text=True)
+    assert b'let session_logged = true;' in response.data
+    assert b'let session_name = "tia";' in response.data
     assert response.status_code == 200
 
 def test_post_create_by_owner(client_is_config):
