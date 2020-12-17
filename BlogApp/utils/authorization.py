@@ -1,6 +1,13 @@
+import os
+from injector import inject
 from functools import wraps
-from flask import url_for, redirect, session, render_template
+from flask import url_for, redirect, session, render_template, request, jsonify
+import jwt
+from dotenv import load_dotenv
+from repository.users_repo import UsersRepo
 
+load_dotenv()
+SECRET_KEY = os.getenv("SECRET_KEY")
 def login_required(view):
     @wraps(view)
     def wrapped_view(**kwargs):
@@ -39,3 +46,21 @@ def first_loggin(view):
             return render_template('403error.html'), 403
         return view(**kwargs)
     return wrapped_view
+
+def token_required(f):
+    @wraps(f)
+    @inject
+    def decorated(user_repo: UsersRepo, *args, **kwargs):
+        token = None
+
+        if 'x-access-token' in request.headers:
+            token = request.headers['x-access-token']
+        if not token:
+            return jsonify({'message' : 'Token is missing'}), 401
+        try:
+            data = jwt.decode(token, SECRET_KEY)
+            user = user_repo.find_by_id(data['user_id'])
+        except:
+            return jsonify({'message' : 'Token is invalid!'}), 401
+        return f(user, *args, **kwargs)
+    return decorated

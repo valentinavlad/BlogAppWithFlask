@@ -2,7 +2,7 @@ from injector import inject
 from flask import Blueprint, jsonify, Response, json, make_response, request
 from repository.posts_repo import PostsRepo
 from services.authentication import Authentication
-
+from utils.authorization import token_required
 api_posts_blueprint = Blueprint('api_posts', __name__, template_folder='templates',
                                 static_folder='static')
 @inject
@@ -12,9 +12,12 @@ def login(authentication: Authentication):
     if not auth or not auth.username or not auth.password:
         return make_response('Could not verify', 401,\
            {'WWW-Authenticate' : 'Basic realm="Login required!"'})
-
-    token = authentication.login(auth.username, auth.password)
-    return jsonify({'token' : token})
+    error, user = authentication.login(auth.username, auth.password)
+    if error is None:
+        token = authentication.get_token(user)
+        return jsonify({'token' : token})
+    return make_response('Could not verify', 401,\
+        {'WWW-Authenticate' : 'Basic realm="Login required!"'})
 
 @inject
 @api_posts_blueprint.route('/<int:pid>', methods=['GET'])
@@ -26,13 +29,15 @@ def view_post(repo: PostsRepo, pid):
 
 @inject
 @api_posts_blueprint.route('/<int:pid>/', methods=['DELETE'])
-def delete(repo: PostsRepo, pid):
+@token_required
+def delete(user, repo: PostsRepo, pid):
     post_delete = repo.find_by_id(pid)
     if post_delete is None:
-        return jsonify({'error' : 'No post found!'})
+        return custom_response({'error': 'post not found'}, 404)
+    if not post_delete.owner == user.user_id and not user.name == 'admin':
+        return custom_response({'error': 'Forbidden'}, 403)
     repo.delete(pid)
     return jsonify({'message' : 'Post deleted!'})
-
 
 def custom_response(res, status_code):
     return Response(
