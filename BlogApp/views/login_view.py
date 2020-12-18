@@ -4,6 +4,7 @@ from flask import Blueprint, render_template, url_for, \
 from repository.users_repo import UsersRepo
 from services.authentication import Authentication
 from utils.setup_decorators import is_config_file
+from utils.authorization import token_required
 from models.user import User
 
 login_blueprint = Blueprint('auth', __name__, template_folder='templates', static_folder='static')
@@ -14,6 +15,7 @@ def set_session(user):
     session['name'] = user.name
     session['email'] = user.email
     session['logged_in'] = True
+
 
 @inject
 @login_blueprint.route('/login', methods=['GET', 'POST'])
@@ -30,6 +32,7 @@ def login(auth: Authentication):
             return redirect(url_for('index.posts'))
         flash(error)
     return render_template('login.html')
+
 
 @inject
 @login_blueprint.route('/logout')

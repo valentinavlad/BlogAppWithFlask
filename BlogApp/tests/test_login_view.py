@@ -2,7 +2,6 @@ def test_login(client_is_config):
     response = client_is_config.get('/auth/login')
 
     assert response.status_code == 200
-    assert b'Email' in response.data
     assert b'Password' in response.data
     data = {'name': 'tia', 'email':'tia@gmail.com', 'password':'123'}
 
@@ -23,13 +22,11 @@ def test_login_invalid_user(client_is_config):
     response = client_is_config.get('/auth/login')
 
     assert response.status_code == 200
-    assert b'Email' in response.data
     assert b'Password' in response.data
-    data = {'email':'dummy@gmail.com', 'password':'123'}
+    data = {'name':'dummy', 'password':'123'}
 
     response_post = client_is_config.post('/auth/login', data=data)
     assert response_post.status_code == 200
-    assert b'Email' in response_post.data
     assert b'Password' in response_post.data
     assert b'This user is not registered' in response_post.data
  

@@ -8,7 +8,7 @@ fetch('http://localhost:4449/api-posts/' + encodeURIComponent(id))
         console.log(data);} )
     .catch(error => console.log(error) );
 
-const url55 = 'http://localhost:5000/posts/';
+const base_url = 'http://localhost:4449/api-posts/';
 const url = 'http://localhost:4449/posts/';
 
 function handleErrors(response) {
@@ -92,7 +92,7 @@ function renderPost(data){
             a_delete.className = 'btn btn-danger';
             a_delete.id = "delete-btn"
             newDiv2.append(a_delete);
-            document.getElementById("delete-btn").addEventListener("click", confirm_delete);
+           document.getElementById("delete-btn").addEventListener("click", confirm_delete);
             
        }  
     }
@@ -103,9 +103,27 @@ function confirm_delete(){
     var r = confirm("Are you sure you want to delete?");
     if (r == true) {
         txt = "You pressed OK!";
+        delete_post();
     } else {
         txt = "You pressed Cancel!";
         event.preventDefault();
     }
     console.log(txt);
+}
+
+function delete_post() {
+    const myDataObject = { postId: id }
+
+    fetch(base_url + id, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(myDataObject)
+    }).then(response => {
+        return response.json()
+    }).then(data =>
+            // TO DO...FIX DELETE
+            console.log(data)
+        )
 }

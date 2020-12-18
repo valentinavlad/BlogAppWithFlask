@@ -118,7 +118,6 @@ def test_post_create_by_owner_extension_file_upper(client_is_config):
 def test_cannot_create_post_if_not_logged(client_is_config):
     response = client_is_config.get('/posts/new', follow_redirects=True)
     assert response.status_code == 200
-    assert b'Email' in response.data
     assert b'Password' in response.data
     assert b'Login' in response.data
 #C++
@@ -169,14 +168,13 @@ def test_update_post_by_other_wont_work(client_is_config):
 def test_update_not_logged_user(client_is_config):
     response = client_is_config.get('/posts/8/edit', follow_redirects=True)
     assert response.status_code == 200
-    assert b'Email' in response.data
     assert b'Password' in response.data
     assert b'Login' in response.data
 
 def test_update_post_by_user_not_logged_redirect_login(client_is_config):
     response = client_is_config.post('/posts/4/edit', follow_redirects=True)
     assert response.status_code == 200
-    assert b'Email' in response.data
+    assert b'Name' in response.data
     assert b'Password' in response.data
 
 #javascript
@@ -199,7 +197,6 @@ def test_delete_post_by_user_not_logged_redirect_login(client_is_config):
     #at id 4 is Javascript
     response = client_is_config.post('/posts/4/delete', follow_redirects=True)
     assert response.status_code == 200
-    assert b'Email' in response.data
     assert b'Password' in response.data
 
 def test_delete_post_by_owner(client_is_config):
@@ -234,7 +231,6 @@ def test_delete_post_by_admin(client_is_config):
 def test_delete_not_logged_user(client_is_config):
     response = client_is_config.get('/posts/8/delete', follow_redirects=True)
     assert response.status_code == 200
-    assert b'Email' in response.data
     assert b'Password' in response.data
     assert b'Login' in response.data
 
@@ -295,7 +291,6 @@ def test_see_posts_first_page(client_is_config):
 def test_see_posts_second_page(client_is_config):
     #have 3 pages
     response = client_is_config.get('/posts/?page=2')
-    #assert b'<h1>Php</h1>' in response.data
     assert b'<h1>Laravel</h1>' in response.data
     assert b'<h1>Ajax</h1>' in response.data
 

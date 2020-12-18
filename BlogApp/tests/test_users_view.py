@@ -19,7 +19,7 @@ def test_create_user_by_admin(client_is_config):
     response = client_is_config.get('/users/new')
     assert response.status_code == 200
     assert b'Name' in response.data
-    assert b'Email' in response.data
+    assert b'Password' in response.data
 
     data = {'name': 'bob', 'email':'bob@gmail.com', 'password': '123'}
     response_post = client_is_config.post('/users/new', data=data, follow_redirects=True)
@@ -34,7 +34,7 @@ def test_try_create_user_by_existing_name_by_admin(client_is_config):
     response = client_is_config.get('/users/new')
     assert response.status_code == 200
     assert b'Name' in response.data
-    assert b'Email' in response.data
+    assert b'Password' in response.data
 
     data = {'name': 'maia', 'email':'maia@gmail.com', 'password': '123'}
     response_post = client_is_config.post('/users/new', data=data)
@@ -44,7 +44,6 @@ def test_try_create_user_by_existing_name_by_admin(client_is_config):
 def test_create_user_by_non_logged_user(client_is_config):
     response = client_is_config.get('/users/new', follow_redirects=True)
     assert response.status_code == 200
-    assert b'Email' in response.data
     assert b'Password' in response.data
     assert b'Login' in response.data
 
@@ -99,8 +98,6 @@ def test_update_user_by_owner(client_is_config):
 def test_update_user_by_not_logged_user(client_is_config):
     response = client_is_config.get('/users/2/edit', follow_redirects=True)
     assert response.status_code == 200
-    #redirects to login
-    assert b'Email' in response.data
     assert b'Password' in response.data
 
 def test_delete_user_by_admin(client_is_config):
@@ -131,7 +128,6 @@ def test_delete_user_by_other_should_not_work(client_is_config):
 def test_delete_user_by_non_logged_user(client_is_config):
     response = client_is_config.get('/users/1/delete', follow_redirects=True)
     assert response.status_code == 200
-    assert b'Email' in response.data
     assert b'Password' in response.data
     assert b'Login' in response.data
 
@@ -143,7 +139,6 @@ def test_user_first_loggin_no_pass(client_is_config):
                                         data=data, follow_redirects=True)
     assert b'Login' in response_two.data
     assert b'Name' in response_two.data
-    assert b'Email' in response_two.data
 
 def test_access_set_credential_with_pass_forbidden(client_is_config):
     data = {'name': 'marc', 'password':'123'}

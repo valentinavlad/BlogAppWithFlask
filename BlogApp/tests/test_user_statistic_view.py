@@ -23,6 +23,5 @@ def test_show_statistics_logged_user(client_is_config):
 def test_statistcs_route_logged_out_user(client_is_config):
     response = client_is_config.get('/statistics', follow_redirects=True)
     assert response.status_code == 200
-    assert b'Email' in response.data
     assert b'Password' in response.data
     assert b'Login' in response.data

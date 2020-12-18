@@ -205,6 +205,7 @@
     </Content>
     <Content Include="scripts\queries.sql" />
     <Content Include="static\img\1.jpg" />
+    <Content Include="static\login.js" />
     <Content Include="static\login_style.css" />
     <Content Include="static\script.js" />
     <Content Include="static\style.css">

@@ -6,7 +6,7 @@ from utils.authorization import token_required
 api_posts_blueprint = Blueprint('api_posts', __name__, template_folder='templates',
                                 static_folder='static')
 @inject
-@api_posts_blueprint.route('/login')
+@api_posts_blueprint.route('/login', methods=['POST'])
 def login(authentication: Authentication):
     auth = request.authorization
     if not auth or not auth.username or not auth.password:

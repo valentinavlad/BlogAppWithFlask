@@ -8,6 +8,7 @@ from repository.users_repo import UsersRepo
 
 load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
+
 def login_required(view):
     @wraps(view)
     def wrapped_view(**kwargs):
