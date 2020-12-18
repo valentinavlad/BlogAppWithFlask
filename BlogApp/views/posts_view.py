@@ -4,7 +4,6 @@ from flask import Blueprint, render_template, url_for, request,\
    redirect, session
 from utils.setup_decorators import is_config_file
 from utils.authorization import login_required
-from utils.authorization import token_required
 from repository.posts_repo import PostsRepo
 from repository.users_repo import UsersRepo
 from repository.image_repo import ImageRepo
@@ -133,4 +132,3 @@ def delete(repo: PostsRepo, pid):
         repo.delete(pid)
         return redirect(url_for('index.posts'))
     return render_template('view_post.html')
-

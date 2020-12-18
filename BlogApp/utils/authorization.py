@@ -1,6 +1,6 @@
 import os
-from injector import inject
 from functools import wraps
+from injector import inject
 from flask import url_for, redirect, session, render_template, request, jsonify
 import jwt
 from dotenv import load_dotenv
@@ -48,8 +48,8 @@ def first_loggin(view):
         return view(**kwargs)
     return wrapped_view
 
-def token_required(f):
-    @wraps(f)
+def token_required(func):
+    @wraps(func)
     @inject
     def decorated(user_repo: UsersRepo, *args, **kwargs):
         token = None
@@ -61,7 +61,7 @@ def token_required(f):
         try:
             data = jwt.decode(token, SECRET_KEY)
             user = user_repo.find_by_id(data['user_id'])
-        except:
+        except ValueError:
             return jsonify({'message' : 'Token is invalid!'}), 401
-        return f(user, *args, **kwargs)
+        return func(user, *args, **kwargs)
     return decorated

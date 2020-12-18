@@ -25,10 +25,10 @@ class Authentication():
         if name != user.name or not self.secure_pass.is_correct_password(password, user):
             error = 'Invalid credentials.'
         return error, user
-
-    def get_token(self, user):
-         token = jwt.encode({'user_id' : user.user_id}, SECRET_KEY)
-         return token.decode('UTF-8')
+    @staticmethod
+    def get_token(user):
+        token = jwt.encode({'user_id' : user.user_id}, SECRET_KEY)
+        return token.decode('UTF-8')
 
     @staticmethod
     def logout_user():
