@@ -118,10 +118,10 @@ post_twelve.modified_at = datetime.datetime(2015, 1, 8)
 post_twelve.img_id = dummy_image[10][0]
 
 post_thirteen = Post(title='Fetch API', owner='6',
-                   contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                    Aenean commodo ligula eget dolor.Lorem ipsum dolor sit amet, 
-                    consectetuer adipiscing elit.Lorem ipsum dolor sit amet,
-                    consectetuer adipiscing elit.""")
+                     contents="""Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+                        Aenean commodo ligula eget dolor.Lorem ipsum dolor sit amet, 
+                        consectetuer adipiscing elit.Lorem ipsum dolor sit amet,
+                        consectetuer adipiscing elit.""")
 post_thirteen.created_at = datetime.datetime(2012, 1, 6)
 post_thirteen.modified_at = datetime.datetime(2015, 1, 8)
 post_thirteen.img_id = dummy_image[10][0]
