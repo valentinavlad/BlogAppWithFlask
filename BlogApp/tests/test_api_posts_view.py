@@ -48,7 +48,7 @@ def test_login_with_invalid_credentials_return_401(client_is_config):
     assert b'Could not verify' in response.data
 
 def test_delete_post_by_logged_user(client_is_config):
-    #MySql id 11
+    #POstgres id 12
     valid_credentials = base64.b64encode(b'ben:123').decode('utf-8')
     response = client_is_config.post(
         '/api-posts/login',
@@ -67,8 +67,76 @@ def test_delete_post_by_logged_user(client_is_config):
     headers = {
         'x-access-token' : token
     }
-    response_delete = client_is_config.delete('/api-posts/11',
+    response_delete = client_is_config.delete('/api-posts/12',
                                               content_type='application/json',
-                                              headers=headers)
-    assert response_delete == 200
-   # response_delete = client_is_config.
+                                              headers=headers,
+                                              follow_redirects=True)
+    delete_data = response_delete.json
+    assert response_delete.status_code == 200
+    assert delete_data['message'] == 'Post deleted!'
+
+def test_delete_post_by_logged_user_with_invalid_post_id(client_is_config):
+    valid_credentials = base64.b64encode(b'ben:123').decode('utf-8')
+    response = client_is_config.post(
+        '/api-posts/login',
+        content_type='application/json',
+        headers={'Authorization': 'Basic ' + valid_credentials}
+    )
+    data = response.json
+    assert response.status_code == 200
+    token_header = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9'
+    token_payload = '.eyJ1c2VyX2lkIjo2fQ'
+    token_signature = '.KGZWLrK0r65CXAMElUhsS8yMWq2MfDIFjgY6TgUPxvY'
+    token = token_header + token_payload + token_signature
+    assert data['token'] == token
+
+    token = data['token']
+    headers = {
+        'x-access-token' : token
+    }
+    response_delete = client_is_config.delete('/api-posts/158',
+                                              content_type='application/json',
+                                              headers=headers,
+                                              follow_redirects=True)
+    delete_data = response_delete.json
+    assert response_delete.status_code == 404
+    assert delete_data['error'] == 'post not found'
+
+def test_delete_other_user_post_by_logged_user_403(client_is_config):
+    valid_credentials = base64.b64encode(b'ben:123').decode('utf-8')
+    response = client_is_config.post(
+        '/api-posts/login',
+        content_type='application/json',
+        headers={'Authorization': 'Basic ' + valid_credentials}
+    )
+    data = response.json
+    assert response.status_code == 200
+    token_header = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9'
+    token_payload = '.eyJ1c2VyX2lkIjo2fQ'
+    token_signature = '.KGZWLrK0r65CXAMElUhsS8yMWq2MfDIFjgY6TgUPxvY'
+    token = token_header + token_payload + token_signature
+    assert data['token'] == token
+
+    token = data['token']
+    headers = {
+        'x-access-token' : token
+    }
+    response_delete = client_is_config.delete('/api-posts/5',
+                                              content_type='application/json',
+                                              headers=headers,
+                                              follow_redirects=True)
+    delete_data = response_delete.json
+    assert response_delete.status_code == 403
+    assert delete_data['error'] == 'Forbidden'
+
+def test_delete_post_by_unlogged_user_401(client_is_config):
+    headers = {
+        'x-access-token' : ""
+    }
+    response_delete = client_is_config.delete('/api-posts/5',
+                                              content_type='application/json',
+                                              headers=headers,
+                                              follow_redirects=True)
+    delete_data = response_delete.json
+    assert response_delete.status_code == 401
+    assert delete_data['message'] == 'Token is missing'

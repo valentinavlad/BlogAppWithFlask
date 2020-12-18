@@ -53,7 +53,6 @@ def token_required(func):
     @inject
     def decorated(user_repo: UsersRepo, *args, **kwargs):
         token = None
-
         if 'x-access-token' in request.headers:
             token = request.headers['x-access-token']
         if not token:
