@@ -2,8 +2,6 @@ fetch('http://localhost:4449/api-posts/' + encodeURIComponent(id))
     .then(handleErrors)
     .then(res => res.json())
     .then(data => {
-        console.log("FETCH........")
-        console.log(data);
         renderPost(data);
         console.log(data);} )
     .catch(error => console.log(error) );
@@ -26,11 +24,6 @@ function handleError(response){
 }
 
 function renderPost(data){
-    console.log(typeof(session_logged))
-    console.log(data);
-    console.log(session_name);
-    console.log(session_id);
-
     let h3 = document.createElement('h3');
     let p1 = document.createElement('p');
     let p2 = document.createElement('p');

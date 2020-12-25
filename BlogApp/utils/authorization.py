@@ -60,7 +60,7 @@ def token_required(func):
         try:
             data = jwt.decode(token, SECRET_KEY)
             user = user_repo.find_by_id(data['user_id'])
-        except ValueError:
+        except jwt.DecodeError:
             return jsonify({'message' : 'Token is invalid!'}), 401
         return func(user, *args, **kwargs)
     return decorated

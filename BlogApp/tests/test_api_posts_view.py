@@ -1,4 +1,5 @@
 import base64
+import json
 def login(client_is_config, name, password):
     return client_is_config.post('/auth/login', data=dict(
         name=name,
@@ -22,11 +23,15 @@ def test_unexisting_post(client_is_config):
 
 def test_login_return_token(client_is_config):
     valid_credentials = base64.b64encode(b'tia:123').decode('utf-8')
+    headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+        'Authorization':  'Basic ' + valid_credentials
+    }
     response = client_is_config.post(
-        '/api-posts/login',
-        content_type='application/json',
-        headers={'Authorization': 'Basic ' + valid_credentials}
-    )
+        '/api-posts/login', headers=headers)
+    #TO DO DELETE TOKEN VARIABLES AND SEE HOW TO TEST(GET) TOKEN FROM HEADER??
+   
     data = response.json
     assert response.status_code == 200
     token_header = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9'
@@ -34,6 +39,7 @@ def test_login_return_token(client_is_config):
     token_signature = '.wI1ScMWwJ779IJRumXR9T_6JPjxxSaaMzGqN8zFv6ys'
     token = token_header + token_payload + token_signature
     assert data['token'] == token
+    assert data['token']
 
 
 def test_login_with_invalid_credentials_return_401(client_is_config):
