@@ -8,16 +8,29 @@ api_posts_blueprint = Blueprint('api_posts', __name__, template_folder='template
 @inject
 @api_posts_blueprint.route('/login', methods=['POST'])
 def login(authentication: Authentication):
-    auth = request.authorization
-    if not auth or not auth.username or not auth.password:
-        return make_response('Could not verify', 401,\
-           {'WWW-Authenticate' : 'Basic realm="Login required!"'})
-    error, user = authentication.login(auth.username, auth.password)
+    auth = request.get_json()
+
+    error, user = authentication.login(auth['username'], auth['password'])
     if error is None:
-        token = authentication.get_token(user)
-        return jsonify({'token' : token})
+        #token = authentication.get_token(user)
+        token = authentication.encode_auth_token(user)
+        #decoded_token = authentication.decode_auth_token(token)
+        if token:
+            responseObject = {
+                'status': 'success',
+                'message': 'Successfully logged in.',
+                'auth_token': token.decode()
+            }
+            return make_response(jsonify(responseObject)), 200
+        #return jsonify({'token' : token.decode('UTF-8')})
+    else:
+            responseObject = {
+                'status': 'fail',
+                'message': 'User does not exist.'
+            }
+            return make_response(jsonify(responseObject)), 404
     return make_response('Could not verify', 401,\
-        {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+        {'WWW-Authenticate' : 'Bearer realm="Login required!"'})
 
 @inject
 @api_posts_blueprint.route('/<int:pid>', methods=['GET'])

@@ -53,13 +53,16 @@ def token_required(func):
     @inject
     def decorated(user_repo: UsersRepo, *args, **kwargs):
         token = None
-        if 'x-access-token' in request.headers:
-            token = request.headers['x-access-token']
-        if not token:
+        auth_header = request.headers.get('Authorization')
+        if auth_header:
+            auth_token = auth_header.split(" ")[1]
+        else:
+            auth_token = ''
+        if not auth_token:
             return jsonify({'message' : 'Token is missing'}), 401
         try:
-            data = jwt.decode(token, SECRET_KEY)
-            user = user_repo.find_by_id(data['user_id'])
+            data = jwt.decode(auth_token, SECRET_KEY)
+            user = user_repo.find_by_id(data['sub'])
         except jwt.DecodeError:
             return jsonify({'message' : 'Token is invalid!'}), 401
         return func(user, *args, **kwargs)

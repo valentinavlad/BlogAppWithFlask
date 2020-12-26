@@ -6,7 +6,7 @@ function submit_login(){
     var password = document.getElementById("password").value;
 
     let headers = new Headers();
-    headers.set('Authorization', 'Basic ' + btoa(username + ":" + password));
+    headers.set('Authorization', 'Bearer ' + btoa(username + ":" + password));
     headers.set('Content-Type', 'application/json');
 
     
