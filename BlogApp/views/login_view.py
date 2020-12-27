@@ -15,12 +15,10 @@ def set_session(user):
     session['email'] = user.email
     session['logged_in'] = True
 
-@login_blueprint.route('/login', methods=['GET', 'POST'])
+@login_blueprint.route('/login')
 @is_config_file
 def login():
     return render_template('login.html')
-	
-
 
 @inject
 @login_blueprint.route('/logout')

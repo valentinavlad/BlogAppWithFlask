@@ -47,3 +47,18 @@
         </div>
     </div>
 </nav>
+<script type="text/javascript">
+    function logout(){
+        event.preventDefault();
+        console.log("logout");
+        fetch('http://localhost:4449/api-posts/logout')
+        .then(res => res.json())
+        .then(data => {
+            console.log("logout function fetch api");
+            console.log(data);
+    } )
+        .catch(error => console.log(error) );
+
+    }
+
+</script>

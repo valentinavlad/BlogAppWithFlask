@@ -3,7 +3,7 @@ import datetime
 from injector import inject
 import jwt
 from dotenv import load_dotenv
-from flask import session, redirect, url_for
+from flask import session, redirect, url_for, request, make_response
 from services.password_manager import PasswordManager
 from repository.users_repo import UsersRepo
 
@@ -15,13 +15,12 @@ class Authentication():
         self.secure_pass = secure_pass
         self.repo = repo
 
+    #TO DO: RENAME FUNCTION LOGIN
     def login(self, name, password):
         error = None
         user = self.repo.check_user_exists_by_name(name)
         if user is None:
             error = "This user is not registered"
-            return error, user
-        if user.password is None:
             return error, user
         if name != user.name or not self.secure_pass.is_correct_password(password, user):
             error = 'Invalid credentials.'
@@ -42,9 +41,14 @@ class Authentication():
     def encode_auth_token(user):
         try:
             payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=5, seconds=5),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=1800),
                 'iat': datetime.datetime.utcnow(),
-                'sub': user.user_id
+                'sub': 
+                {
+                    "user_id" : user.user_id,
+                    "name" : user.name,
+                    "email" : user.email
+                }
             }
             return jwt.encode(
                 payload,
@@ -58,7 +62,7 @@ class Authentication():
     def decode_auth_token(auth_token):
         try:
             payload = jwt.decode(auth_token, SECRET_KEY)
-            return payload
+            return payload['sub']
         except jwt.ExpiredSignatureError:
             return 'Signature expired. Please log in again.'
         except jwt.InvalidTokenError:

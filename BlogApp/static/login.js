@@ -1,12 +1,11 @@
 
-const base_url = 'http://localhost:4449/api-posts/login';
+const base_url = '/api-posts/login';
 function submit_login(){
     event.preventDefault();
     var username = document.getElementById("name").value;
     var password = document.getElementById("password").value;
-
+    console.log(username);
     let headers = new Headers();
-    headers.set('Authorization', 'Bearer ' + btoa(username + ":" + password));
     headers.set('Content-Type', 'application/json');
 
     
@@ -22,10 +21,14 @@ function submit_login(){
         body: value
     })
     .then(handleErrors)
-    .then(res => res.json())
+        .then(res =>  res.json())
     .then((data) => {
-      console.log(data);
-      set_token(data);
+
+        if (data.user_id) {
+            return window.location.replace('/users/' + data.user_id + '/set_credentials');
+        }
+        window.localStorage.setItem('token', data['auth_token']);
+        redirect_home();
     })
     .catch((err) => {
       console.log(err);
@@ -33,9 +36,8 @@ function submit_login(){
     });
 }
 
-function set_token(data){
-    window.localStorage.setItem('token', data['token']);
-    window.location.replace("http://localhost:4449/");
+function redirect_home(){
+    window.location.replace("/");
 }
 
 function handleErrors(response) {
@@ -43,7 +45,6 @@ function handleErrors(response) {
         handleError(response);
         throw Error(response.statusText);
     }
-    console.log(response);
     return response;
 }
 

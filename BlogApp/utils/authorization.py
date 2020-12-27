@@ -1,7 +1,7 @@
 import os
 from functools import wraps
 from injector import inject
-from flask import url_for, redirect, session, render_template, request, jsonify
+from flask import url_for, redirect, session, render_template, request, jsonify, make_response
 import jwt
 from dotenv import load_dotenv
 from repository.users_repo import UsersRepo
@@ -62,7 +62,8 @@ def token_required(func):
             return jsonify({'message' : 'Token is missing'}), 401
         try:
             data = jwt.decode(auth_token, SECRET_KEY)
-            user = user_repo.find_by_id(data['sub'])
+            user = user_repo.find_by_id(data['sub']['user_id'])
+
         except jwt.DecodeError:
             return jsonify({'message' : 'Token is invalid!'}), 401
         return func(user, *args, **kwargs)

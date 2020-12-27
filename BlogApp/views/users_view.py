@@ -83,25 +83,8 @@ def delete(repo: UsersRepo, pid):
         return redirect(url_for('users.users'))
     return render_template('view_user.html')
 
-@inject
-@users_blueprint.route('/<int:uid>/set_credentials', methods=['GET', 'POST'])
-@first_loggin
-def set_credentials(repo: UsersRepo, secure_pass: PasswordManager, uid):
-    user = repo.find_by_id(uid)
 
-    if request.method == 'POST':
-        error = None
-        name = request.form.get("name")
-        email = request.form.get("email")
-        password = request.form.get("password")
-        cf_password = request.form.get("cf_password")
-        if password != cf_password:
-            error = "Pass must mach"
-        if error is None:
-            user.name = name
-            user.email = email
-            user.password = secure_pass.generate_secured_pass(password)
-            repo.edit(user)
-            return redirect(url_for('auth.login'))
-        flash(error)
-    return render_template('set_credentials.html', user=user)
+@users_blueprint.route('/<int:uid>/set_credentials')
+def set_credentials(uid):
+    print("uid >>>", uid)
+    return render_template('set_credentials.html', uid=uid)

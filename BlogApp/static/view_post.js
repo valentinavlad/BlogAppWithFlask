@@ -105,15 +105,17 @@ function confirm_delete(){
 }
 
 function delete_post() {
-    const myDataObject = { postId: id }
+    const token = window.localStorage.getItem('token');
+    console.log(token);
 
     fetch(base_url + id, {
         method: 'DELETE',
         headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(myDataObject)
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        }
     }).then(response => {
+        console.log(response + "  Deletee")
         return response.json()
     }).then(data =>
             // TO DO...FIX DELETE
