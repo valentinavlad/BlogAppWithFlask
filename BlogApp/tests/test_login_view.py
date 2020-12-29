@@ -1,17 +1,16 @@
+from flask import json
+
 def test_login(client_is_config):
-    response = client_is_config.get('/auth/login')
+    response = client_is_config.post('/api-posts/login', data=json.dumps(dict(
+        username='tia',
+        password='123'
+    )), content_type='application/json')
+    data = json.loads(response.data.decode())
 
     assert response.status_code == 200
-    assert b'Password' in response.data
-    data = {'name': 'tia', 'email':'tia@gmail.com', 'password':'123'}
-
-    response_post = client_is_config.post('/auth/login', data=data, follow_redirects=True)
-    assert response_post.status_code == 200
-    assert b'Check our latest posts in web technologies!' in response_post.data
-    assert '<h1>Angular</h1>' in response_post.get_data(as_text=True)
-    assert '<h1>C++</h1>' in response_post.get_data(as_text=True)
-    assert b'Hello Tia !' in response_post.data
-    assert b'Log Out' in response_post.data
+    assert data['message'] == 'Successfully logged in.'
+    assert data['status'] == 'success'
+    assert data['auth_token']
 
 def test_logout(client_is_config):
     response = client_is_config.get('/auth/logout', follow_redirects=True)
@@ -19,14 +18,13 @@ def test_logout(client_is_config):
     assert b'Login' in response.data
 
 def test_login_invalid_user(client_is_config):
-    response = client_is_config.get('/auth/login')
-
-    assert response.status_code == 200
-    assert b'Password' in response.data
-    data = {'name':'dummy', 'password':'123'}
-
-    response_post = client_is_config.post('/auth/login', data=data)
-    assert response_post.status_code == 200
-    assert b'Password' in response_post.data
-    assert b'This user is not registered' in response_post.data
+    response = client_is_config.post('/api-posts/login', data=json.dumps(dict(
+            username='dummy',
+            password='222'
+        )),
+        content_type='application/json')
+    data = json.loads(response.data.decode())
+    assert response.status_code == 401
+    assert data['message'] == 'Credentials invalid!' 
+    assert data['status'] == 'fail' 
  

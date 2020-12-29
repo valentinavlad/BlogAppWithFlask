@@ -22,83 +22,71 @@ def test_unexisting_post(client_is_config):
     assert data["error"] == "post not found"
 
 def test_login_return_token(client_is_config):
-    valid_credentials = base64.b64encode(b'tia:123').decode('utf-8')
-    headers = {
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json',
-        'Authorization':  'Basic ' + valid_credentials
-    }
-    response = client_is_config.post(
-        '/api-posts/login', headers=headers)
-    #TO DO DELETE TOKEN VARIABLES AND SEE HOW TO TEST(GET) TOKEN FROM HEADER??
-   
-    data = response.json
-    assert response.status_code == 200
-    token_header = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9'
-    token_payload = '.eyJ1c2VyX2lkIjoxfQ'
-    token_signature = '.wI1ScMWwJ779IJRumXR9T_6JPjxxSaaMzGqN8zFv6ys'
-    token = token_header + token_payload + token_signature
-    assert data['token'] == token
-    assert data['token']
+    response = client_is_config.post('/api-posts/login',
+        data=json.dumps(dict(
+            username='tia',
+            password='123'
+        )),
+        content_type='application/json')
 
+    data = json.loads(response.data.decode())
+    assert data['status'] == 'success'
+    assert data['message'] == 'Successfully logged in.'
+    assert data['auth_token']
+    assert response.status_code == 200
 
 def test_login_with_invalid_credentials_return_401(client_is_config):
-    invalid_credentials = base64.b64encode(b'tipa:123').decode('utf-8')
     response = client_is_config.post(
         '/api-posts/login',
-        content_type='application/json',
-        headers={'Authorization': 'Basic ' + invalid_credentials}
-    )
+        data=json.dumps(dict(
+            username='dummy',
+            password='111'
+        )),
+        content_type='application/json')
 
     assert response.status_code == 401
-    assert b'Could not verify' in response.data
+    assert b'Credentials invalid!' in response.data
 
 def test_delete_post_by_logged_user(client_is_config):
     #POstgres id 12
-    valid_credentials = base64.b64encode(b'ben:123').decode('utf-8')
     response = client_is_config.post(
         '/api-posts/login',
-        content_type='application/json',
-        headers={'Authorization': 'Basic ' + valid_credentials}
-    )
-    data = response.json
+        data=json.dumps(dict(
+            username='ben',
+            password='123'
+        )),
+        content_type='application/json')
+    
+    data = json.loads(response.data.decode())
+    assert data['status'] == 'success'
+    assert data['message'] == 'Successfully logged in.'
+    assert data['auth_token']
     assert response.status_code == 200
-    token_header = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9'
-    token_payload = '.eyJ1c2VyX2lkIjo2fQ'
-    token_signature = '.KGZWLrK0r65CXAMElUhsS8yMWq2MfDIFjgY6TgUPxvY'
-    token = token_header + token_payload + token_signature
-    assert data['token'] == token
 
-    token = data['token']
     headers = {
-        'x-access-token' : token
+        'Authorization' : 'Bearer ' + data['auth_token']
     }
     response_delete = client_is_config.delete('/api-posts/12',
                                               content_type='application/json',
                                               headers=headers,
                                               follow_redirects=True)
-    delete_data = response_delete.json
+    delete_data = json.loads(response_delete.data.decode())
     assert response_delete.status_code == 200
     assert delete_data['message'] == 'Post deleted!'
 
 def test_delete_post_by_logged_user_with_invalid_post_id(client_is_config):
-    valid_credentials = base64.b64encode(b'ben:123').decode('utf-8')
-    response = client_is_config.post(
-        '/api-posts/login',
-        content_type='application/json',
-        headers={'Authorization': 'Basic ' + valid_credentials}
-    )
-    data = response.json
-    assert response.status_code == 200
-    token_header = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9'
-    token_payload = '.eyJ1c2VyX2lkIjo2fQ'
-    token_signature = '.KGZWLrK0r65CXAMElUhsS8yMWq2MfDIFjgY6TgUPxvY'
-    token = token_header + token_payload + token_signature
-    assert data['token'] == token
+    response = client_is_config.post('/api-posts/login',
+        data=json.dumps(dict(
+            username='ben',
+            password='123'
+        )),
+        content_type='application/json')
+    
+    data = json.loads(response.data.decode())
+    assert data['message'] == 'Successfully logged in.'
 
-    token = data['token']
     headers = {
-        'x-access-token' : token
+        'Authorization' : 'Bearer ' + data['auth_token']
     }
     response_delete = client_is_config.delete('/api-posts/158',
                                               content_type='application/json',
@@ -109,24 +97,20 @@ def test_delete_post_by_logged_user_with_invalid_post_id(client_is_config):
     assert delete_data['error'] == 'post not found'
 
 def test_delete_other_user_post_by_logged_user_403(client_is_config):
-    valid_credentials = base64.b64encode(b'ben:123').decode('utf-8')
-    response = client_is_config.post(
-        '/api-posts/login',
-        content_type='application/json',
-        headers={'Authorization': 'Basic ' + valid_credentials}
-    )
-    data = response.json
-    assert response.status_code == 200
-    token_header = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9'
-    token_payload = '.eyJ1c2VyX2lkIjo2fQ'
-    token_signature = '.KGZWLrK0r65CXAMElUhsS8yMWq2MfDIFjgY6TgUPxvY'
-    token = token_header + token_payload + token_signature
-    assert data['token'] == token
+    response = client_is_config.post('/api-posts/login',
+        data=json.dumps(dict(
+            username='ben',
+            password='123'
+        )),
+        content_type='application/json')
+    
+    data = json.loads(response.data.decode())
+    assert data['message'] == 'Successfully logged in.'
 
-    token = data['token']
     headers = {
-        'x-access-token' : token
+        'Authorization' : 'Bearer ' + data['auth_token']
     }
+
     response_delete = client_is_config.delete('/api-posts/5',
                                               content_type='application/json',
                                               headers=headers,
@@ -137,7 +121,7 @@ def test_delete_other_user_post_by_logged_user_403(client_is_config):
 
 def test_delete_post_by_unlogged_user_401(client_is_config):
     headers = {
-        'x-access-token' : ""
+        'Authorization' : ""
     }
     response_delete = client_is_config.delete('/api-posts/5',
                                               content_type='application/json',

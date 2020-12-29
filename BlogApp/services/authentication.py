@@ -15,7 +15,7 @@ class Authentication():
         self.secure_pass = secure_pass
         self.repo = repo
 
-    #TO DO: RENAME FUNCTION LOGIN
+    #TO DO: RENAME FUNCTION LOGIN to validate login
     def login(self, name, password):
         error = None
         user = self.repo.check_user_exists_by_name(name)
@@ -25,11 +25,6 @@ class Authentication():
         if name != user.name or not self.secure_pass.is_correct_password(password, user):
             error = 'Invalid credentials.'
         return error, user
-
-    @staticmethod
-    def get_token(user):
-        token = jwt.encode({'user_id' : user.user_id}, SECRET_KEY)
-        return token.decode('UTF-8')
 
     @staticmethod
     def logout_user():

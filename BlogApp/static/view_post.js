@@ -1,4 +1,4 @@
-fetch('http://localhost:4449/api-posts/' + encodeURIComponent(id))
+fetch('/api-posts/' + encodeURIComponent(id))
     .then(handleErrors)
     .then(res => res.json())
     .then(data => {
@@ -6,8 +6,8 @@ fetch('http://localhost:4449/api-posts/' + encodeURIComponent(id))
         console.log(data);} )
     .catch(error => console.log(error) );
 
-const base_url = 'http://localhost:4449/api-posts/';
-const url = 'http://localhost:4449/posts/';
+const base_url = '/api-posts/';
+const url = '/posts/';
 
 function handleErrors(response) {
     if (!response.ok) {
@@ -115,10 +115,8 @@ function delete_post() {
             'Authorization': 'Bearer ' + token
         }
     }).then(response => {
-        console.log(response + "  Deletee")
         return response.json()
     }).then(data =>
-            // TO DO...FIX DELETE
             console.log(data)
         )
 }

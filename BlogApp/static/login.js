@@ -1,10 +1,9 @@
-
 const base_url = '/api-posts/login';
 function submit_login(){
     event.preventDefault();
     var username = document.getElementById("name").value;
     var password = document.getElementById("password").value;
-    console.log(username);
+
     let headers = new Headers();
     headers.set('Content-Type', 'application/json');
 

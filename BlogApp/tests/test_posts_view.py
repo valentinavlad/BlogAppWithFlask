@@ -1,10 +1,15 @@
 import io
+from flask import json
 
 def login(client_is_config, name, password):
-    return client_is_config.post('/auth/login', data=dict(
-        name=name,
-        password=password
-    ), follow_redirects=True)
+    return client_is_config.post(
+        '/api-posts/login',
+        data=json.dumps(dict(
+            username=name,
+            password=password
+        )),
+        content_type='application/json'
+    )
 
 def logout(client_is_config):
     return client_is_config.get('/auth/logout', follow_redirects=True)
@@ -26,21 +31,41 @@ def test_view_post_user_not_logged_in(client_is_config):
     assert response.status_code == 200
 
 def test_view_post_user_logged_in(client_is_config):
-    log = login(client_is_config, 'tia', '123')
-    assert b'Hello Tia' in log.data
-    response = client_is_config.get('/posts/5')
-    assert 'var id = 5;' in response.get_data(as_text=True)
-    assert b'let session_logged = true;' in response.data
-    assert b'let session_name = "tia";' in response.data
+    res = client_is_config.get('/auth/login')
+    assert b'<h3>Login</h3>' in res.data
+    assert b'<input type="text" class="form-control" placeholder="Name" name="name" id="name">' in res.data
+    assert b'<input type="password" class="form-control" placeholder="Password" name="password" id="password">' in res.data
+    assert b'<input type="submit" value="Login" class="btn float-right login_btn" onclick="submit_login()">' in res.data
+
+    response = login(client_is_config, 'tia', '123')
+    data = json.loads(response.data.decode())
+    assert data['status'] == 'success'
+    assert data['message'] == 'Successfully logged in.'
+    assert data['auth_token']
+    assert response.content_type == 'application/json'
     assert response.status_code == 200
 
+    response2 = client_is_config.get('/posts/5')
+    assert b'Hello Tia' in response2.data
+    assert 'var id = 5;' in response2.get_data(as_text=True)
+    assert b'let session_logged = true;' in response2.data
+    assert b'let session_name = "tia";' in response2.data
+    assert response2.status_code == 200
+
 def test_post_create_by_owner(client_is_config):
-    log = login(client_is_config, 'tia', '123')
-    assert b'Hello Tia' in log.data
-    response = client_is_config.get('/posts/new')
+    response = login(client_is_config, 'tia', '123')
+    data = json.loads(response.data.decode())
+    assert data['status'] == 'success'
+    assert data['message'] == 'Successfully logged in.'
+    assert data['auth_token']
+    assert response.content_type == 'application/json'
     assert response.status_code == 200
-    assert b'<label for="title">Title</label>' in response.data
-    assert b'Content' in response.data
+
+    response2 = client_is_config.get('/posts/new')
+    assert b'Hello Tia' in response2.data
+    assert response2.status_code == 200
+    assert b'<label for="title">Title</label>' in response2.data
+    assert b'Content' in response2.data
 
     file_name = "1.png"
     data = {
@@ -56,12 +81,19 @@ def test_post_create_by_owner(client_is_config):
     logout(client_is_config)
 
 def test_post_create_by_admin(client_is_config):
-    log = login(client_is_config, 'admin', '123')
-    assert b'Hello Admin' in log.data
-    response = client_is_config.get('/posts/new')
+    response = login(client_is_config, 'admin', '123')
+    data = json.loads(response.data.decode())
+    assert data['status'] == 'success'
+    assert data['message'] == 'Successfully logged in.'
+    assert data['auth_token']
+    assert response.content_type == 'application/json'
     assert response.status_code == 200
-    assert b'<label for="title">Title</label>' in response.data
-    assert b'Content' in response.data
+
+    response2 = client_is_config.get('/posts/new')
+    assert b'Hello Admin' in response2.data
+    assert response2.status_code == 200
+    assert b'<label for="title">Title</label>' in response2.data
+    assert b'Content' in response2.data
     file_name = "1.PNG"
     data = {
         'title': 'KOKO', 'contents':'hello',
@@ -77,12 +109,19 @@ def test_post_create_by_admin(client_is_config):
     logout(client_is_config)
 
 def test_post_create_by_owner_wrong_extension_file_error(client_is_config):
-    log = login(client_is_config, 'tia', '123')
-    assert b'Hello Tia' in log.data
-    response = client_is_config.get('/posts/new')
+    response = login(client_is_config, 'tia', '123')
+    data = json.loads(response.data.decode())
+    assert data['status'] == 'success'
+    assert data['message'] == 'Successfully logged in.'
+    assert data['auth_token']
+    assert response.content_type == 'application/json'
     assert response.status_code == 200
-    assert b'<label for="title">Title</label>' in response.data
-    assert b'Content' in response.data
+
+    response2 = client_is_config.get('/posts/new')
+    assert b'Hello Tia' in response2.data
+    assert response2.status_code == 200
+    assert b'<label for="title">Title</label>' in response2.data
+    assert b'Content' in response2.data
     file_name = "1.txt"
     data = {
         'title': 'KOKO', 'contents':'hello',
@@ -96,12 +135,18 @@ def test_post_create_by_owner_wrong_extension_file_error(client_is_config):
     logout(client_is_config)
 
 def test_post_create_by_owner_extension_file_upper(client_is_config):
-    log = login(client_is_config, 'tia', '123')
-    assert b'Hello Tia' in log.data
-    response = client_is_config.get('/posts/new')
+    response = login(client_is_config, 'tia', '123')
+    data = json.loads(response.data.decode())
+    assert data['status'] == 'success'
+    assert data['message'] == 'Successfully logged in.'
+    assert data['auth_token']
+    assert response.content_type == 'application/json'
     assert response.status_code == 200
-    assert b'<label for="title">Title</label>' in response.data
-    assert b'Content' in response.data
+   
+    response2 = client_is_config.get('/posts/new')
+    assert response2.status_code == 200
+    assert b'<label for="title">Title</label>' in response2.data
+    assert b'Content' in response2.data
     file_name = "1.PNG"
     data = {
         'title': 'KOKO', 'contents':'hello',
@@ -120,42 +165,64 @@ def test_cannot_create_post_if_not_logged(client_is_config):
     assert response.status_code == 200
     assert b'Password' in response.data
     assert b'Login' in response.data
-#C++
-def test_update_post_by_owner(client_is_config):
-    log = login(client_is_config, 'tia', '123')
-    with client_is_config.session_transaction() as sess:
-        sess['user_id'] = 1
-    assert b'Hello Tia' in log.data
-    response = client_is_config.get('/posts/6')
-    assert response.status_code == 200
-    assert b'var id = 6;' in response.data
-    assert b'let session_logged = true;' in response.data
-    assert b'let session_name = "tia";' in response.data
 
-    logout(client_is_config)
-    sess.clear()
-#php
-def test_update_post_by_admin(client_is_config):
-    log = login(client_is_config, 'admin', '123')
-    with client_is_config.session_transaction() as sess:
-        sess['user_id'] = '3'
-    assert b'Hello Admin' in log.data
-    response = client_is_config.get('/posts/2')
+def test_update_post_by_owner(client_is_config):
+    res = client_is_config.get('/auth/login')
+    assert b'<h3>Login</h3>' in res.data
+    assert b'<input type="text" class="form-control" placeholder="Name" name="name" id="name">' in res.data
+    assert b'<input type="password" class="form-control" placeholder="Password" name="password" id="password">' in res.data
+    assert b'<input type="submit" value="Login" class="btn float-right login_btn" onclick="submit_login()">' in res.data
+
+    response = login(client_is_config, 'tia', '123')
+    data = json.loads(response.data.decode())
+    assert data['status'] == 'success'
+    assert data['message'] == 'Successfully logged in.'
+    assert data['auth_token']
+    assert response.content_type == 'application/json'
     assert response.status_code == 200
-    assert b'View your post' in response.data
-    assert b'var id = 2;' in response.data
-    assert b'let session_logged = true;' in response.data
-    assert b'let session_name = "admin";' in response.data
+
+    response2 = client_is_config.get('/posts/6')
+    assert response2.status_code == 200
+    assert b'var id = 6;' in response2.data
+    assert b'let session_logged = true;' in response2.data
+    assert b'let session_name = "tia";' in response2.data
+    assert b'Hello Tia' in response2.data
+
+def test_update_post_by_admin(client_is_config):
+    response = login(client_is_config, 'admin', '123')
+    data = json.loads(response.data.decode())
+    assert data['status'] == 'success'
+    assert data['message'] == 'Successfully logged in.'
+    assert data['auth_token']
+    assert response.content_type == 'application/json'
+    assert response.status_code == 200
+    response2 = client_is_config.get('/posts/2')
+    assert b'Hello Admin' in response2.data
+    assert response2.status_code == 200
+    assert b'View your post' in response2.data
+    assert b'var id = 2;' in response2.data
+    assert b'let session_logged = true;' in response2.data
+    assert b'let session_name = "admin";' in response2.data
 
 #Laravel
 def test_update_post_by_other_wont_work(client_is_config):
-    log = login(client_is_config, 'tia', '123')
-    assert b'Hello Tia' in log.data
-    with client_is_config.session_transaction() as sess:
-        sess['user_id'] = '1'
-    response = client_is_config.get('/posts/8')
+    res = client_is_config.get('/auth/login')
+    assert b'<h3>Login</h3>' in res.data
+    assert b'<input type="text" class="form-control" placeholder="Name" name="name" id="name">' in res.data
+    assert b'<input type="password" class="form-control" placeholder="Password" name="password" id="password">' in res.data
+    assert b'<input type="submit" value="Login" class="btn float-right login_btn" onclick="submit_login()">' in res.data
+
+    response = login(client_is_config, 'tia', '123')
+    data = json.loads(response.data.decode())
+    assert data['status'] == 'success'
+    assert data['message'] == 'Successfully logged in.'
+    assert data['auth_token']
+    assert response.content_type == 'application/json'
     assert response.status_code == 200
-    assert b'View your post' in response.data
+  
+    response2 = client_is_config.get('/posts/8')
+    assert response2.status_code == 200
+    assert b'View your post' in response2.data
 
     data = {'title': 'updated Laravel', 'owner': 'update', 'contents': 'úpdated Laravel content'}
     resp = client_is_config.post('/posts/8/edit', data=data)
@@ -180,11 +247,19 @@ def test_update_post_by_user_not_logged_redirect_login(client_is_config):
 #javascript
 def test_delete_post_by_other_dont_work(client_is_config):
     #at id 4 is Javascript
-    log = login(client_is_config, 'maia', '123')
+    response = login(client_is_config, 'maia', '123')
+    data = json.loads(response.data.decode())
+    assert data['status'] == 'success'
+    assert data['message'] == 'Successfully logged in.'
+    assert data['auth_token']
+    assert response.content_type == 'application/json'
+    assert response.status_code == 200
+
     with client_is_config.session_transaction() as sess:
         sess['user_id'] = '2'
-    assert b'Hello Maia' in log.data
+
     res = client_is_config.get('/posts/4')
+    assert b'Hello Maia' in res.data
     assert res.status_code == 200
     response = client_is_config.post('/posts/4/delete')
     assert response.status == '403 FORBIDDEN'
@@ -201,11 +276,16 @@ def test_delete_post_by_user_not_logged_redirect_login(client_is_config):
 
 def test_delete_post_by_owner(client_is_config):
     #at id 4 is Javascript
-    log = login(client_is_config, 'tia', '123')
-    with client_is_config.session_transaction() as session:
-        session['user_id'] = 1
-    assert b'Hello Tia' in log.data
+    response = login(client_is_config, 'tia', '123')
+    data = json.loads(response.data.decode())
+    assert data['status'] == 'success'
+    assert data['message'] == 'Successfully logged in.'
+    assert data['auth_token']
+    assert response.content_type == 'application/json'
+    assert response.status_code == 200
+
     res = client_is_config.get('/posts/4')
+    assert b'Hello Tia' in res.data
     assert res.status_code == 200
     assert b'Hi! View your post' in res.data
     assert b'var id = 4;' in res.data
@@ -215,10 +295,14 @@ def test_delete_post_by_owner(client_is_config):
     logout(client_is_config)
 #python
 def test_delete_post_by_admin(client_is_config):
-    log = login(client_is_config, 'admin', '123')
-    with client_is_config.session_transaction() as sess:
-        sess['user_id'] = '3'
-    assert b'Hello Admin' in log.data
+    response = login(client_is_config, 'admin', '123')
+    data = json.loads(response.data.decode())
+    assert data['status'] == 'success'
+    assert data['message'] == 'Successfully logged in.'
+    assert data['auth_token']
+    assert response.content_type == 'application/json'
+    assert response.status_code == 200
+
     res = client_is_config.get('/posts/1')
     assert res.status_code == 200
     assert b'var id = 1;' in res.data
@@ -226,7 +310,6 @@ def test_delete_post_by_admin(client_is_config):
     assert b'let session_name = "admin";' in res.data
 
     logout(client_is_config)
-    sess.clear()
 
 def test_delete_not_logged_user(client_is_config):
     response = client_is_config.get('/posts/8/delete', follow_redirects=True)

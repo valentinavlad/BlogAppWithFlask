@@ -29,13 +29,12 @@ def login(user_repo: UsersRepo, authentication: Authentication):
             }
             set_session_token(authentication, token)
             return make_response(jsonify(responseObject)), 200
-    else:
-        responseObject = {
-            'status': 'fail',
-            'message': 'Credentials invalid!'
-        }
-        return make_response(jsonify(responseObject)), 404
-    return make_response('Could not verify', 401)
+
+    responseObject = {
+        'status': 'fail',
+        'message': 'Credentials invalid!'
+    }
+    return make_response(jsonify(responseObject)), 401
 
 
 @inject
@@ -53,6 +52,7 @@ def delete(user, repo: PostsRepo, pid):
     post_delete = repo.find_by_id(pid)
     if post_delete is None:
         return custom_response({'error': 'post not found'}, 404)
+    #TO DO MOVE IN TOKEN IF
     if not int(post_delete.owner) == user.user_id and not user.name == 'admin':
         return custom_response({'error': 'Forbidden'}, 403)
     repo.delete(pid)
@@ -94,4 +94,3 @@ def set_credentials(repo: UsersRepo, secure_pass: PasswordManager, uid):
         repo.edit(user)
         return jsonify(user.__dict__)
     return custom_response({'error': 'Forbidden!'}, 403)
-        #return redirect(url_for('auth.login'))

@@ -1,17 +1,21 @@
+from flask import json
+
 def login(client_is_config, name, password):
-    return client_is_config.post('/auth/login', data=dict(
-        name=name,
-        password=password
-    ), follow_redirects=True)
+    return client_is_config.post(
+        '/api-posts/login',
+        data=json.dumps(dict(
+            username=name,
+            password=password
+        )),
+        content_type='application/json'
+    )
 
 def logout(client_is_config):
     return client_is_config.get('/auth/logout', follow_redirects=True)
 
 def test_show_statistics_logged_user(client_is_config):
     log = login(client_is_config, 'tia', '123')
-    with client_is_config.session_transaction() as session:
-        session['user_id'] = 1
-    assert b'Hello Tia' in log.data
+
     res = client_is_config.get('/statistics/')
     assert res.status_code == 200
     assert b'In March 2020 you had 1 posts' in res.data

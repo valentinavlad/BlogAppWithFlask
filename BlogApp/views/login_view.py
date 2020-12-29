@@ -8,13 +8,6 @@ from models.user import User
 
 login_blueprint = Blueprint('auth', __name__, template_folder='templates', static_folder='static')
 
-def set_session(user):
-    session.clear()
-    session['user_id'] = user.user_id
-    session['name'] = user.name
-    session['email'] = user.email
-    session['logged_in'] = True
-
 @login_blueprint.route('/login')
 @is_config_file
 def login():

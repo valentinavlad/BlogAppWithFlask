@@ -226,7 +226,6 @@
     <Content Include="templates\layout.html" />
     <Content Include="templates\list_users.html" />
     <Content Include="templates\login.html" />
-    <Content Include="templates\login1.html" />
     <Content Include="templates\navigation.html" />
     <Content Include="templates\add_post.html" />
     <Content Include="templates\register.html" />
