@@ -52,9 +52,7 @@ def delete(user, repo: PostsRepo, pid):
     post_delete = repo.find_by_id(pid)
     if post_delete is None:
         return custom_response({'error': 'post not found'}, 404)
-    #TO DO MOVE IN TOKEN IF
-    if not int(post_delete.owner) == user.user_id and not user.name == 'admin':
-        return custom_response({'error': 'Forbidden'}, 403)
+
     repo.delete(pid)
     return jsonify({'message' : 'Post deleted!'})
 
