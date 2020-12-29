@@ -18,13 +18,13 @@ def test_logout(client_is_config):
     assert b'Login' in response.data
 
 def test_login_invalid_user(client_is_config):
-    response = client_is_config.post('/api-posts/login', data=json.dumps(dict(
-            username='dummy',
-            password='222'
-        )),
-        content_type='application/json')
+    response = client_is_config.post('/api-posts/login',
+                                     data=json.dumps(dict(
+                                         username='dummy',
+                                         password='222')),
+                                     content_type='application/json')
     data = json.loads(response.data.decode())
     assert response.status_code == 401
-    assert data['message'] == 'Credentials invalid!' 
-    assert data['status'] == 'fail' 
+    assert data['message'] == 'Credentials invalid!'
+    assert data['status'] == 'fail'
  

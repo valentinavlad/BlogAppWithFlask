@@ -1,6 +1,6 @@
 from injector import inject
 from flask import Blueprint, render_template, url_for, \
-    request, redirect, flash, session
+    request, redirect, flash
 from repository.users_repo import UsersRepo
 from services.authentication import Authentication
 from utils.setup_decorators import is_config_file

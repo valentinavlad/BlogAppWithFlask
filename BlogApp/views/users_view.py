@@ -5,9 +5,8 @@ from flask import Blueprint, render_template, url_for, \
 from repository.users_repo import UsersRepo
 from utils.setup_decorators import is_config_file
 from utils.authorization import admin_required, admin_or_owner_required,\
-   login_required, first_loggin
+   login_required
 from models.user import User
-from services.password_manager import PasswordManager
 
 users_blueprint = Blueprint('users', __name__, template_folder='templates', static_folder='static')
 
@@ -83,8 +82,6 @@ def delete(repo: UsersRepo, pid):
         return redirect(url_for('users.users'))
     return render_template('view_user.html')
 
-
 @users_blueprint.route('/<int:uid>/set_credentials')
 def set_credentials(uid):
-    print("uid >>>", uid)
     return render_template('set_credentials.html', uid=uid)

@@ -14,7 +14,7 @@ def logout(client_is_config):
     return client_is_config.get('/auth/logout', follow_redirects=True)
 
 def test_show_statistics_logged_user(client_is_config):
-    log = login(client_is_config, 'tia', '123')
+    login(client_is_config, 'tia', '123')
 
     res = client_is_config.get('/statistics/')
     assert res.status_code == 200

@@ -31,20 +31,9 @@ def test_view_post_user_not_logged_in(client_is_config):
     assert response.status_code == 200
 
 def test_view_post_user_logged_in(client_is_config):
-    res = client_is_config.get('/auth/login')
-    assert b'<h3>Login</h3>' in res.data
-    assert b'<input type="text" class="form-control" placeholder="Name" name="name" id="name">' in res.data
-    assert b'<input type="password" class="form-control" placeholder="Password" name="password" id="password">' in res.data
-    assert b'<input type="submit" value="Login" class="btn float-right login_btn" onclick="submit_login()">' in res.data
-
     response = login(client_is_config, 'tia', '123')
     data = json.loads(response.data.decode())
-    assert data['status'] == 'success'
     assert data['message'] == 'Successfully logged in.'
-    assert data['auth_token']
-    assert response.content_type == 'application/json'
-    assert response.status_code == 200
-
     response2 = client_is_config.get('/posts/5')
     assert b'Hello Tia' in response2.data
     assert 'var id = 5;' in response2.get_data(as_text=True)
@@ -142,7 +131,7 @@ def test_post_create_by_owner_extension_file_upper(client_is_config):
     assert data['auth_token']
     assert response.content_type == 'application/json'
     assert response.status_code == 200
-   
+
     response2 = client_is_config.get('/posts/new')
     assert response2.status_code == 200
     assert b'<label for="title">Title</label>' in response2.data
@@ -167,20 +156,10 @@ def test_cannot_create_post_if_not_logged(client_is_config):
     assert b'Login' in response.data
 
 def test_update_post_by_owner(client_is_config):
-    res = client_is_config.get('/auth/login')
-    assert b'<h3>Login</h3>' in res.data
-    assert b'<input type="text" class="form-control" placeholder="Name" name="name" id="name">' in res.data
-    assert b'<input type="password" class="form-control" placeholder="Password" name="password" id="password">' in res.data
-    assert b'<input type="submit" value="Login" class="btn float-right login_btn" onclick="submit_login()">' in res.data
-
     response = login(client_is_config, 'tia', '123')
     data = json.loads(response.data.decode())
     assert data['status'] == 'success'
     assert data['message'] == 'Successfully logged in.'
-    assert data['auth_token']
-    assert response.content_type == 'application/json'
-    assert response.status_code == 200
-
     response2 = client_is_config.get('/posts/6')
     assert response2.status_code == 200
     assert b'var id = 6;' in response2.data
@@ -206,20 +185,10 @@ def test_update_post_by_admin(client_is_config):
 
 #Laravel
 def test_update_post_by_other_wont_work(client_is_config):
-    res = client_is_config.get('/auth/login')
-    assert b'<h3>Login</h3>' in res.data
-    assert b'<input type="text" class="form-control" placeholder="Name" name="name" id="name">' in res.data
-    assert b'<input type="password" class="form-control" placeholder="Password" name="password" id="password">' in res.data
-    assert b'<input type="submit" value="Login" class="btn float-right login_btn" onclick="submit_login()">' in res.data
-
     response = login(client_is_config, 'tia', '123')
     data = json.loads(response.data.decode())
-    assert data['status'] == 'success'
     assert data['message'] == 'Successfully logged in.'
-    assert data['auth_token']
-    assert response.content_type == 'application/json'
-    assert response.status_code == 200
-  
+
     response2 = client_is_config.get('/posts/8')
     assert response2.status_code == 200
     assert b'View your post' in response2.data

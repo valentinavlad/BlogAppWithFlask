@@ -1,7 +1,7 @@
 import os
 from functools import wraps
 from injector import inject
-from flask import url_for, redirect, session, render_template, request, jsonify, make_response
+from flask import url_for, redirect, session, render_template, request, jsonify
 import jwt
 from dotenv import load_dotenv
 from repository.users_repo import UsersRepo
@@ -52,7 +52,6 @@ def token_required(func):
     @wraps(func)
     @inject
     def decorated(user_repo: UsersRepo, *args, **kwargs):
-        token = None
         auth_header = request.headers.get('Authorization')
         if auth_header:
             auth_token = auth_header.split(" ")[1]

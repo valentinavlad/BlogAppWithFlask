@@ -1,11 +1,11 @@
 from injector import inject
 from flask import Blueprint, jsonify, Response, json, make_response,\
-   request, session, flash
+   request, session
 from repository.posts_repo import PostsRepo
+from repository.users_repo import UsersRepo
+from services.password_manager import PasswordManager
 from services.authentication import Authentication
 from utils.authorization import token_required
-from services.password_manager import PasswordManager
-from repository.users_repo import UsersRepo
 
 api_posts_blueprint = Blueprint('api_posts', __name__, template_folder='templates',
                                 static_folder='static')
@@ -22,19 +22,19 @@ def login(user_repo: UsersRepo, authentication: Authentication):
     if error is None:
         token = authentication.encode_auth_token(user)
         if token:
-            responseObject = {
+            response_object = {
                 'status': 'success',
                 'message': 'Successfully logged in.',
                 'auth_token': token.decode()
             }
             set_session_token(authentication, token)
-            return make_response(jsonify(responseObject)), 200
+            return make_response(jsonify(response_object)), 200
 
-    responseObject = {
+    response_object = {
         'status': 'fail',
         'message': 'Credentials invalid!'
     }
-    return make_response(jsonify(responseObject)), 401
+    return make_response(jsonify(response_object)), 401
 
 
 @inject
@@ -67,15 +67,13 @@ def custom_response(res, status_code):
 def set_session_token(auth: Authentication, token):
     session.clear()
     user = auth.decode_auth_token(token)
-    if user is None:
-        return jsonify({'message' : 'Token is invalid!'}), 401
     session['user_id'] = user["user_id"]
     session['name'] = user["name"]
     session['email'] = user["email"]
     session['logged_in'] = True
 
 @inject
-@api_posts_blueprint.route('/<int:uid>/set_credentials',  methods=['POST'])
+@api_posts_blueprint.route('/<int:uid>/set_credentials', methods=['POST'])
 def set_credentials(repo: UsersRepo, secure_pass: PasswordManager, uid):
     user = repo.find_by_id(uid)
     error = None

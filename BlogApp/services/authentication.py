@@ -3,7 +3,7 @@ import datetime
 from injector import inject
 import jwt
 from dotenv import load_dotenv
-from flask import session, redirect, url_for, request, make_response
+from flask import session, redirect, url_for
 from services.password_manager import PasswordManager
 from repository.users_repo import UsersRepo
 
@@ -38,7 +38,7 @@ class Authentication():
             payload = {
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=1800),
                 'iat': datetime.datetime.utcnow(),
-                'sub': 
+                'sub':
                 {
                     "user_id" : user.user_id,
                     "name" : user.name,
@@ -50,8 +50,8 @@ class Authentication():
                 SECRET_KEY,
                 algorithm='HS256'
             )
-        except Exception as e:
-            return e
+        except jwt.DecodeError as exception:
+            return exception
 
     @staticmethod
     def decode_auth_token(auth_token):

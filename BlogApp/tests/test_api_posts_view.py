@@ -1,4 +1,3 @@
-import base64
 import json
 def login(client_is_config, name, password):
     return client_is_config.post('/auth/login', data=dict(
@@ -23,11 +22,10 @@ def test_unexisting_post(client_is_config):
 
 def test_login_return_token(client_is_config):
     response = client_is_config.post('/api-posts/login',
-        data=json.dumps(dict(
-            username='tia',
-            password='123'
-        )),
-        content_type='application/json')
+                                     data=json.dumps(dict(
+                                         username='tia',
+                                         password='123')),
+                                     content_type='application/json')
 
     data = json.loads(response.data.decode())
     assert data['status'] == 'success'
@@ -56,7 +54,6 @@ def test_delete_post_by_logged_user(client_is_config):
             password='123'
         )),
         content_type='application/json')
-    
     data = json.loads(response.data.decode())
     assert data['status'] == 'success'
     assert data['message'] == 'Successfully logged in.'
@@ -76,12 +73,10 @@ def test_delete_post_by_logged_user(client_is_config):
 
 def test_delete_post_by_logged_user_with_invalid_post_id(client_is_config):
     response = client_is_config.post('/api-posts/login',
-        data=json.dumps(dict(
-            username='ben',
-            password='123'
-        )),
-        content_type='application/json')
-    
+                                     data=json.dumps(dict(
+                                         username='ben',
+                                         password='123')),
+                                     content_type='application/json')
     data = json.loads(response.data.decode())
     assert data['message'] == 'Successfully logged in.'
 
@@ -98,19 +93,15 @@ def test_delete_post_by_logged_user_with_invalid_post_id(client_is_config):
 
 def test_delete_other_user_post_by_logged_user_403(client_is_config):
     response = client_is_config.post('/api-posts/login',
-        data=json.dumps(dict(
-            username='ben',
-            password='123'
-        )),
-        content_type='application/json')
-    
+                                     data=json.dumps(dict(
+                                         username='ben',
+                                         password='123')),
+                                     content_type='application/json')
     data = json.loads(response.data.decode())
     assert data['message'] == 'Successfully logged in.'
-
     headers = {
         'Authorization' : 'Bearer ' + data['auth_token']
     }
-
     response_delete = client_is_config.delete('/api-posts/5',
                                               content_type='application/json',
                                               headers=headers,
