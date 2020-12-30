@@ -66,8 +66,7 @@ function renderPost(data){
     imgDiv.appendChild(img);
     
     if(session_logged == true){
-       if (data['owner'] == session_id || session_name == 'admin'){
-              
+       if (data['owner'] == session_id || session_name == 'admin'){ 
             var a = document.createElement('a');  
             var link = document.createTextNode("Edit your post"); 
             a.appendChild(link);  
@@ -85,7 +84,7 @@ function renderPost(data){
             a_delete.className = 'btn btn-danger';
             a_delete.id = "delete-btn"
             newDiv2.append(a_delete);
-           document.getElementById("delete-btn").addEventListener("click", confirm_delete);
+            document.getElementById("delete-btn").addEventListener("click", confirm_delete);
             
        }  
     }

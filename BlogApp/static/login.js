@@ -22,7 +22,6 @@ function submit_login(){
     .then(handleErrors)
         .then(res =>  res.json())
     .then((data) => {
-
         if (data.user_id) {
             return window.location.replace('/users/' + data.user_id + '/set_credentials');
         }

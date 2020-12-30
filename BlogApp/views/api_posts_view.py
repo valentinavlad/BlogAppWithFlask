@@ -17,7 +17,6 @@ def login(user_repo: UsersRepo, authentication: Authentication):
     user = user_repo.check_user_exists_by_name(auth['username'])
     if user is not None and user.password is None:
         return custom_response({'message': 'Accepted', 'user_id': user.user_id}, 202)
-
     error, user = authentication.login(auth['username'], auth['password'])
     if error is None:
         token = authentication.encode_auth_token(user)
@@ -29,13 +28,11 @@ def login(user_repo: UsersRepo, authentication: Authentication):
             }
             set_session_token(authentication, token)
             return make_response(jsonify(response_object)), 200
-
     response_object = {
         'status': 'fail',
         'message': 'Credentials invalid!'
     }
     return make_response(jsonify(response_object)), 401
-
 
 @inject
 @api_posts_blueprint.route('/<int:pid>', methods=['GET'])
@@ -52,7 +49,6 @@ def delete(user, repo: PostsRepo, pid):
     post_delete = repo.find_by_id(pid)
     if post_delete is None:
         return custom_response({'error': 'post not found'}, 404)
-
     repo.delete(pid)
     return jsonify({'message' : 'Post deleted!'})
 
@@ -61,6 +57,7 @@ def custom_response(res, status_code):
         mimetype="application/json",
         response=json.dumps(res),
         status=status_code)
+
 @inject
 def set_session_token(auth: Authentication, token):
     session.clear()
@@ -90,3 +87,10 @@ def set_credentials(repo: UsersRepo, secure_pass: PasswordManager, uid):
         repo.edit(user)
         return jsonify(user.__dict__)
     return custom_response({'error': 'Forbidden!'}, 403)
+
+@inject
+@api_posts_blueprint.route('/logout', methods=['POST'])
+def logout():
+     session.pop('logged_in', None)
+     session.clear()
+     return custom_response({'message': 'Successfully logged out.'}, 200)

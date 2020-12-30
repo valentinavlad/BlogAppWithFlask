@@ -1,6 +1,6 @@
 from injector import inject
 from flask import Blueprint, render_template, url_for, \
-    request, redirect, flash
+    request, redirect, flash, session
 from repository.users_repo import UsersRepo
 from services.authentication import Authentication
 from utils.setup_decorators import is_config_file
@@ -16,8 +16,10 @@ def login():
 @inject
 @login_blueprint.route('/logout')
 @is_config_file
-def logout(auth: Authentication):
-    return auth.logout_user()
+def logout():
+    session.pop('logged_in', None)
+    session.clear()
+    return render_template('list_posts.html')
 
 @inject
 @login_blueprint.route('/register', methods=['GET', 'POST'])
