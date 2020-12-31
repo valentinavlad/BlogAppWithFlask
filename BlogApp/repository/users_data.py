@@ -42,5 +42,10 @@ user_eight.created_at = 'May 6, 2017'
 user_eight.modified_at = 'January 9, 2018'
 user_eight.user_id = 8
 
+user_nine = User(name='oli', email='', password='')
+user_nine.created_at = 'May 6, 2017'
+user_nine.modified_at = 'January 9, 2018'
+user_nine.user_id = 9
 dummy_users = [user_one, user_two, user_three, user_four,\
-              user_five, user_six, user_seven, user_eight]
+              user_five, user_six, user_seven, user_eight,\
+              user_nine]

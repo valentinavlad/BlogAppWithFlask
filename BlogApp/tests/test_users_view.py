@@ -134,20 +134,6 @@ def test_delete_user_by_non_logged_user(client_is_config):
     assert b'Password' in response.data
     assert b'Login' in response.data
 
-def test_user_first_loggin_no_pass(client_is_config):
-    response = client_is_config.get('users/7/set_credentials', follow_redirects=True)
-    assert b'Set login info' in response.data
-
-    response_two = client_is_config.post('/api-posts/7/set_credentials',\
-                                         data=json.dumps(dict(
-                                             email='goia@gmail.com',
-                                             password='123',
-                                             cf_password='123')),
-                                         content_type='application/json', follow_redirects=True)
-    data = json.loads(response_two.data.decode())
-    assert data['created_at'] == 'May 6, 2017'
-    assert data['email'] == 'goia@gmail.com'
-
 def test_access_set_credential_with_pass_forbidden(client_is_config):
     client_is_config.post('/api-posts/login',
                           data=json.dumps(dict(

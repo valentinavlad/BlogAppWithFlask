@@ -89,7 +89,7 @@ def test_delete_post_by_logged_user_with_invalid_post_id(client_is_config):
                                               follow_redirects=True)
     delete_data = response_delete.json
     assert response_delete.status_code == 404
-    assert delete_data['error'] == 'post not found'
+    assert delete_data['error'] == 'Post not found'
 
 def test_delete_other_user_post_by_logged_user_403(client_is_config):
     response = client_is_config.post('/api-posts/login',
@@ -121,3 +121,43 @@ def test_delete_post_by_unlogged_user_401(client_is_config):
     delete_data = response_delete.json
     assert response_delete.status_code == 401
     assert delete_data['message'] == 'Token is missing'
+
+def test_logout(client_is_config):
+    response = client_is_config.post('/api-posts/logout',
+                                     content_type='application/json', follow_redirects=True)
+    data = json.loads(response.data.decode())
+    assert data['message'] == 'Successfully logged out.'
+    assert response.status_code == 200
+
+def test_set_credentials_should_set_pass(client_is_config):
+    response = client_is_config.post('/api-posts/login',
+                                     data=json.dumps(dict(
+                                         username='oli',
+                                         password='')),
+                                     content_type='application/json',
+                                     follow_redirects=True)
+    data = json.loads(response.data.decode())
+    assert data['message'] == 'Accepted'
+    assert response.status_code == 202
+    response_set_cred = client_is_config.post('/api-posts/9/set_credentials',
+                                              data=json.dumps(dict(
+                                                  email='oli@jds.com',
+                                                  password='123',
+                                                  cf_password='123')),
+                                              content_type='application/json',
+                                              follow_redirects=True)
+    data = json.loads(response_set_cred.data.decode())
+    assert data['email'] == 'oli@jds.com'
+    assert data['name'] == 'oli'
+
+def test_set_credentials_user_with_pass_should_return_403(client_is_config):
+    response_set_cred = client_is_config.post('/api-posts/8/set_credentials',
+                                              data=json.dumps(dict(
+                                                  email='marc@gmail.com',
+                                                  password='123',
+                                                  cf_password='123')),
+                                              content_type='application/json',
+                                              follow_redirects=True)
+    data = json.loads(response_set_cred.data.decode())
+    assert data['error'] == 'Forbidden!'
+    assert response_set_cred.status_code == 403

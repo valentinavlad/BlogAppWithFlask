@@ -14,7 +14,7 @@ def test_login(client_is_config):
 
 def test_logout(client_is_config):
     response = client_is_config.get('/auth/logout', follow_redirects=True)
-    assert not b'Log Out' in response.data
+    assert b'Log Out' in response.data
     assert b'Login' in response.data
 
 def test_login_invalid_user(client_is_config):
@@ -27,4 +27,3 @@ def test_login_invalid_user(client_is_config):
     assert response.status_code == 401
     assert data['message'] == 'Credentials invalid!'
     assert data['status'] == 'fail'
- 

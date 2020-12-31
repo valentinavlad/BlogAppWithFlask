@@ -15,7 +15,7 @@ api_posts_blueprint = Blueprint('api_posts', __name__, template_folder='template
 def login(user_repo: UsersRepo, authentication: Authentication):
     auth = request.get_json()
     user = user_repo.check_user_exists_by_name(auth['username'])
-    if user is not None and user.password is None:
+    if user is not None and (user.password is None or user.password == ''):
         return custom_response({'message': 'Accepted', 'user_id': user.user_id}, 202)
     error, user = authentication.login(auth['username'], auth['password'])
     if error is None:
@@ -45,7 +45,7 @@ def view_post(repo: PostsRepo, pid):
 @inject
 @api_posts_blueprint.route('/<int:pid>/', methods=['DELETE'])
 @token_required
-def delete(user, repo: PostsRepo, pid):
+def delete(repo: PostsRepo, pid):
     post_delete = repo.find_by_id(pid)
     if post_delete is None:
         return custom_response({'error': 'post not found'}, 404)
@@ -72,8 +72,7 @@ def set_session_token(auth: Authentication, token):
 def set_credentials(repo: UsersRepo, secure_pass: PasswordManager, uid):
     user = repo.find_by_id(uid)
     error = None
-    #TO DO VALIDATE FORM
-    if user.password is not None:
+    if user.password != '':
         return custom_response({'error': 'Forbidden!'}, 403)
     post_data = request.get_json()
     email = post_data["email"]
@@ -91,6 +90,6 @@ def set_credentials(repo: UsersRepo, secure_pass: PasswordManager, uid):
 @inject
 @api_posts_blueprint.route('/logout', methods=['POST'])
 def logout():
-     session.pop('logged_in', None)
-     session.clear()
-     return custom_response({'message': 'Successfully logged out.'}, 200)
+    session.pop('logged_in', None)
+    session.clear()
+    return custom_response({'message': 'Successfully logged out.'}, 200)

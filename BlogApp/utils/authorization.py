@@ -54,9 +54,11 @@ def token_required(func):
             data = jwt.decode(auth_token, SECRET_KEY)
             user = user_repo.find_by_id(data['sub']['user_id'])
             post = repo.find_by_id(pid)
+            if post is None:
+                return jsonify({'error': 'Post not found'}), 404
             if not int(post.owner) == user.user_id and not user.name == 'admin':
                 return jsonify({'error': 'Forbidden'}), 403
         except jwt.DecodeError:
             return jsonify({'message' : 'Token is invalid!'}), 401
-        return func(user, *args, **kwargs)
+        return func(*args, **kwargs)
     return decorated
