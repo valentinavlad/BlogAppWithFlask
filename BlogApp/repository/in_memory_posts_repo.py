@@ -21,6 +21,8 @@ class InMemoryPostsRepo(PostsRepo):
         for post in dummy_posts:
             if post.post_id == pid:
                 found_post = post
+        if found_post is None:
+            return None
         found_post.name = self.user_repo.find_by_id(int(found_post.owner)).name
         return found_post
 

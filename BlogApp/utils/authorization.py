@@ -1,5 +1,13 @@
+import os
 from functools import wraps
-from flask import url_for, redirect, session, render_template
+from injector import inject
+from flask import url_for, redirect, session, render_template, request, jsonify
+import jwt
+from dotenv import load_dotenv
+from repository.users_repo import UsersRepo
+
+load_dotenv()
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 def login_required(view):
     @wraps(view)
@@ -29,13 +37,28 @@ def admin_or_owner_required(view):
         return view(**kwargs)
     return wrapped_view
 
-def first_loggin(view):
-    @wraps(view)
-    def wrapped_view(**kwargs):
-        current_user_id = kwargs.get("uid")
+def token_required(func):
+    @wraps(func)
+    @inject
+    def decorated(user_repo: UsersRepo, *args, **kwargs):
+        pid = kwargs.get("pid")
         repo = kwargs.get("repo")
-        user = repo.find_by_id(current_user_id)
-        if user.password is not None:
-            return render_template('403error.html'), 403
-        return view(**kwargs)
-    return wrapped_view
+        auth_header = request.headers.get('Authorization')
+        if auth_header:
+            auth_token = auth_header.split(" ")[1]
+        else:
+            auth_token = ''
+        if not auth_token:
+            return jsonify({'message' : 'Token is missing'}), 401
+        try:
+            data = jwt.decode(auth_token, SECRET_KEY)
+            user = user_repo.find_by_id(data['sub']['user_id'])
+            post = repo.find_by_id(pid)
+            if post is None:
+                return jsonify({'error': 'Post not found'}), 404
+            if not int(post.owner) == user.user_id and not user.name == 'admin':
+                return jsonify({'error': 'Forbidden'}), 403
+        except jwt.DecodeError:
+            return jsonify({'message' : 'Token is invalid!'}), 401
+        return func(*args, **kwargs)
+    return decorated

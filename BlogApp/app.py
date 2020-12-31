@@ -9,16 +9,18 @@ from views.setup_view import setup_blueprint
 from views.login_view import login_blueprint
 from views.users_view import users_blueprint
 from views.user_statistic_view import user_statistic_blueprint
+from views.api_posts_view import api_posts_blueprint
 
 app = Flask(__name__)
 
 app.secret_key = 'any random string'
-
+app.config['SECRET_KEY'] = 'this is my secret key'
 app.register_blueprint(index_blueprint, url_prefix="/posts")
 app.register_blueprint(setup_blueprint, url_prefix="/setup")
 app.register_blueprint(login_blueprint, url_prefix="/auth")
 app.register_blueprint(users_blueprint, url_prefix="/users")
 app.register_blueprint(user_statistic_blueprint, url_prefix="/statistics")
+app.register_blueprint(api_posts_blueprint, url_prefix="/api-posts")
 
 @app.route('/')
 def index():

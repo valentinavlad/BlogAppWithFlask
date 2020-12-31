@@ -1,4 +1,7 @@
 /************HEADER*********/
+.hide {
+    display: none!important;
+}
 header.masthead{
     background-image: url('https://images7.alphacoders.com/110/1102604.jpg');
     margin-bottom: 50px;
